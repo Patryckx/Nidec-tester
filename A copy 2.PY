@@ -11,6 +11,7 @@ ser = serial.Serial(
 )
 
 
+
 command = bytes.fromhex('FF00FFA50060100D04D05101010249')
 ser.write(command)
 
@@ -33,14 +34,37 @@ response = ser.read(256)
 print(response)
 
 
-
-
-'''command = bytes.fromhex('FF00FFA50060100D05D05B0203FF0356')
+command = bytes.fromhex('FF00FFA50060100D05D05D0402000256')
 ser.write(command)
 
 # Leer la respuesta
 response = ser.read(256)
-print(response)'''
+print(response)
+
+
+command = bytes.fromhex('FF00FFA50060100D07D05D0400000000025A')
+ser.write(command)
+
+# Leer la respuesta
+response = ser.read(256)
+print(response)
+
+
+command = bytes.fromhex('FF00FFA50060100D05D05B0203FF0356')
+ser.write(command)
+
+# Leer la respuesta
+response = ser.read(256)
+print(response)
+
+
+command = bytes.fromhex('FF00FFA50060100D07D05D04484F4C41037E')
+ser.write(command)
+
+# Leer la respuesta
+response = ser.read(256)
+print(response)
+
 
 # Cerrar puerto serial
 ser.close()

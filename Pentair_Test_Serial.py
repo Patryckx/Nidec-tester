@@ -1,6 +1,7 @@
 import serial
 import time
 
+
 def calculate_checksum(packet):
     """Calcula el checksum para el paquete."""
     checksum = sum(packet[3:])  # Sumar desde el byte 4 hasta el final
@@ -60,45 +61,45 @@ def main():
         with serial.Serial(port, baudrate, timeout=timeout) as ser:
             print("Conexión establecida con el dispositivo.")
             
-            # Enviar comando para activar modo de comandos
+            # # Enviar comando para activar modo de comandos
             print("Enviando comando para activar modo de comandos...")
-            send_command(ser, 0x0D, [0xD0, 0x51, 0x01, 0x01])
+            send_command(ser, 0x0D, [0xD0, 0x51, 0x01, 0x00])
             time.sleep(1)  # Esperar para recibir respuesta
             
-            # Enviar comando de consulta de versión de firmware
+            # # Enviar comando de consulta de versión de firmware
             print("Enviando comando de consulta de versión de firmware...")
             response = send_command(ser, 0x0D, [0xD0, 0x56, 0x00] )
             print(f"Respuesta recibida: {response.hex().upper()}")
 
             
-            # Ejemplo de uso
-            led_high, led_low = split_16bit(0x200)
+            # # Ejemplo de uso
+            # led_high, led_low = split_16bit(0x200)
 
-             # Enviar comando de consulta de versión de firmware
-            print("Enviando comando de consulta de versión de firmware 200...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5B,0x02,  0x03, 0xFF] )
+            #  # Enviar comando de consulta de versión de firmware
+            # print("Enviando comando de consulta de versión de firmware 200...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x5B,0x02,  0x03, 0xFF] )
             
-            print(f"Respuesta recibida: {response.hex().upper()}")
+            # print(f"Respuesta recibida: {response.hex().upper()}")
 
-            # Enviar comando de consulta de versión de firmware
-            '''print("Enviando comando de control de LEDS...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5B,0x02, 0x01,0x00] )
-            print(f"Respuesta recibida: {response.hex().upper()}")'''
+            # # Enviar comando de consulta de versión de firmware
+            # '''print("Enviando comando de control de LEDS...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x5B,0x02, 0x01,0x00] )
+            # print(f"Respuesta recibida: {response.hex().upper()}")'''
 
-             # Enviar comando de consulta de versión de firmware
-            print("Enviando comando Control intensidad pantalla...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5C,0x01, 0x64] )
-            print(f"Respuesta recibida: {response.hex().upper()}")
+            #  # Enviar comando de consulta de versión de firmware
+            # print("Enviando comando Control intensidad pantalla...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x5C,0x01, 0x64] )
+            # print(f"Respuesta recibida: {response.hex().upper()}")
 
              # Enviar comando de consulta de versión de firmware
             print("Enviando comando Esribir pantalla LCD...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x00,0X01,0X05,0X08] )
+            response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x48, 0x4f, 0x4c, 0x41] )
             print(f"Respuesta recibida: {response.hex().upper()}")
 
-             # Enviar comando de consulta de versión de firmware
-            print("Enviando comando iconos LCD...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x01,0X001] )
-            print(f"Respuesta recibida: {response.hex().upper()}")
+            #  # Enviar comando de consulta de versión de firmware
+            # print("Enviando comando iconos LCD...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x01,0X001] )
+            # print(f"Respuesta recibida: {response.hex().upper()}")
 
     
     except serial.SerialException as e:
