@@ -1,0 +1,66 @@
+<RCC>
+  <qresource prefix="resources">
+    <file>UX icons/led.png</file>
+    <file>UX icons/lcd.png</file>
+    <file>UX icons/seven-segment-display.png</file>
+    <file>UX icons/magnifying-glass.png</file>
+    <file>UX icons/magnifying-glass.png</file>
+    <file>UX icons/info.png</file>
+    <file>UX icons/warning.png</file>
+    <file>UX icons/cogwheel.png</file>
+    <file>UX icons/clock_2.png</file>
+    <file>UX icons/idea.png</file>
+    <file>UX icons/arrow.png</file>
+    <file>UX icons/webcam.png</file>
+    <file>UX icons/microchip.png</file>
+    <file>UX icons/connection.png</file>
+    <file>UX icons/warning.png</file>
+    <file>UX icons/info.png</file>
+    <file>UX icons/play.png</file>
+    <file>UX icons/space.png</file>
+    <file>UX icons/pentairIMG.PNG</file>
+    <file>UX icons/shuttle.png</file>
+    <file>UX icons/star (1).png</file>
+    <file>UX icons/play.png</file>
+    <file>UX icons/display.png</file>
+    <file>UX icons/led.png</file>
+    <file>UX icons/close.png</file>
+    <file>UX icons/right.png</file>
+    <file>UX icons/magnifying-glass.png</file>
+    <file>UX icons/pentairIMG.PNG</file>
+    <file>UX icons/pcb-board.png</file>
+    <file>UX icons/warning.png</file>
+    <file>UX icons/clipboard.png</file>
+    <file>UX icons/database.png</file>
+    <file>UX icons/edit.png</file>
+    <file>UX icons/diskette.png</file>
+    <file>UX icons/database (1).png</file>
+    <file>UX icons/webcam.png</file>
+    <file>UX icons/focus.png</file>
+    <file>UX icons/connection.png</file>
+    <file>UX icons/port.png</file>
+    <file>UX icons/vga-port.png</file>
+    <file>UX icons/configicon.PNG</file>
+    <file>UX icons/pentairIMG.PNG</file>
+    <file>UX icons/voltage.png</file>
+    <file>UX icons/barcode.png</file>
+    <file>UX icons/informacion.png</file>
+    <file>UX icons/enter.png</file>
+    <file>UX icons/seven.png</file>
+    <file>UX icons/six.png</file>
+    <file>UX icons/five.png</file>
+    <file>UX icons/four.png</file>
+    <file>UX icons/three.png</file>
+    <file>UX icons/two.png</file>
+    <file>UX icons/number-1.png</file>
+    <file>UX icons/document.png</file>
+    <file>UX icons/configicon.PNG</file>
+    <file>UX icons/play.png</file>
+    <file>UX icons/documents.png</file>
+    <file>UX icons/switch.png</file>
+    <file>UX icons/settings.png</file>
+    <file>UX icons/Pentair.PNG</file>
+    <file>UX icons/vectorseek.com-Nidec Logo Vector.png</file>
+    <file>UX icons/equal.png</file>
+  </qresource>
+</RCC>
