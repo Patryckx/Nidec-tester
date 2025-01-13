@@ -4,18 +4,15 @@ from PyQt5.QtCore import Qt
 
 from PyQt5.QtCore import QTimer
 
-from ui.Z_label_inspector import Ui_MainWindow as mainApplication
+from ui.Application import Ui_MainWindow as mainApplication
 
 from utilities.DAQ.DAQ import FX3U
-from utilities.Config.Configuration import Config_Screen
 
-from ui.Autentication import Ui_MainWindow as auth_screen
 
-from utilities.Session.currentSession import Session
-
+#from utilities.Config.Configuration import Config_Screen
 
 # Custom imports
-import qdarktheme
+#import qdarktheme
 from datetime import datetime
 
 from datetime import datetime, timedelta
@@ -40,7 +37,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.connect_signals()
     
 
-        # Formato a tabla
+        '''# Formato a tabla
         headers = ['ID','Codigo','Resultado', 'Programa','Hora' ]
         # Ajustar el ancho de una columna específica (por ejemplo, la columna "Resultado")
         id_column_index = headers.index('ID')
@@ -68,7 +65,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.session_app=Session()
 
         # Space bar function initialized flag 
-        self.initialized_flag = None
+        self.initialized_flag = None'''
 
         # Ethernet connection instance
         self.controller = None
@@ -82,13 +79,13 @@ class MainWindow(QMainWindow, mainApplication):
         #Threading event scan 
         self.keep_scanning = threading.Event()
         
-        #Disable stop button 
+        '''#Disable stop button 
         self.lblstop.setEnabled(False)
         #Disable stop button 
         self.lblEnter.setEnabled(False)
 
         #Disable txt field
-        self.txtCode.setEnabled(False)
+        self.txtCode.setEnabled(False)'''
 
     
 
@@ -100,14 +97,14 @@ class MainWindow(QMainWindow, mainApplication):
 
 
     def keyPressEvent(self, event):
-
-        
+        pass
+        '''
         if event.key() == Qt.Key_Space and self.initialized_flag is None:
             # Initialize application pressing Space Bar
             print("space bar pressed")
             self.inicialize(event)
 
-        '''if event.key() == Qt.Key_Return and self.initialized_flag ==True :  
+       if event.key() == Qt.Key_Return and self.initialized_flag ==True :  
             # Aquí se ejecuta la acción al presionar Enter
             print("Se presionó Enter")
             #self.get_validate_Mspec()
@@ -115,7 +112,7 @@ class MainWindow(QMainWindow, mainApplication):
   
 
     def connect_signals(self):
-        self.lblstart.mousePressEvent = self.inicialize
+        '''self.lblstart.mousePressEvent = self.inicialize
         self.lblconfig.mousePressEvent = self.open_config
         self.lblstop.mousePressEvent = self.stop_scanning
         self.lblEnter.mousePressEvent=self.Validate_Barcode_and_response
@@ -123,7 +120,9 @@ class MainWindow(QMainWindow, mainApplication):
         #►Enter Key to execute code validation
         self.txtCode.returnPressed.connect(lambda: self.Validate_Barcode_and_response(None))
 
-        self.lblShowSession.mousePressEvent=self.showSessionApp
+        self.lblShowSession.mousePressEvent=self.showSessionApp'''
+
+        pass
 
 
 

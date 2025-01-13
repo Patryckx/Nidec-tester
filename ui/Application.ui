@@ -53,7 +53,7 @@ QPushButton {
 	color: rgb(231, 236, 237);
 	background-color: rgb(47, 47, 47);
 
-     border: 4px solid rgb(67, 67, 67); /* Borde para el QStackedWidget */
+     border: 2px solid rgb(67, 67, 67); /* Borde para el QStackedWidget */
     border-radius: 20px; /* Bordes redondeados solo para el QStackedWidget */
     padding: 5px; /* Opcional: agrega espacio interno */
 }</string>
@@ -95,7 +95,7 @@ QPushButton {
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resources.qrc">:/resources/UX icons/vectorseek.com-Nidec Logo Vector.png</pixmap>
+            <pixmap resource="../resources/resources.qrc">:/resources/vectorseek.com-Nidec Logo Vector.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -239,13 +239,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/number-1.png</normaloff>:/resources/UX icons/number-1.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-1 (1).png</normaloff>:/resources/number-1 (1).png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -312,13 +312,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/two.png</normaloff>:/resources/UX icons/two.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-2.png</normaloff>:/resources/number-2.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -385,13 +385,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/three.png</normaloff>:/resources/UX icons/three.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-3.png</normaloff>:/resources/number-3.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -458,13 +458,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/four.png</normaloff>:/resources/UX icons/four.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-4.png</normaloff>:/resources/number-4.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -531,13 +531,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/five.png</normaloff>:/resources/UX icons/five.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-5.png</normaloff>:/resources/number-5.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -604,13 +604,13 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/six.png</normaloff>:/resources/UX icons/six.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/number-6.png</normaloff>:/resources/number-6.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>35</width>
+             <height>35</height>
             </size>
            </property>
            <property name="checkable">
@@ -677,8 +677,8 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/clipboard.png</normaloff>:/resources/UX icons/clipboard.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/clipboard.png</normaloff>:/resources/clipboard.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -750,8 +750,8 @@ QPushButton {
             <string> Trazabilidad</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/document.png</normaloff>:/resources/UX icons/document.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/document.png</normaloff>:/resources/document.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -823,8 +823,8 @@ QPushButton {
             <string> Configuración</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/UX icons/settings.png</normaloff>:/resources/UX icons/settings.png</iconset>
+            <iconset resource="../resources/resources.qrc">
+             <normaloff>:/resources/cogwheel.png</normaloff>:/resources/cogwheel.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -946,7 +946,7 @@ QPushButton {
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resources.qrc">:/resources/UX icons/clock_2.png</pixmap>
+            <pixmap resource="../resources/resources.qrc">:/resources/clock_2.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -1094,7 +1094,7 @@ QStackedWidget &gt; * {
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="resources.qrc">:/resources/UX icons/shuttle.png</pixmap>
+                   <pixmap resource="../resources/resources.qrc">:/resources/shuttle.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -1207,7 +1207,7 @@ barra espaciadora</string>
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="resources.qrc">:/resources/UX icons/play.png</pixmap>
+                   <pixmap resource="../resources/resources.qrc">:/resources/play.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -1248,7 +1248,7 @@ barra espaciadora</string>
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="resources.qrc">:/resources/UX icons/space.png</pixmap>
+                   <pixmap resource="../resources/resources.qrc">:/resources/space.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -1298,7 +1298,7 @@ barra espaciadora</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/pentairIMG.PNG</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -1392,7 +1392,7 @@ barra espaciadora</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/connection.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/connection.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1451,7 +1451,7 @@ barra espaciadora</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/magnifying-glass.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1589,7 +1589,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/warning.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1763,7 +1763,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/microchip.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/microchip.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1822,7 +1822,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/magnifying-glass.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1960,7 +1960,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/warning.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2133,7 +2133,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/webcam.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/webcam.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2192,7 +2192,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/magnifying-glass.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2330,7 +2330,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/warning.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2507,7 +2507,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/number-1.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/number-1 (1).png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2600,7 +2600,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/informacion.png</pixmap>
+                 <pixmap>:/resources/UX icons/informacion.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2675,7 +2675,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/barcode.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/barcode.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2730,7 +2730,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/enter.png</pixmap>
+                 <pixmap>:/resources/UX icons/enter.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2829,7 +2829,7 @@ Direccion IP, máscara etc...</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="resources.qrc">:/resources/UX icons/two.png</pixmap>
+               <pixmap resource="../resources/resources.qrc">:/resources/number-2.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -2922,7 +2922,7 @@ Direccion IP, máscara etc...</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="resources.qrc">:/resources/UX icons/informacion.png</pixmap>
+               <pixmap>:/resources/UX icons/informacion.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -2985,7 +2985,7 @@ Direccion IP, máscara etc...</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="resources.qrc">:/resources/UX icons/pcb-board.png</pixmap>
+               <pixmap resource="../resources/resources.qrc">:/resources/pcb-board.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -2996,7 +2996,7 @@ Direccion IP, máscara etc...</string>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="txtSerialCode_2">
+             <widget class="QLineEdit" name="txtFirmware">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -3134,7 +3134,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/three.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/number-3.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -3260,7 +3260,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3288,7 +3288,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3346,7 +3346,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3374,7 +3374,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3432,7 +3432,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3460,7 +3460,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3518,7 +3518,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3546,7 +3546,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3604,7 +3604,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3632,7 +3632,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3690,7 +3690,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3718,7 +3718,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3776,7 +3776,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3804,7 +3804,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3862,7 +3862,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3890,7 +3890,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3948,7 +3948,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3976,7 +3976,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4034,7 +4034,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4062,7 +4062,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4120,7 +4120,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4148,7 +4148,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/led.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4193,7 +4193,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/pentairIMG.PNG</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -4235,7 +4235,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/four.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/number-4.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -4361,7 +4361,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4389,7 +4389,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/lcd.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/lcd.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4447,7 +4447,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4475,7 +4475,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4533,7 +4533,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4561,7 +4561,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4619,7 +4619,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4647,7 +4647,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4705,7 +4705,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4733,7 +4733,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4791,7 +4791,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4819,7 +4819,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4877,7 +4877,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4905,7 +4905,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4963,7 +4963,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4991,7 +4991,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5049,7 +5049,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5077,7 +5077,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5135,7 +5135,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5163,7 +5163,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5221,7 +5221,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5249,7 +5249,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/seven-segment-display.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5294,7 +5294,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/pentairIMG.PNG</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -5338,7 +5338,7 @@ Direccion IP, máscara etc...</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="resources.qrc">:/resources/UX icons/five.png</pixmap>
+               <pixmap resource="../resources/resources.qrc">:/resources/number-5.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -5412,7 +5412,7 @@ Direccion IP, máscara etc...</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="resources.qrc">:/resources/UX icons/idea.png</pixmap>
+               <pixmap resource="../resources/resources.qrc">:/resources/info.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -5543,7 +5543,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5571,7 +5571,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5629,7 +5629,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5657,7 +5657,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5715,7 +5715,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5743,7 +5743,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5801,7 +5801,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5829,7 +5829,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5887,7 +5887,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5915,7 +5915,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5973,7 +5973,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6001,7 +6001,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6059,7 +6059,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6087,7 +6087,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6145,7 +6145,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/right.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6173,7 +6173,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/resources/UX icons/arrow.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6218,7 +6218,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/pentairIMG.PNG</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6269,7 +6269,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/cogwheel.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/cogwheel.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6330,7 +6330,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/diskette.png</pixmap>
+             <pixmap>:/resources/UX icons/diskette.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6364,7 +6364,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/edit.png</pixmap>
+             <pixmap>:/resources/UX icons/edit.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6412,7 +6412,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/connection.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/connection.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6486,7 +6486,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/vga-port.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/vga-port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6595,7 +6595,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/port.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6704,7 +6704,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/focus.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/focus.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6778,7 +6778,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/webcam.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/webcam.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6874,7 +6874,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/database.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/database.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6948,7 +6948,7 @@ Direccion IP, máscara etc...</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="resources.qrc">:/resources/UX icons/database (1).png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/database (1).png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7025,8 +7025,7 @@ Direccion IP, máscara etc...</string>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
-  <include location="../Users/Ewin/.designer/backup/resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
