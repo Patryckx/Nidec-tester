@@ -6,7 +6,9 @@ from PyQt5.QtCore import QTimer
 
 from ui.Application import Ui_MainWindow as mainApplication
 
+#Instruments
 from utilities.DAQ.DAQ import FX3U
+from utilities.Telnet_lib.telnet import TelnetClient
 
 
 #from utilities.Config.Configuration import Config_Screen
@@ -62,10 +64,10 @@ class MainWindow(QMainWindow, mainApplication):
         ########## Configuration ##########
         self.configuration_app = Config_Screen()
 
-        self.session_app=Session()
+        self.session_app=Session()'''
 
         # Space bar function initialized flag 
-        self.initialized_flag = None'''
+        self.initialized_flag = None
 
         # Ethernet connection instance
         self.controller = None
@@ -97,33 +99,37 @@ class MainWindow(QMainWindow, mainApplication):
 
 
     def keyPressEvent(self, event):
-        pass
-        '''
+        
         if event.key() == Qt.Key_Space and self.initialized_flag is None:
             # Initialize application pressing Space Bar
             print("space bar pressed")
             self.inicialize(event)
 
-       if event.key() == Qt.Key_Return and self.initialized_flag ==True :  
+        if event.key() == Qt.Key_Return and self.initialized_flag ==True :  
             # Aquí se ejecuta la acción al presionar Enter
             print("Se presionó Enter")
             #self.get_validate_Mspec()
-            self.Validate_Barcode_and_response(event)'''
+            self.Validate_Barcode_and_response(event)
   
 
     def connect_signals(self):
-        '''self.lblstart.mousePressEvent = self.inicialize
-        self.lblconfig.mousePressEvent = self.open_config
-        self.lblstop.mousePressEvent = self.stop_scanning
-        self.lblEnter.mousePressEvent=self.Validate_Barcode_and_response
+        self.lblinicialize.mousePressEvent = self.inicialize
 
-        #►Enter Key to execute code validation
-        self.txtCode.returnPressed.connect(lambda: self.Validate_Barcode_and_response(None))
+        
 
-        self.lblShowSession.mousePressEvent=self.showSessionApp'''
+        
 
-        pass
 
+    def inicialize(self,event):
+        print("App inicialized")
+
+        print("Verifiying instruments...")
+
+        print("Verifiying Serial port ")
+
+
+
+        self.stackedWidget.setCurrentIndex(1)
 
 
 if __name__ == "__main__":

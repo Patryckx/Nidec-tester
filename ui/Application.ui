@@ -989,7 +989,7 @@ QPushButton {
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QStackedWidget" name="stackedWidget_2">
+     <widget class="QStackedWidget" name="stackedWidget">
       <property name="minimumSize">
        <size>
         <width>1000</width>
@@ -1187,7 +1187,7 @@ barra espaciadora</string>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_14">
                 <item>
-                 <widget class="QLabel" name="lblCode_17">
+                 <widget class="QLabel" name="lblinicialize">
                   <property name="minimumSize">
                    <size>
                     <width>100</width>
@@ -1501,7 +1501,7 @@ las siguientes fallas:</string>
                  <number>60</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="btnSerialErrorOK">
                   <property name="minimumSize">
                    <size>
                     <width>390</width>
@@ -1872,7 +1872,7 @@ las siguientes fallas:</string>
                  <number>60</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="btnGatewayErrorOK">
                   <property name="minimumSize">
                    <size>
                     <width>390</width>
@@ -2242,7 +2242,7 @@ las siguientes fallas:</string>
                  <number>60</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButton_3">
+                 <widget class="QPushButton" name="btnCameraErrorOK">
                   <property name="minimumSize">
                    <size>
                     <width>390</width>
