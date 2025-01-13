@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="resources">
+    <file>idea.png</file>
+    <file>info.png</file>
+    <file>edit (1).png</file>
+    <file>user.png</file>
     <file>shuttle.png</file>
     <file>database (1).png</file>
     <file>database.png</file>

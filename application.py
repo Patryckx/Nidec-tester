@@ -9,6 +9,7 @@ from ui.Application import Ui_MainWindow as mainApplication
 #Instruments
 from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
+from utilities.PySerial.PySerial_lib import SerialDevice
 
 
 #from utilities.Config.Configuration import Config_Screen
@@ -115,6 +116,16 @@ class MainWindow(QMainWindow, mainApplication):
     def connect_signals(self):
         self.lblinicialize.mousePressEvent = self.inicialize
 
+        #Error buttons
+        self.btnCameraErrorOK.clicked.connect(self.back_to_inicialize_app)
+        self.btnGatewayErrorOK.clicked.connect(self.back_to_inicialize_app)
+        self.btnSerialErrorOK.clicked.connect(self.back_to_inicialize_app)
+
+    #Show error events
+
+    def back_to_inicialize_app(self):
+
+        self.stackedWidget.setCurrentIndex(0)
         
 
         
@@ -126,6 +137,9 @@ class MainWindow(QMainWindow, mainApplication):
         print("Verifiying instruments...")
 
         print("Verifiying Serial port ")
+
+        self.gateway=FX3U()
+        self.gateway.open()
 
 
 
