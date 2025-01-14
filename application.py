@@ -200,8 +200,19 @@ class MainWindow(QMainWindow, mainApplication):
             self.new_485_port = search_result.group() if search_result else "1"
             self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
 
+           
             # Camera Address
             self.new_camera_address = str(self.txtCameraAddress.text())
+            # Regular expression to match an IPv4 address
+            ip_pattern = r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+            search_result = re.search(ip_pattern, self.new_camera_address)
+
+            # Fallback to a default IP if no valid IP is found
+            if search_result:
+                self.new_camera_address = search_result.group()
+            else:
+                self.new_camera_address = "192.168.1.1"  # Default fallback IP address
+
             self.new_timer_value = str(self.spinBoxTimer.value())
 
             self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
