@@ -687,6 +687,9 @@ las siguientes fallas:</string>
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
 	
@@ -705,6 +708,9 @@ QPushButton &gt; * {
                   </property>
                   <property name="text">
                    <string>Entendido</string>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -1057,6 +1063,9 @@ las siguientes fallas:</string>
                     <weight>75</weight>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
@@ -1427,6 +1436,9 @@ las siguientes fallas:</string>
                     <weight>75</weight>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
@@ -8057,6 +8069,12 @@ QPushButton &gt; * {
              <font>
               <pointsize>22</pointsize>
              </font>
+            </property>
+            <property name="minimum">
+             <number>45</number>
+            </property>
+            <property name="maximum">
+             <number>60</number>
             </property>
            </widget>
           </item>

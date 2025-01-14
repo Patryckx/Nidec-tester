@@ -28,7 +28,7 @@ import threading
 import json 
 
 import subprocess
-
+import re
 
 import socket
 import telnetlib
@@ -70,6 +70,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Instance config class
         self.config=Configuration()
+
+        self.gateway=FX3U()
 
         # Space bar function initialized flag 
         self.initialized_flag = None
@@ -120,6 +122,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Config button
         self.btnConfiguracion.clicked.connect(self.show_configuration)
+        self.lblEditar.mousePressEvent = self.show_edit_screen_configuration
+        self.lblGuardar.mousePressEvent = self.save_configuration
+        self.lblCancelar.mousePressEvent = self.show_configuration
+
 
         #Error buttons
         self.btnCameraErrorOK.clicked.connect(self.back_to_inicialize_app)
@@ -130,9 +136,78 @@ class MainWindow(QMainWindow, mainApplication):
     def back_to_inicialize_app(self):
         self.stackedWidget.setCurrentIndex(0)
 
-    def show_configuration(self):
+    def show_edit_screen_configuration(self,event):
+        self.stackedWidget.setCurrentIndex(11)
+    
+
+    def show_configuration(self,event):
         self.stackedWidget.setCurrentIndex(10)
 
+        current_config=self.config.get_current_config()
+
+        gateway_port=str(current_config[0])
+        RS232_port=str(current_config[1])
+        RS485_port=str(current_config[2])
+        camera_address=str(current_config[3])
+        #camera_port=current_config[4]
+        timer=str(current_config[5])
+        self.lblGatewayPort.setText(str(gateway_port))
+        self.lbl232Port.setText(str(RS232_port))
+        self.lbl485Port.setText(str(RS485_port))
+        self.lblCameraAddress.setText(str(camera_address))
+        self.lblTimer.setText(timer)
+        
+    def save_configuration(self, event):
+        if (self.txtGatewayPort.text() and self.txt232Port.text() and 
+            self.txt485Port.text() and self.txtCameraAddress.text()):
+            
+            # Gateway port
+            self.new_gateway_port = self.txtGatewayPort.text()
+            search_result = re.search(r'\d+', self.new_gateway_port)
+            self.new_gateway_port = search_result.group() if search_result else "1"
+            self.gateway_new_port_string = f'"COM{str(self.new_gateway_port)}"'
+
+            # RS232 Port
+            self.new_232_port = self.txt232Port.text()
+            search_result = re.search(r'\d+', self.new_232_port)
+            self.new_232_port = search_result.group() if search_result else "1"
+            self.new_232_port_string = f'"COM{str(self.new_232_port)}"'
+
+            # RS485 Port
+            self.new_485_port = self.txt485Port.text()
+            search_result = re.search(r'\d+', self.new_485_port)
+            self.new_485_port = search_result.group() if search_result else "1"
+            self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
+
+            # Camera Address
+            self.new_camera_address = self.txtCameraAddress.text()
+            self.new_timer_value = self.spinboxTimer.value()
+
+            self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
+                                               self.new_485_port_string,self.new_camera_address,
+                                               self.new_timer_value)
+
+            self.back_to_inicialize_app()
+        else:
+            
+            print("Por favor, completa todos los campos antes de guardar la configuración.")
+
+            # Set placeholders for empty or invalid fields
+            if not self.txtGatewayPort.text():
+                self.txtGatewayPort.setPlaceholderText("Texto faltante")
+            if not self.txt232Port.text():
+                self.txt232Port.setPlaceholderText("Texto faltante")
+            if not self.txt485Port.text():
+                self.txt485Port.setPlaceholderText("Texto faltante")
+            if not self.txtCameraAddress.text():
+                self.txtCameraAddress.setPlaceholderText("Texto faltante")
+    
+
+
+    def inicialize(self,event):
+        print("App inicialized")
+
+        print("Obtaining instruments configuration")
         current_config=self.config.get_current_config()
 
         gateway_port=current_config[0]
@@ -140,31 +215,18 @@ class MainWindow(QMainWindow, mainApplication):
         RS485_port=current_config[2]
         camera_address=current_config[3]
         camera_port=current_config[4]
-        timer=current_config[5]
-    
-
-        self.lbl.setText(str(self.newdaqtext))
-        self.ui.lbltxtdaqport.setText(str(self.daq_port))
-
-        self.ui.lbltxtethernet_address.setText(str(self.ethernet_address))
-        self.ui.lbltxtethernet_port.setText(str(self.ethernet_port))
-        
-        
-
-
-    def inicialize(self,event):
-        print("App inicialized")
 
         print("Verifiying instruments...")
 
         print("Verifiying Serial port ")
 
-        self.gateway=FX3U()
-        self.gateway.open()
+        self.gateway.open(gateway_port)
+
+        if not self.gateway.is_connected():
+            self.stackedWidget.setCurrentIndex(2)
 
 
 
-        self.stackedWidget.setCurrentIndex(1)
 
 
 if __name__ == "__main__":
