@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>edit.png</file>
+    <file>diskette.png</file>
     <file>idea.png</file>
     <file>info.png</file>
     <file>edit (1).png</file>

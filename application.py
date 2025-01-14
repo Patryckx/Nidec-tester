@@ -10,6 +10,7 @@ from ui.Application import Ui_MainWindow as mainApplication
 from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
 from utilities.PySerial.PySerial_lib import SerialDevice
+from utilities.Configuration.Config import Configuration
 
 
 #from utilities.Config.Configuration import Config_Screen
@@ -67,6 +68,9 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.session_app=Session()'''
 
+        #Instance config class
+        self.config=Configuration()
+
         # Space bar function initialized flag 
         self.initialized_flag = None
 
@@ -76,8 +80,6 @@ class MainWindow(QMainWindow, mainApplication):
         self.tn=None
 
         self.plc=None
-
-        
 
         #Threading event scan 
         self.keep_scanning = threading.Event()
@@ -116,18 +118,37 @@ class MainWindow(QMainWindow, mainApplication):
     def connect_signals(self):
         self.lblinicialize.mousePressEvent = self.inicialize
 
+        #Config button
+        self.btnConfiguracion.clicked.connect(self.show_configuration)
+
         #Error buttons
         self.btnCameraErrorOK.clicked.connect(self.back_to_inicialize_app)
         self.btnGatewayErrorOK.clicked.connect(self.back_to_inicialize_app)
         self.btnSerialErrorOK.clicked.connect(self.back_to_inicialize_app)
 
     #Show error events
-
     def back_to_inicialize_app(self):
-
         self.stackedWidget.setCurrentIndex(0)
-        
 
+    def show_configuration(self):
+        self.stackedWidget.setCurrentIndex(10)
+
+        current_config=self.config.get_current_config()
+
+        gateway_port=current_config[0]
+        RS232_port=current_config[1]
+        RS485_port=current_config[2]
+        camera_address=current_config[3]
+        camera_port=current_config[4]
+        timer=current_config[5]
+    
+
+        self.ui.lbltxtdaqenabled.setText(str(self.newdaqtext))
+        self.ui.lbltxtdaqport.setText(str(self.daq_port))
+
+        self.ui.lbltxtethernet_address.setText(str(self.ethernet_address))
+        self.ui.lbltxtethernet_port.setText(str(self.ethernet_port))
+        
         
 
 
