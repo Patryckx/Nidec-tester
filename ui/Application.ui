@@ -8716,7 +8716,7 @@ QPushButton &gt; * {
              </font>
             </property>
             <property name="text">
-             <string>Dirección IP camara </string>
+             <string>Dirección IP cámara </string>
             </property>
            </widget>
           </item>
