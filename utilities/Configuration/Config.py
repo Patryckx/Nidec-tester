@@ -27,45 +27,7 @@ class Configuration():
             return None,None,None,None,None,None
 
 
-    def show_current_configuration(self, event):
 
-        current_config=self.get_current_config()
-
-        gateway_port=current_config[0]
-        RS232_port=current_config[1]
-        RS485_port=current_config[2]
-        camera_address=current_config[3]
-        camera_port=current_config[4]
-        timer=current_config[5]
-        
-       
-
-
-        #Show first screen of stacked widget
-        self.ui.stackedWidget.setCurrentIndex(0)
-
-        
-
-    def show_set_configuration(self,event):
-
-        #Put information in Configuration GUI
-
-    
-        #DAQ
-        if self.daq_stat.lower()=="true":
-            self.ui.daqcombobox.setCurrentText("Habilitado")
-        elif self.daq_stat.lower()=="false":
-            self.ui.daqcombobox.setCurrentText("Deshabilitado")
-        #self.configuration_app.ui.txtdaqenabled.setText(str(self.daq_stat))
-        
-        #Display information in Gui
-
-        self.ui.txtdaqport.setText(str(self.daq_port))
-
-        self.ui.txtEthernet_address.setText(str(self.ethernet_address))
-        self.ui.txtEthernetPort.setText(str(self.ethernet_port))
-
-    
     
     def save_new_configuration(self, event):
         self.ui.lbltxtfilltexfields.setText("")

@@ -22,11 +22,6 @@
     <height>772</height>
    </size>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>26</pointsize>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -107,7 +102,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resources/resources.qrc">:/resources/clock_2.png</pixmap>
+            <pixmap resource="../../resources/resources.qrc">:/resources/clock_2.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -153,7 +148,7 @@
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>1000</width>
         <height>648</height>
        </size>
       </property>
@@ -162,11 +157,6 @@
         <width>1100</width>
         <height>658</height>
        </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>24</pointsize>
-       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">QStackedWidget {
@@ -182,7 +172,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>10</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -247,7 +237,7 @@ QStackedWidget &gt; * {
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/shuttle.png</pixmap>
+                   <pixmap resource="../../resources/resources.qrc">:/resources/shuttle.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -360,7 +350,7 @@ barra espaciadora</string>
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/play.png</pixmap>
+                   <pixmap resource="../../resources/resources.qrc">:/resources/play.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -401,7 +391,7 @@ barra espaciadora</string>
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/space.png</pixmap>
+                   <pixmap resource="../../resources/resources.qrc">:/resources/space.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -451,7 +441,7 @@ barra espaciadora</string>
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -558,7 +548,7 @@ barra espaciadora</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/connection.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/connection.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -617,7 +607,7 @@ barra espaciadora</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -755,7 +745,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -929,7 +919,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/microchip.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/microchip.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -988,7 +978,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1126,7 +1116,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1299,7 +1289,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/webcam.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/webcam.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1358,7 +1348,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/magnifying-glass.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1496,7 +1486,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/warning.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/warning.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1706,7 +1696,7 @@ Direccion IP, máscara etc...</string>
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/info.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/info.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1890,7 +1880,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/user.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -1969,7 +1959,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/edit (1).png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2137,7 +2127,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/idea.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/idea.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2320,7 +2310,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/user.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2399,7 +2389,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/edit (1).png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2534,7 +2524,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/number-1 (1).png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/number-1 (1).png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2702,7 +2692,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/barcode.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/barcode.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -2856,7 +2846,7 @@ QPushButton &gt; * {
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/number-2.png</pixmap>
+               <pixmap resource="../../resources/resources.qrc">:/resources/number-2.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -3012,7 +3002,7 @@ QPushButton &gt; * {
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/pcb-board.png</pixmap>
+               <pixmap resource="../../resources/resources.qrc">:/resources/pcb-board.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -3161,7 +3151,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/number-3.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/number-3.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -3287,7 +3277,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3315,7 +3305,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3373,7 +3363,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3401,7 +3391,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3459,7 +3449,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3487,7 +3477,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3545,7 +3535,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3573,7 +3563,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3631,7 +3621,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3659,7 +3649,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3717,7 +3707,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3745,7 +3735,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3803,7 +3793,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3831,7 +3821,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3889,7 +3879,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3917,7 +3907,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3975,7 +3965,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4003,7 +3993,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4061,7 +4051,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4089,7 +4079,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4147,7 +4137,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4175,7 +4165,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/sun.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/sun.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4220,7 +4210,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -4262,7 +4252,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/number-4.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/number-4.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -4388,7 +4378,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4416,7 +4406,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/lcd.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/lcd.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4474,7 +4464,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4502,7 +4492,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4560,7 +4550,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4588,7 +4578,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4646,7 +4636,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4674,7 +4664,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4732,7 +4722,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4760,7 +4750,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4818,7 +4808,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4846,7 +4836,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4904,7 +4894,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4932,7 +4922,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -4990,7 +4980,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5018,7 +5008,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5076,7 +5066,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5104,7 +5094,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5162,7 +5152,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5190,7 +5180,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5248,7 +5238,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5276,7 +5266,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/seven-segment-display.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5321,7 +5311,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -5365,7 +5355,7 @@ QPushButton &gt; * {
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/number-5.png</pixmap>
+               <pixmap resource="../../resources/resources.qrc">:/resources/number-5.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -5439,7 +5429,7 @@ QPushButton &gt; * {
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/info.png</pixmap>
+               <pixmap resource="../../resources/resources.qrc">:/resources/info.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -5570,7 +5560,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5598,7 +5588,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5656,7 +5646,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5684,7 +5674,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5742,7 +5732,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5770,7 +5760,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5828,7 +5818,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5856,7 +5846,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5914,7 +5904,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -5942,7 +5932,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6000,7 +5990,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6028,7 +6018,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6086,7 +6076,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6114,7 +6104,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6172,7 +6162,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/right.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6200,7 +6190,7 @@ QPushButton &gt; * {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/arrow.png</pixmap>
+                 <pixmap resource="../../resources/resources.qrc">:/resources/arrow.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -6245,7 +6235,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/pentairIMG.PNG</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6259,19 +6249,19 @@ QPushButton &gt; * {
       <widget class="QWidget" name="ConfigurationShow">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
-         <number>12</number>
+         <number>0</number>
         </property>
         <property name="leftMargin">
          <number>30</number>
         </property>
         <property name="topMargin">
-         <number>30</number>
+         <number>0</number>
         </property>
         <property name="rightMargin">
          <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>30</number>
+         <number>0</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_60">
@@ -6296,7 +6286,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/cogwheel.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/cogwheel.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6369,7 +6359,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/edit.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/edit.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6417,7 +6407,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/connection.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/connection.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6440,7 +6430,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -6491,7 +6481,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/microchip.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/microchip.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6514,7 +6504,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
              </font>
             </property>
             <property name="text">
@@ -6551,11 +6541,6 @@ QPushButton &gt; * {
               <width>250</width>
               <height>60</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="text">
              <string/>
@@ -6603,7 +6588,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/vga-port.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/vga-port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6626,7 +6611,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
              </font>
             </property>
             <property name="text">
@@ -6663,11 +6648,6 @@ QPushButton &gt; * {
               <width>250</width>
               <height>60</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="text">
              <string/>
@@ -6715,7 +6695,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/port.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6738,7 +6718,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
              </font>
             </property>
             <property name="text">
@@ -6775,11 +6755,6 @@ QPushButton &gt; * {
               <width>250</width>
               <height>60</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="text">
              <string/>
@@ -6827,7 +6802,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/focus.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/focus.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6850,7 +6825,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -6901,7 +6876,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/webcam.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/webcam.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -6924,7 +6899,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
              </font>
             </property>
             <property name="text">
@@ -6951,11 +6926,6 @@ QPushButton &gt; * {
               <width>320</width>
               <height>70</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="text">
              <string/>
@@ -7003,7 +6973,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/cycle (1).png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/cycle (1).png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7026,7 +6996,7 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>26</pointsize>
+              <pointsize>22</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -7043,11 +7013,6 @@ QPushButton &gt; * {
               <width>60</width>
               <height>60</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -7088,7 +7053,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/clock_2.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/clock_2.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7120,7 +7085,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTimer">
+           <widget class="QLabel" name="lblDatabaseServer">
             <property name="minimumSize">
              <size>
               <width>400</width>
@@ -7132,11 +7097,6 @@ QPushButton &gt; * {
               <width>400</width>
               <height>70</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
             </property>
             <property name="text">
              <string/>
@@ -7158,37 +7118,16 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="ConfigurationEditSave">
-       <property name="font">
-        <font>
-         <pointsize>26</pointsize>
-        </font>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_13">
-        <property name="spacing">
-         <number>12</number>
-        </property>
-        <property name="leftMargin">
-         <number>30</number>
-        </property>
-        <property name="topMargin">
-         <number>30</number>
-        </property>
-        <property name="rightMargin">
-         <number>30</number>
-        </property>
-        <property name="bottomMargin">
-         <number>30</number>
-        </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_76">
+         <layout class="QHBoxLayout" name="horizontalLayout_133">
           <property name="spacing">
-           <number>30</number>
+           <number>15</number>
+          </property>
+          <property name="leftMargin">
+           <number>90</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblConfig_4">
+           <widget class="QLabel" name="lblseria_30">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -7205,7 +7144,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/cogwheel.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/database.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7213,19 +7152,173 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_43">
+           <widget class="QLabel" name="lblTitleSeriales_30">
             <property name="minimumSize">
              <size>
-              <width>380</width>
+              <width>350</width>
               <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>380</width>
+              <width>350</width>
               <height>60</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>22</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Base de datos</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_159">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>768</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_134">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <property name="leftMargin">
+           <number>150</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblseria_31">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../../resources/resources.qrc">:/resources/database (1).png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTitleSeriales_31">
+            <property name="minimumSize">
+             <size>
+              <width>350</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>350</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>22</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Nombre servidor</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblDatabaseServer_2">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>400</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_160">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>318</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="ConfigurationEditSave">
+       <layout class="QVBoxLayout" name="verticalLayout_13">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_113">
+          <property name="spacing">
+           <number>30</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblConfig_5">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../../resources/resources.qrc">:/resources/cogwheel.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_48">
             <property name="font">
              <font>
               <pointsize>36</pointsize>
@@ -7239,7 +7332,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_113">
+           <spacer name="horizontalSpacer_116">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7252,45 +7345,11 @@ QPushButton &gt; * {
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="lblGuardar">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>70</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="toolTip">
-             <string>Editar</string>
-            </property>
-            <property name="whatsThis">
-             <string>Editar</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/diskette.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="lblCancelar">
             <property name="minimumSize">
              <size>
-              <width>60</width>
-              <height>60</height>
+              <width>70</width>
+              <height>70</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -7312,7 +7371,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/undo.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/undo.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7320,7 +7379,41 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_115">
+           <widget class="QLabel" name="lblGuardar">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="toolTip">
+             <string>Editar</string>
+            </property>
+            <property name="whatsThis">
+             <string>Editar</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../../resources/resources.qrc">:/resources/diskette.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_117">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7335,7 +7428,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_77">
+         <layout class="QHBoxLayout" name="horizontalLayout_114">
           <property name="spacing">
            <number>15</number>
           </property>
@@ -7343,24 +7436,24 @@ QPushButton &gt; * {
            <number>90</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblseria_17">
+           <widget class="QLabel" name="lblseria_22">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/connection.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/connection.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7368,17 +7461,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTitleSeriales_17">
+           <widget class="QLabel" name="lblTitleSeriales_22">
             <property name="minimumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7394,7 +7487,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_120">
+           <spacer name="horizontalSpacer_137">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7409,7 +7502,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_133">
+         <layout class="QHBoxLayout" name="horizontalLayout_131">
           <property name="spacing">
            <number>12</number>
           </property>
@@ -7417,24 +7510,24 @@ QPushButton &gt; * {
            <number>150</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblserial232_12">
+           <widget class="QLabel" name="lblserial232_10">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/microchip.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/microchip.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7442,17 +7535,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_57">
+           <widget class="QLabel" name="label_55">
             <property name="minimumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7466,7 +7559,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_159">
+           <spacer name="horizontalSpacer_155">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7482,7 +7575,7 @@ QPushButton &gt; * {
            </spacer>
           </item>
           <item>
-           <widget class="QLineEdit" name="txtGatewayPort">
+           <widget class="QLineEdit" name="txt232Port_2">
             <property name="minimumSize">
              <size>
               <width>250</width>
@@ -7495,15 +7588,10 @@ QPushButton &gt; * {
               <height>60</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
-            </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_160">
+           <spacer name="horizontalSpacer_156">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7518,7 +7606,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_78">
+         <layout class="QHBoxLayout" name="horizontalLayout_119">
           <property name="spacing">
            <number>12</number>
           </property>
@@ -7526,24 +7614,24 @@ QPushButton &gt; * {
            <number>150</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblserial232_5">
+           <widget class="QLabel" name="lblserial232_6">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/vga-port.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/vga-port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7551,17 +7639,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_46">
+           <widget class="QLabel" name="label_49">
             <property name="minimumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7575,7 +7663,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_123">
+           <spacer name="horizontalSpacer_138">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7604,15 +7692,10 @@ QPushButton &gt; * {
               <height>60</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
-            </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_127">
+           <spacer name="horizontalSpacer_139">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7627,7 +7710,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_79">
+         <layout class="QHBoxLayout" name="horizontalLayout_120">
           <property name="spacing">
            <number>12</number>
           </property>
@@ -7635,24 +7718,24 @@ QPushButton &gt; * {
            <number>150</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblserial485_4">
+           <widget class="QLabel" name="lblserial485_5">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/port.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7660,17 +7743,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_47">
+           <widget class="QLabel" name="label_51">
             <property name="minimumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>300</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7684,7 +7767,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_128">
+           <spacer name="horizontalSpacer_140">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7713,15 +7796,10 @@ QPushButton &gt; * {
               <height>60</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <pointsize>22</pointsize>
-             </font>
-            </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_131">
+           <spacer name="horizontalSpacer_141">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7736,7 +7814,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_80">
+         <layout class="QHBoxLayout" name="horizontalLayout_121">
           <property name="spacing">
            <number>15</number>
           </property>
@@ -7744,24 +7822,24 @@ QPushButton &gt; * {
            <number>90</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblseria_18">
+           <widget class="QLabel" name="lblseria_23">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/focus.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/focus.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7769,17 +7847,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTitleSeriales_18">
+           <widget class="QLabel" name="lblTitleSeriales_23">
             <property name="minimumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7795,7 +7873,7 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_132">
+           <spacer name="horizontalSpacer_142">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7810,7 +7888,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_81">
+         <layout class="QHBoxLayout" name="horizontalLayout_122">
           <property name="spacing">
            <number>15</number>
           </property>
@@ -7818,24 +7896,24 @@ QPushButton &gt; * {
            <number>150</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblseria_19">
+           <widget class="QLabel" name="lblseria_24">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/webcam.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/webcam.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7843,17 +7921,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTitleSeriales_19">
+           <widget class="QLabel" name="lblTitleSeriales_24">
             <property name="minimumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7882,13 +7960,16 @@ QPushButton &gt; * {
             </property>
             <property name="font">
              <font>
-              <pointsize>22</pointsize>
+              <pointsize>24</pointsize>
              </font>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_134">
+           <spacer name="horizontalSpacer_143">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7903,7 +7984,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_82">
+         <layout class="QHBoxLayout" name="horizontalLayout_123">
           <property name="spacing">
            <number>15</number>
           </property>
@@ -7911,24 +7992,24 @@ QPushButton &gt; * {
            <number>90</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblseria_20">
+           <widget class="QLabel" name="lblseria_25">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/cycle (1).png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/database.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7936,17 +8017,17 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTitleSeriales_20">
+           <widget class="QLabel" name="lblTitleSeriales_25">
             <property name="minimumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
@@ -7957,18 +8038,12 @@ QPushButton &gt; * {
              </font>
             </property>
             <property name="text">
-             <string>Tiempo de ciclo</string>
+             <string>Base de datos</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_135">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>60</height>
-             </size>
-            </property>
+           <spacer name="horizontalSpacer_144">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -7983,7 +8058,7 @@ QPushButton &gt; * {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_112">
+         <layout class="QHBoxLayout" name="horizontalLayout_124">
           <property name="spacing">
            <number>15</number>
           </property>
@@ -7991,24 +8066,24 @@ QPushButton &gt; * {
            <number>150</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblseria_21">
+           <widget class="QLabel" name="lblseria_26">
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
-              <height>50</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/clock_2.png</pixmap>
+             <pixmap resource="../../resources/resources.qrc">:/resources/database (1).png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -8016,52 +8091,52 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblTitleSeriales_21">
+           <widget class="QLabel" name="lblTitleSeriales_26">
             <property name="minimumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>350</width>
-              <height>60</height>
+              <height>80</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>22</pointsize>
+              <pointsize>26</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Temporizador (segundos)</string>
+             <string>Nombre servidor</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinboxTimer">
+           <widget class="QLineEdit" name="txtServerName">
             <property name="minimumSize">
              <size>
-              <width>200</width>
-              <height>60</height>
+              <width>400</width>
+              <height>70</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>350</width>
-              <height>60</height>
+              <width>400</width>
+              <height>70</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>22</pointsize>
+              <pointsize>20</pointsize>
              </font>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_136">
+           <spacer name="horizontalSpacer_145">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -8147,7 +8222,7 @@ QPushButton {
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resources/resources.qrc">:/resources/vectorseek.com-Nidec Logo Vector.png</pixmap>
+            <pixmap resource="../../resources/resources.qrc">:/resources/vectorseek.com-Nidec Logo Vector.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -8291,7 +8366,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-1 (1).png</normaloff>:/resources/number-1 (1).png</iconset>
            </property>
            <property name="iconSize">
@@ -8364,7 +8439,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-2.png</normaloff>:/resources/number-2.png</iconset>
            </property>
            <property name="iconSize">
@@ -8437,7 +8512,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-3.png</normaloff>:/resources/number-3.png</iconset>
            </property>
            <property name="iconSize">
@@ -8510,7 +8585,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-4.png</normaloff>:/resources/number-4.png</iconset>
            </property>
            <property name="iconSize">
@@ -8583,7 +8658,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-5.png</normaloff>:/resources/number-5.png</iconset>
            </property>
            <property name="iconSize">
@@ -8656,7 +8731,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/number-6.png</normaloff>:/resources/number-6.png</iconset>
            </property>
            <property name="iconSize">
@@ -8729,7 +8804,7 @@ QPushButton {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/clipboard.png</normaloff>:/resources/clipboard.png</iconset>
            </property>
            <property name="iconSize">
@@ -8802,7 +8877,7 @@ QPushButton {
             <string> Trazabilidad</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/document.png</normaloff>:/resources/document.png</iconset>
            </property>
            <property name="iconSize">
@@ -8875,7 +8950,7 @@ QPushButton {
             <string> Configuración</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset resource="../../resources/resources.qrc">
              <normaloff>:/resources/cogwheel.png</normaloff>:/resources/cogwheel.png</iconset>
            </property>
            <property name="iconSize">
@@ -8912,7 +8987,7 @@ QPushButton {
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

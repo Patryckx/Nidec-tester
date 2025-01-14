@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="resources">
+    <file>cycle (1).png</file>
+    <file>cycle (1).png</file>
+    <file>undo.png</file>
     <file>edit.png</file>
     <file>diskette.png</file>
     <file>idea.png</file>

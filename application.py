@@ -143,7 +143,7 @@ class MainWindow(QMainWindow, mainApplication):
         timer=current_config[5]
     
 
-        self.ui.lbltxtdaqenabled.setText(str(self.newdaqtext))
+        self.lbl.setText(str(self.newdaqtext))
         self.ui.lbltxtdaqport.setText(str(self.daq_port))
 
         self.ui.lbltxtethernet_address.setText(str(self.ethernet_address))
