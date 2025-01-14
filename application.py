@@ -132,6 +132,14 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnGatewayErrorOK.clicked.connect(self.back_to_inicialize_app)
         self.btnSerialErrorOK.clicked.connect(self.back_to_inicialize_app)
 
+        #Placeholder text with style configuration screeen
+
+        # Connect focus event to clear the placeholder text and reset style
+        self.txtGatewayPort.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtGatewayPort, event)
+        self.txt232Port.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txt232Port, event)
+        self.txt485Port.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txt485Port, event)
+        self.txtCameraAddress.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtCameraAddress, event)
+
     #Show error events
     def back_to_inicialize_app(self):
         self.stackedWidget.setCurrentIndex(0)
@@ -200,20 +208,26 @@ class MainWindow(QMainWindow, mainApplication):
                                                self.new_485_port_string,self.new_camera_address,
                                                self.new_timer_value)
 
-            self.back_to_inicialize_app()
+            self.show_configuration(event)
         else:
             
             print("Por favor, completa todos los campos antes de guardar la configuración.")
 
             # Set placeholders for empty or invalid fields
-            if not self.txtGatewayPort.text():
-                self.txtGatewayPort.setPlaceholderText("Texto faltante")
-            if not self.txt232Port.text():
-                self.txt232Port.setPlaceholderText("Texto faltante")
-            if not self.txt485Port.text():
-                self.txt485Port.setPlaceholderText("Texto faltante")
-            if not self.txtCameraAddress.text():
-                self.txtCameraAddress.setPlaceholderText("Texto faltante")
+            self.set_placeholder_with_style(self.txtGatewayPort, "Texto faltante")
+            self.set_placeholder_with_style(self.txt232Port, "Texto faltante")
+            self.set_placeholder_with_style(self.txt485Port, "Texto faltante")
+            self.set_placeholder_with_style(self.txtCameraAddress, "Texto faltante")
+    
+    def set_placeholder_with_style(self, widget, placeholder_text):
+        if not widget.text():
+            widget.setPlaceholderText(placeholder_text)
+            widget.setStyleSheet("color: rgb(170, 0, 0);")
+
+    def clear_placeholder_and_reset_style(self, widget, event):
+        widget.setPlaceholderText("")
+        widget.setStyleSheet("")  # Resets to default style
+        super(type(widget), widget).focusInEvent(event)
     
 
 

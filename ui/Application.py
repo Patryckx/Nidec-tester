@@ -3263,7 +3263,7 @@ class Ui_MainWindow(object):
         self.label_46.setText(_translate("MainWindow", "Puerto serial 232"))
         self.label_47.setText(_translate("MainWindow", "Puerto serial 485"))
         self.lblTitleSeriales_18.setText(_translate("MainWindow", "Sistema de vision"))
-        self.lblTitleSeriales_19.setText(_translate("MainWindow", "Dirección IP camara "))
+        self.lblTitleSeriales_19.setText(_translate("MainWindow", "Dirección IP cámara "))
         self.lblTitleSeriales_20.setText(_translate("MainWindow", "Tiempo de ciclo"))
         self.lblTitleSeriales_21.setText(_translate("MainWindow", "Temporizador (secs)"))
 import resources.resources
