@@ -138,6 +138,19 @@ class MainWindow(QMainWindow, mainApplication):
 
     def show_edit_screen_configuration(self,event):
         self.stackedWidget.setCurrentIndex(11)
+        current_config=self.config.get_current_config()
+
+        gateway_port=str(current_config[0])
+        RS232_port=str(current_config[1])
+        RS485_port=str(current_config[2])
+        camera_address=str(current_config[3])
+        #camera_port=current_config[4]
+        timer=str(current_config[4])
+        self.txtGatewayPort.setText(str(gateway_port))
+        self.txt232Port.setText(str(RS232_port))
+        self.txt485Port.setText(str(RS485_port))
+        self.txtCameraAddress.setText(str(camera_address))
+        #self.lblTimer.setText(timer)
     
 
     def show_configuration(self,event):
@@ -150,7 +163,7 @@ class MainWindow(QMainWindow, mainApplication):
         RS485_port=str(current_config[2])
         camera_address=str(current_config[3])
         #camera_port=current_config[4]
-        timer=str(current_config[5])
+        timer=str(current_config[4])
         self.lblGatewayPort.setText(str(gateway_port))
         self.lbl232Port.setText(str(RS232_port))
         self.lbl485Port.setText(str(RS485_port))
@@ -180,8 +193,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
 
             # Camera Address
-            self.new_camera_address = self.txtCameraAddress.text()
-            self.new_timer_value = self.spinboxTimer.value()
+            self.new_camera_address = str(self.txtCameraAddress.text())
+            self.new_timer_value = str(self.spinBoxTimer.value())
 
             self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
                                                self.new_485_port_string,self.new_camera_address,
