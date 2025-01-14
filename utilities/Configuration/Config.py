@@ -13,15 +13,15 @@ class Configuration():
 
         try:
             config.read('settings/settings.ini')
-            gateway_port = config.get('DAQ', 'address', fallback='None')
-            rs485_port = config.get('RS485', 'address', fallback='None')
-            rs232_port = config.get('RS232', 'address', fallback='None')
+            gateway_port = config.get('DAQ', 'address', fallback='None').replace('"', '')
+            rs485_port = config.get('RS485', 'address', fallback='None').replace('"', '')
+            rs232_port = config.get('RS232', 'address', fallback='None').replace('"', '')
 
-            camera_address=config.get('Camera', 'address', fallback='None')
-            camera_port=config.get('Camera', 'port', fallback='None')
+            camera_address=config.get('Camera', 'address', fallback='None').replace('"', '')
+            #camera_port=config.get('Camera', 'port', fallback='None').replace('"', '')
 
             timer=config.get('Timer', 'cycle_time', fallback='None')
-            return gateway_port, rs485_port, rs485_port, rs232_port,camera_address,camera_port,timer
+            return gateway_port, rs485_port, rs485_port, rs232_port,camera_address,timer
         except Exception as e:
             print(f"Error reading settings.ini: {e}")
             return None,None,None,None,None,None
@@ -29,102 +29,30 @@ class Configuration():
 
 
     
-    def save_new_configuration(self, event):
-        self.ui.lbltxtfilltexfields.setText("")
-
-        if self.ui.txtdaqport.text() and self.ui.txtEthernetPort.text() and self.ui.txtEthernet_address :
-            # Get parameters from textfields
-
-            # DAQ
-            # Status
-            self.daq_new_status = self.ui.daqcombobox.currentText()
-
-            if self.daq_new_status == "Habilitado":
-                self.daq_enabled = '"true"'
-            elif self.daq_new_status == "Deshabilitado":
-                self.daq_enabled = '"false"'
-            else:
-                print("Opción no reconocida")          
-
-            # Port
-            self.new_daqport = self.ui.txtdaqport.text()
-
-           # Search for digits in new_daqport
-            search_result = re.search(r'\d+', self.new_daqport)
-
-            # Fallback to prevent empty COM port input in config
-            if search_result is None:
-                self.daqport_new_number = int(1)  # Default value
-            else:
-                self.daqport_new_number = search_result.group()
+    def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value):
+        try:
             
-
-            self.daqport_new_port_string = f'"COM{str(self.daqport_new_number)}"'
-
-            #Ethernet
-
-            self.new_ethernet_address=self.ui.txtEthernet_address.text()
-
-            self.new_ethernet_port=self.ui.txtEthernetPort.text()
-
-            # Modify variables to save in configuration
-
-            # Overwrite configuration
-
             # Crear un objeto ConfigParser
             config = configparser.ConfigParser()
 
             # Cargar el archivo .ini
             config.read('settings/settings.ini')
 
-           
-
             # DAQ
-            config.set('DAQ', 'address', self.daqport_new_port_string)
-            config.set('DAQ', 'enabled', self.daq_enabled)
+            config.set('DAQ', 'address', gateway_port)
+            # RS232
+            config.set('RS232', 'address', rs232_port)
+            # RS485
+            config.set('RS485', 'address', rs485_port)
+            # Camera
+            config.set('Camera', 'address', camera_address)
 
-            # Ethernet
-            config.set('Ethernet', 'address', self.new_ethernet_address)
-            config.set('Ethernet', 'port', self.new_ethernet_port)
+            # Timer
+            config.set('Timer', 'cycle_time', timer_value)
 
             # Guardar los cambios en el archivo .ini
             with open('settings/settings.ini', 'w') as configfile:
                 config.write(configfile)
+        except Exception as e:
+            print("Error al guardar la configuracion",e)
 
-            # Close screen once we save the configurations successfully
-            self.close_configuration_screen()
-
-        else:
-            self.ui.lbltxtfilltexfields.setText("Por favor rellena todos los campos")
-            print("Por favor, completa todos los campos antes de guardar la configuración.")
-
-
-    def daq_information(self):
-        # Read model configurations
-        config = configparser.ConfigParser()
-        #config.read('engine/settings/instrument_settings.ini')
-        config.read('settings/settings.ini')
-        
-        daq_status = str(config['DAQ']['enabled'].replace('"', ''))
-        daq_port = str(config['DAQ']['address'].replace('"', ''))
-
-        return daq_status, daq_port
-    
-    def ethernet_information(self):
-        # Read model configurations
-        config = configparser.ConfigParser()
-        #config.read('engine/settings/instrument_settings.ini')
-        config.read('settings/settings.ini')
-        
-        ethernet_address = str(config['Ethernet']['address'].replace('"', ''))
-        ethernet_port = str(config['Ethernet']['port'].replace('"', ''))
-
-        return ethernet_address, ethernet_port
-    
-    
-    def back_showconfiguration(self,event):
-        self.ui.stackedWidget.setCurrentIndex(0) 
-
-    
-    def close_configuration_screen(self):
-        self.hide()

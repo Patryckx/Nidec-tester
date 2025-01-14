@@ -255,6 +255,7 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.btnSerialErrorOK.setFont(font)
+        self.btnSerialErrorOK.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnSerialErrorOK.setStyleSheet("QPushButton {\n"
 "    \n"
 "    color: rgb(255, 255, 255);\n"
@@ -269,6 +270,7 @@ class Ui_MainWindow(object):
 "    border-radius: 0px; /* Restablece el border-radius para los elementos internos */\n"
 "    background-color: transparent; /* Opción para mantener el fondo de los elementos internos */\n"
 "}")
+        self.btnSerialErrorOK.setFlat(False)
         self.btnSerialErrorOK.setObjectName("btnSerialErrorOK")
         self.horizontalLayout_19.addWidget(self.btnSerialErrorOK)
         self.horizontalLayout_18.addLayout(self.horizontalLayout_19)
@@ -404,6 +406,7 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.btnGatewayErrorOK.setFont(font)
+        self.btnGatewayErrorOK.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnGatewayErrorOK.setStyleSheet("QPushButton {\n"
 "    \n"
 "    color: rgb(255, 255, 255);\n"
@@ -553,6 +556,7 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.btnCameraErrorOK.setFont(font)
+        self.btnCameraErrorOK.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnCameraErrorOK.setStyleSheet("QPushButton {\n"
 "    \n"
 "    color: rgb(255, 255, 255);\n"
@@ -2830,6 +2834,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(22)
         self.spinboxTimer.setFont(font)
+        self.spinboxTimer.setMinimum(45)
+        self.spinboxTimer.setMaximum(60)
         self.spinboxTimer.setObjectName("spinboxTimer")
         self.horizontalLayout_112.addWidget(self.spinboxTimer)
         spacerItem72 = QtWidgets.QSpacerItem(318, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -3235,7 +3241,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Pruebas"))
         self.btnTrazabilidad.setText(_translate("MainWindow", " Trazabilidad"))
         self.btnConfiguracion.setText(_translate("MainWindow", " Configuración"))
-import resources.resouces
+import resources.resources
 
 
 if __name__ == "__main__":
