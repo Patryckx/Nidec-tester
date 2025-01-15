@@ -73,6 +73,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.gateway=FX3U()
 
+        
+
         # Space bar function initialized flag 
         self.initialized_flag = None
 
@@ -143,10 +145,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.txt485Port.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txt485Port, event)
         self.txtCameraAddress.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtCameraAddress, event)
 
-    #Show error events
-    def back_to_inicialize_app(self):
-        self.stackedWidget.setCurrentIndex(0)
-
+    
+################## CONFIGURATION #############################################
     def show_edit_screen_configuration(self,event):
         self.stackedWidget.setCurrentIndex(11)
         current_config=self.config.get_current_config()
@@ -243,7 +243,7 @@ class MainWindow(QMainWindow, mainApplication):
         widget.setStyleSheet("")  # Resets to default style
         super(type(widget), widget).focusInEvent(event)
     
-
+###############################################################
 
     def inicialize(self,event):
         print("App inicialized")
@@ -266,6 +266,8 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
 
+    def back_to_inicialize_app(self):
+        self.stackedWidget.setCurrentIndex(0)
 
 
 
