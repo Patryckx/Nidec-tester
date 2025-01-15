@@ -128,6 +128,13 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblGuardar.mousePressEvent = self.save_configuration
         self.lblCancelar.mousePressEvent = self.show_configuration
 
+        #User ID and Shop order 
+        self.lblConfirmUserInfo.mousePressEvent = self.confirm_and_save_userId_and_ShopOrder
+        self.lblDenyUserInfo.mousePressEvent = self.deny_userId_and_ShopOrder
+
+        self.btnVerificarDatos.clicked.connect(self.verify_user_and_ShopOrder)
+
+
         #Home Button
         self.btnInicializar.clicked.connect(self.back_to_inicialize_app)
 
@@ -144,6 +151,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.txt232Port.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txt232Port, event)
         self.txt485Port.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txt485Port, event)
         self.txtCameraAddress.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtCameraAddress, event)
+
+        #User ID and Shop order textboxes
+        self.txtNumeroEmpleado.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroEmpleado, event)
+        self.txtNumeroOrden.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroOrden, event)
 
     
 ################## CONFIGURATION #############################################
@@ -266,7 +277,85 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
 
-        #Show User and Shop order input 
+        #Instrument verification finished
+
+        data = self.config.get_current_user()
+
+        # Verificar si ambos valores son números y cumplen con la longitud requerida
+        if re.fullmatch(r'\d{4}', data[0]) and re.fullmatch(r'\d{6}', data[1]):
+            print("Datos válidos obtenidos")
+            # Aquí puedes continuar con la lógica si los datos son válidos
+            currentUserId=str(data[0])
+            self.lblCurrentUser.setText(currentUserId)
+
+            currentShopOrder=str(data[1])
+            self.lblCurrentOrder.setText(currentShopOrder)
+            
+            #Show first test index screen
+            self.stackedWidget.setCurrentIndex(6)
+        else:
+            print("Datos no válidos o no cumplen con los requisitos")
+
+            #Show User and Shop order input 
+            self.stackedWidget.setCurrentIndex(4)
+
+    def verify_user_and_ShopOrder(self):
+        currentUserId=self.txtNumeroEmpleado.text()
+        currentShopOrder=self.txtNumeroOrden.text()
+
+        if currentUserId and currentShopOrder:
+
+            # Verificar si ambos valores son números y cumplen con la longitud requerida
+            if re.fullmatch(r'\d{4}', currentUserId) and re.fullmatch(r'\d{6}', currentShopOrder):
+                print("Datos válidos obtenidos")
+
+                currentUserId=str(currentUserId)
+                self.lblNumeroEmpleado.setText(currentUserId)
+
+                currentShopOrder=str(currentShopOrder)
+                self.lblNumeroOrden.setText(currentShopOrder)
+
+                #Show User and Shop order input confirm Screen
+                self.stackedWidget.setCurrentIndex(5)
+               
+            else:
+                print("Datos no válidos o no cumplen con los requisitos")
+
+                #Erase textfield information
+                self.txtNumeroEmpleado.setText("")
+                self.txtNumeroOrden.setText("")
+
+                self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
+                self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
+
+                #Show User and Shop order input 
+                #self.stackedWidget.setCurrentIndex(4)
+        else:
+            print("Informacion de usuario u orden faltante ")           
+            self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
+            self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
+    
+    def confirm_and_save_userId_and_ShopOrder(self,event):
+
+        currentUserId=str(self.lblNumeroEmpleado.text())
+        currentShopOrder=str(self.lblNumeroOrden.text())
+
+        self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
+
+        #Put information in GUI 
+        self.lblCurrentUser.setText(currentUserId)
+        self.lblCurrentOrder.setText(currentShopOrder)
+        
+        #Show first test index screen
+        self.stackedWidget.setCurrentIndex(6)
+    
+    def deny_userId_and_ShopOrder(self,event):
+
+        #Erase information in textfields
+        self.txtNumeroEmpleado.setText("")
+        self.txtNumeroOrden.setText("")
+        
+        #Show again user input information 
         self.stackedWidget.setCurrentIndex(4)
 
     def back_to_inicialize_app(self):
