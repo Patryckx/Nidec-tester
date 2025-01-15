@@ -3376,7 +3376,7 @@ QPushButton &gt; * {
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_40">
               <item>
-               <widget class="QLabel" name="lblinicialize_2">
+               <widget class="QLabel" name="lblConfirmUserInfo">
                 <property name="minimumSize">
                  <size>
                   <width>100</width>
@@ -3423,7 +3423,7 @@ QPushButton &gt; * {
                </spacer>
               </item>
               <item>
-               <widget class="QLabel" name="lblCode_19">
+               <widget class="QLabel" name="lblDenyUserInfo">
                 <property name="minimumSize">
                  <size>
                   <width>100</width>
@@ -3435,6 +3435,9 @@ QPushButton &gt; * {
                   <width>100</width>
                   <height>100</height>
                  </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
