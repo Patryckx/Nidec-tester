@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>user (1).png</file>
+    <file>home.png</file>
     <file>cycle (1).png</file>
     <file>cycle (1).png</file>
     <file>undo.png</file>

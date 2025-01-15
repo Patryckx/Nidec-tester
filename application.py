@@ -126,6 +126,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblGuardar.mousePressEvent = self.save_configuration
         self.lblCancelar.mousePressEvent = self.show_configuration
 
+        #Home Button
+        self.btnInicializar.clicked.connect(self.back_to_inicialize_app)
+
 
         #Error buttons
         self.btnCameraErrorOK.clicked.connect(self.back_to_inicialize_app)
