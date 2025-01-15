@@ -12,8 +12,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>220</width>
+    <height>45</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -1282,7 +1282,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -2429,7 +2429,7 @@ QPushButton &gt; * {
                 </property>
                 <property name="text">
                  <string>Error de conexión
- con cámara</string>
+ con camara</string>
                 </property>
                </widget>
               </item>
@@ -2779,179 +2779,155 @@ Direccion IP, máscara etc...</string>
           </property>
          </spacer>
         </item>
-        <item row="1" column="1" colspan="2">
-         <layout class="QVBoxLayout" name="verticalLayout_15">
+        <item row="1" column="1" colspan="3">
+         <layout class="QHBoxLayout" name="horizontalLayout_50">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_50">
+           <layout class="QVBoxLayout" name="verticalLayout_15">
             <item>
-             <spacer name="horizontalSpacer_39">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <layout class="QHBoxLayout" name="horizontalLayout_61">
+              <property name="spacing">
+               <number>30</number>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+              <item>
+               <widget class="QLabel" name="lblTest1_18">
+                <property name="minimumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../resources/resources.qrc">:/resources/info.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblCode_42">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>35</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Inicializar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QLabel" name="lblTest1_24">
-              <property name="minimumSize">
-               <size>
-                <width>80</width>
-                <height>80</height>
-               </size>
+             <layout class="QHBoxLayout" name="horizontalLayout_48">
+              <property name="spacing">
+               <number>30</number>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/info.png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblCode_44">
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>35</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Inicio</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_40">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_48">
-            <property name="spacing">
-             <number>30</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_15">
-              <property name="minimumSize">
-               <size>
-                <width>500</width>
-                <height>180</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>500</width>
-                <height>180</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Favor de introducir
+              <item>
+               <widget class="QLabel" name="label_15">
+                <property name="minimumSize">
+                 <size>
+                  <width>500</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>500</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>30</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Favor de introducir
  los siguientes datos</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_49">
-            <item>
-             <spacer name="horizontalSpacer_42">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>38</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QPushButton" name="btnVerificarDatos">
-              <property name="minimumSize">
-               <size>
-                <width>390</width>
-                <height>110</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>390</width>
-                <height>110</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>24</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Continuar </string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
+             <layout class="QHBoxLayout" name="horizontalLayout_49">
+              <item>
+               <spacer name="horizontalSpacer_42">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>38</width>
+                  <height>17</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnVerificarDatos">
+                <property name="minimumSize">
+                 <size>
+                  <width>390</width>
+                  <height>110</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>390</width>
+                  <height>110</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>24</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="toolTip">
+                 <string>Continuar </string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
 	
 	color: rgb(255, 255, 255);
 	
@@ -2966,191 +2942,193 @@ QPushButton &gt; * {
     border-radius: 0px; /* Restablece el border-radius para los elementos internos */
     background-color: transparent; /* Opción para mantener el fondo de los elementos internos */
 }</string>
-              </property>
-              <property name="text">
-               <string>Continuar</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_70">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>38</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
+                </property>
+                <property name="text">
+                 <string>Continuar</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_70">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>38</width>
+                  <height>17</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
-         </layout>
-        </item>
-        <item row="1" column="3">
-         <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_62">
+           <layout class="QVBoxLayout" name="verticalLayout_16">
             <item>
-             <widget class="QLabel" name="lblTest1_19">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_62">
+              <item>
+               <widget class="QLabel" name="lblTest1_19">
+                <property name="minimumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_26">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>28</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Numero empleado</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QLabel" name="label_26">
+             <widget class="QLineEdit" name="txtNumeroEmpleado">
               <property name="minimumSize">
                <size>
                 <width>400</width>
-                <height>50</height>
+                <height>70</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>50</height>
+                <width>320</width>
+                <height>70</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>28</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
+                <pointsize>24</pointsize>
                </font>
-              </property>
-              <property name="text">
-               <string>Numero empleado</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txtNumeroEmpleado">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>320</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>24</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_47">
-            <item>
-             <widget class="QLabel" name="lblTest1_20">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
               </property>
               <property name="text">
                <string/>
               </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_28">
+             <layout class="QHBoxLayout" name="horizontalLayout_47">
+              <item>
+               <widget class="QLabel" name="lblTest1_20">
+                <property name="minimumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_28">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>28</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Numero de orden</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txtNumeroOrden">
               <property name="minimumSize">
                <size>
-                <width>400</width>
-                <height>50</height>
+                <width>320</width>
+                <height>70</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>50</height>
+                <width>400</width>
+                <height>70</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>28</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
+                <pointsize>24</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>Numero de orden</string>
+               <string/>
               </property>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txtNumeroOrden">
-            <property name="minimumSize">
-             <size>
-              <width>320</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>400</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>24</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
@@ -3186,7 +3164,7 @@ QPushButton &gt; * {
        </layout>
       </widget>
       <widget class="QWidget" name="page_11">
-       <layout class="QGridLayout" name="gridLayout_5">
+       <layout class="QGridLayout" name="gridLayout_12">
         <item row="0" column="1">
          <spacer name="verticalSpacer_16">
           <property name="orientation">
@@ -3232,182 +3210,112 @@ QPushButton &gt; * {
           </property>
          </spacer>
         </item>
-        <item row="1" column="1" colspan="2">
-         <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item row="1" column="1" colspan="3">
+         <layout class="QHBoxLayout" name="horizontalLayout_70">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_46">
+           <layout class="QVBoxLayout" name="verticalLayout_17">
             <item>
-             <spacer name="horizontalSpacer_34">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <layout class="QHBoxLayout" name="horizontalLayout_71">
+              <property name="spacing">
+               <number>30</number>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblTest1_21">
-              <property name="minimumSize">
-               <size>
-                <width>80</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/idea.png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblCode_43">
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>35</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Atención</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_27">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_72">
-            <property name="spacing">
-             <number>30</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_16">
-              <property name="minimumSize">
-               <size>
-                <width>500</width>
-                <height>180</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>500</width>
-                <height>180</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Favor de confirmar los
- datos introducidos</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_45">
-            <item>
-             <spacer name="horizontalSpacer_48">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>38</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_40">
               <item>
-               <widget class="QLabel" name="lblinicialize_2">
+               <widget class="QLabel" name="lblTest1_21">
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
+                  <width>80</width>
+                  <height>80</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>80</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../resources/resources.qrc">:/resources/idea.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblCode_43">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
                   <height>100</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>100</width>
-                  <height>100</height>
+                  <height>16777215</height>
                  </size>
                 </property>
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
+                <property name="font">
+                 <font>
+                  <pointsize>35</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
                 </property>
                 <property name="text">
-                 <string/>
-                </property>
-                <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
+                 <string>Atención</string>
                 </property>
                </widget>
               </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_72">
+              <property name="spacing">
+               <number>30</number>
+              </property>
               <item>
-               <spacer name="horizontalSpacer_65">
+               <widget class="QLabel" name="label_16">
+                <property name="minimumSize">
+                 <size>
+                  <width>500</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>500</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>30</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Favor de confirmar los
+ datos introducidos</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_73">
+              <item>
+               <spacer name="horizontalSpacer_48">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -3416,221 +3324,241 @@ QPushButton &gt; * {
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
-                  <height>20</height>
+                  <width>38</width>
+                  <height>17</height>
                  </size>
                 </property>
                </spacer>
               </item>
               <item>
-               <widget class="QLabel" name="lblCode_19">
+               <widget class="QPushButton" name="btnVerificarDatos_2">
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
-                  <height>100</height>
+                  <width>390</width>
+                  <height>110</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>100</width>
-                  <height>100</height>
+                  <width>390</width>
+                  <height>110</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>24</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="toolTip">
+                 <string>Confirmar datos</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+	
+	color: rgb(255, 255, 255);
+	background-color: rgb(11, 186, 78);
+     border: 4px solid rgb(11, 186, 78); /* Borde para el QStackedWidget */
+    border-radius: 25px; /* Bordes redondeados solo para el QStackedWidget */
+    padding: 5px; /* Opcional: agrega espacio interno */
+}
+
+QPushButton &gt; * {
+    border: none; /* Asegura que los elementos dentro del QStackedWidget no hereden el borde */
+    border-radius: 0px; /* Restablece el border-radius para los elementos internos */
+    background-color: transparent; /* Opción para mantener el fondo de los elementos internos */
+}</string>
+                </property>
+                <property name="text">
+                 <string>Confirmar</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_71">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>38</width>
+                  <height>17</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_24">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_74">
+              <item>
+               <widget class="QLabel" name="lblTest1_22">
+                <property name="minimumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
                  </size>
                 </property>
                 <property name="text">
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap resource="../resources/resources.qrc">:/resources/close.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
                 </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_27">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>28</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Numero empleado</string>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
             <item>
-             <spacer name="horizontalSpacer_71">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>38</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="3">
-         <layout class="QVBoxLayout" name="verticalLayout_24">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_74">
-            <item>
-             <widget class="QLabel" name="lblTest1_22">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/user.png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_27">
+             <widget class="QLabel" name="lblNumeroEmpleado">
               <property name="minimumSize">
                <size>
                 <width>400</width>
-                <height>50</height>
+                <height>70</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>50</height>
+                <width>320</width>
+                <height>70</height>
                </size>
               </property>
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
                </font>
-              </property>
-              <property name="text">
-               <string>Numero empleado</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblNumeroEmpleado">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>320</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>28</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_75">
-            <item>
-             <widget class="QLabel" name="lblTest1_23">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
               </property>
               <property name="text">
                <string/>
               </property>
-              <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_29">
+             <layout class="QHBoxLayout" name="horizontalLayout_75">
+              <item>
+               <widget class="QLabel" name="lblTest1_23">
+                <property name="minimumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>70</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../resources/resources.qrc">:/resources/edit (1).png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_29">
+                <property name="minimumSize">
+                 <size>
+                  <width>400</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>28</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Numero de orden</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblNumeroOrden">
               <property name="minimumSize">
                <size>
                 <width>400</width>
-                <height>50</height>
+                <height>70</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>50</height>
+                <width>400</width>
+                <height>70</height>
                </size>
               </property>
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
                </font>
               </property>
               <property name="text">
-               <string>Numero de orden</string>
+               <string/>
               </property>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblNumeroOrden">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>400</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>28</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
