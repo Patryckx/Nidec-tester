@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>close.png</file>
+    <file>logout (1).png</file>
     <file>user (1).png</file>
     <file>home.png</file>
     <file>cycle (1).png</file>

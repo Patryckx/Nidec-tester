@@ -266,6 +266,9 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
 
+        #Show User and Shop order input 
+        self.stackedWidget.setCurrentIndex(4)
+
     def back_to_inicialize_app(self):
         self.stackedWidget.setCurrentIndex(0)
 

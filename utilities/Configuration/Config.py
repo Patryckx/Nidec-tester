@@ -26,7 +26,17 @@ class Configuration():
             print(f"Error reading settings.ini: {e}")
             return None,None,None,None,None,None
 
-
+    def get_current_user(self):
+        config = configparser.ConfigParser()
+        try:
+            config.read('settings/session.ini')
+            user_Id = config.get('Session', 'ID_User', fallback='None').replace('"', '')
+            shop_Order = config.get('Session', 'Shop_order', fallback='None').replace('"', '')
+           
+            return user_Id,shop_Order
+        except Exception as e:
+            print(f"Error reading session.ini: {e}")
+            return None,None
 
     
     def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value):
@@ -55,4 +65,25 @@ class Configuration():
                 config.write(configfile)
         except Exception as e:
             print("Error al guardar la configuracion",e)
+    
+    
+    def save_new_user_and_shop_info(self,user_Id,Shop_order):
+        try:
+            
+            # Crear un objeto ConfigParser
+            config = configparser.ConfigParser()
+
+            # Cargar el archivo .ini
+            config.read('settings/session.ini')
+
+            # DAQ
+            config.set('Session', 'ID_User', user_Id)
+            # RS232
+            config.set('Session', 'Shop_order', Shop_order)
+            
+            # Guardar los cambios en el archivo .ini
+            with open('settings/session.ini', 'w') as configfile:
+                config.write(configfile)
+        except Exception as e:
+            print("Error al guardar la informacion del usuario y orden de compra",e)
 
