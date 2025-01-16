@@ -39,6 +39,9 @@ class MainWindow(QMainWindow, mainApplication):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.connect_signals()
+
+        # Eliminar la barra de título y los botones de control
+        self.setWindowFlags(Qt.FramelessWindowHint)
     
 
         '''# Formato a tabla
@@ -95,7 +98,20 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Disable txt field
         self.txtCode.setEnabled(False)'''
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self._startPos = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
 
+    def mouseMoveEvent(self, event):
+        if self._startPos is not None and event.buttons() == Qt.LeftButton:
+            self.move(event.globalPos() - self._startPos)
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self._startPos = None
+            event.accept()
     
 
     def get_userinfo(self,name,apellidos):
