@@ -296,6 +296,33 @@ class MainWindow(QMainWindow, mainApplication):
 
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
+            #return
+
+        self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
+
+        if not self.Rs232.connect():
+            print("Serial 232 Device NOT connected connected")
+            self.stackedWidget.setCurrentIndex(1)
+            #return
+
+
+        self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
+
+        if not self.Rs485.connect():
+            print("Serial 485 Device NOT connected connected")
+            self.stackedWidget.setCurrentIndex(1)
+            #return
+
+        #Camera Connection through telnet protocol
+        
+        self.Camera=TelnetClient(camera_address,camera_port)
+
+        if not self.Camera.connect():
+            print("Camera connection Telnet not established")
+            self.stackedWidget.setCurrentIndex(3)
+            #return
+
+        print("All devices sucessfully conected")  
 
         #Instrument verification finished
 
