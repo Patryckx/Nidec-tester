@@ -42,7 +42,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         # Eliminar la barra de título y los botones de control
         self.setWindowFlags(Qt.FramelessWindowHint)
-    
+        #self.setWindowState(Qt.WindowFullScreen)  # Pantalla completa
+
+        self.setMouseTracking(True)  # Seguimiento del mouse
+        self._startPos = None  # Para guardar la posición inicial del mouse
 
         '''# Formato a tabla
         headers = ['ID','Codigo','Resultado', 'Programa','Hora' ]
@@ -98,7 +101,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Disable txt field
         self.txtCode.setEnabled(False)'''
-    def mousePressEvent(self, event):
+
+    def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.LeftButton:
             self._startPos = event.globalPos() - self.frameGeometry().topLeft()
             event.accept()

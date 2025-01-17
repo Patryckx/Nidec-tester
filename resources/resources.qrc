@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="resources">
+    <file>clipboard.png</file>
+    <file>processing.png</file>
+    <file>big-data.png</file>
+    <file>pentairIMG.PNG</file>
     <file>close.png</file>
     <file>logout (1).png</file>
     <file>user (1).png</file>
