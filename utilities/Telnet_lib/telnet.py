@@ -22,8 +22,11 @@ class TelnetClient:
         try:
             self.connection = telnetlib.Telnet(self.host, self.port, self.timeout)
             print(f"Conexión establecida con {self.host}:{self.port}")
+            return True
         except Exception as e:
-            raise ConnectionError(f"No se pudo conectar a {self.host}:{self.port}. Error: {e}")
+            print((f"No se pudo conectar a {self.host}:{self.port}. Error: {e}"))
+            return False
+            #raise ConnectionError(f"No se pudo conectar a {self.host}:{self.port}. Error: {e}")
 
     def send_data(self, data):
         """

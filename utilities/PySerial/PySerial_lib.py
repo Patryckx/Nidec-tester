@@ -19,8 +19,12 @@ class SerialDevice:
                 timeout=self.timeout
             )
             print(f"Connected to {self.port}")
+            return True
         except serial.SerialException as e:
             print(f"Failed to connect to {self.port}: {e}")
+            return False
+
+
 
     def disconnect(self):
         if self.serial_connection and self.serial_connection.is_open:
