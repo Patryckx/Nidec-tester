@@ -3854,7 +3854,7 @@ QPushButton &gt; * {
                  </font>
                 </property>
                 <property name="text">
-                 <string>Por favor escanee el codigo serial </string>
+                 <string>Por favor escanee el código serial </string>
                 </property>
                </widget>
               </item>
@@ -3878,6 +3878,9 @@ QPushButton &gt; * {
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_22">
+              <property name="spacing">
+               <number>0</number>
+              </property>
               <property name="leftMargin">
                <number>50</number>
               </property>
@@ -3934,11 +3937,11 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblBtnStart">
+               <widget class="QLabel" name="lblEnter_VerifyCode">
                 <property name="minimumSize">
                  <size>
-                  <width>50</width>
-                  <height>50</height>
+                  <width>60</width>
+                  <height>60</height>
                  </size>
                 </property>
                 <property name="maximumSize">
@@ -3950,11 +3953,14 @@ QPushButton &gt; * {
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
+                <property name="toolTip">
+                 <string>Verificar codigo</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap>:/resources/UX icons/enter.png</pixmap>
+                 <pixmap resource="../resources/resources.qrc">:/resources/enter.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>
@@ -3988,7 +3994,7 @@ QPushButton &gt; * {
                <number>150</number>
               </property>
               <item>
-               <widget class="QLabel" name="label_8">
+               <widget class="QLabel" name="lblVerifySerialCode">
                 <property name="minimumSize">
                  <size>
                   <width>560</width>
