@@ -510,7 +510,7 @@ class MainWindow(QMainWindow, mainApplication):
        
         else:
             self.lblVerifyFirmware.setText("Firmware NO capturado")
-            self.lblVerifySerialCode.setStyleSheet("color: red;")
+            self.lblVerifyFirmware.setStyleSheet("color: red;")
 
             #Test Button 
             self.btnPrueba2.setStyleSheet("background-color: red;")
