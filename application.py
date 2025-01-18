@@ -11,6 +11,7 @@ from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
 from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
+from utilities.Tests.Tests import Manage_tests
 
 
 #from utilities.Config.Configuration import Config_Screen
@@ -79,6 +80,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.gateway=FX3U()
 
+        self.test=Manage_tests()
+
         
 
         # Space bar function initialized flag 
@@ -116,14 +119,6 @@ class MainWindow(QMainWindow, mainApplication):
         if event.button() == Qt.LeftButton:
             self._startPos = None
             event.accept()
-    
-
-    def get_userinfo(self,name,apellidos):
-        self.user_name = name
-        self.user_apellidos = apellidos
-
-        self.complete_name=(f"{self.user_name} {self.user_apellidos}")
-
 
     def keyPressEvent(self, event):
         
@@ -175,6 +170,10 @@ class MainWindow(QMainWindow, mainApplication):
         #User ID and Shop order textboxes
         self.txtNumeroEmpleado.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroEmpleado, event)
         self.txtNumeroOrden.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroOrden, event)
+
+        #Serial code Test I
+        self.txtSerialCode.returnPressed.connect(self.test_1)
+        self.lblEnter_VerifyCode.mousePressEvent = self.test_1
 
     
 ################## CONFIGURATION #############################################
@@ -276,6 +275,72 @@ class MainWindow(QMainWindow, mainApplication):
     
 ###############################################################
 
+    
+
+    def verify_user_and_ShopOrder(self):
+        currentUserId=self.txtNumeroEmpleado.text()
+        currentShopOrder=self.txtNumeroOrden.text()
+
+        if currentUserId and currentShopOrder:
+
+            # Verificar si ambos valores son números y cumplen con la longitud requerida
+            if re.fullmatch(r'\d{4}', currentUserId) and re.fullmatch(r'\d{6}', currentShopOrder):
+                print("Datos válidos obtenidos")
+
+                currentUserId=str(currentUserId)
+                self.lblNumeroEmpleado.setText(currentUserId)
+
+                currentShopOrder=str(currentShopOrder)
+                self.lblNumeroOrden.setText(currentShopOrder)
+
+                #Show User and Shop order input confirm Screen
+                self.stackedWidget.setCurrentIndex(5)
+               
+            else:
+                print("Datos no válidos o no cumplen con los requisitos")
+
+                #Erase textfield information
+                self.txtNumeroEmpleado.setText("")
+                self.txtNumeroOrden.setText("")
+
+                self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
+                self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
+
+                #Show User and Shop order input 
+                #self.stackedWidget.setCurrentIndex(4)
+        else:
+            print("Informacion de usuario u orden faltante ")           
+            self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
+            self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
+    
+    def confirm_and_save_userId_and_ShopOrder(self,event):
+
+        currentUserId=str(self.lblNumeroEmpleado.text())
+        currentShopOrder=str(self.lblNumeroOrden.text())
+
+        self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
+
+        #Put information in GUI 
+        self.lblCurrentUser.setText(currentUserId)
+        self.lblCurrentOrder.setText(currentShopOrder)
+        
+        #Show first test index screen
+        self.stackedWidget.setCurrentIndex(6)
+        self.txtSerialCode.setFocus()
+
+    
+    def deny_userId_and_ShopOrder(self,event):
+
+        #Erase information in textfields
+        self.txtNumeroEmpleado.setText("")
+        self.txtNumeroOrden.setText("")
+        
+        #Show again user input information 
+        self.stackedWidget.setCurrentIndex(4)
+
+    def back_to_inicialize_app(self):
+        self.stackedWidget.setCurrentIndex(0)
+
     def inicialize(self,event):
         print("App inicialized")
 
@@ -340,74 +405,90 @@ class MainWindow(QMainWindow, mainApplication):
             
             #Show first test index screen
             self.stackedWidget.setCurrentIndex(6)
+
+            self.txtSerialCode.setFocus()
         else:
             print("Datos no válidos o no cumplen con los requisitos")
 
             #Show User and Shop order input 
             self.stackedWidget.setCurrentIndex(4)
+    
+    def test_1(self,event=None):
+        
+        print("Primera prueba")
 
-    def verify_user_and_ShopOrder(self):
-        currentUserId=self.txtNumeroEmpleado.text()
-        currentShopOrder=self.txtNumeroOrden.text()
+        #Ejemplo formato codigo serial
+        #BQ244423100510013
 
-        if currentUserId and currentShopOrder:
+        serial_code=self.txtSerialCode.text()
 
-            # Verificar si ambos valores son números y cumplen con la longitud requerida
-            if re.fullmatch(r'\d{4}', currentUserId) and re.fullmatch(r'\d{6}', currentShopOrder):
-                print("Datos válidos obtenidos")
+        print(f"Codigo introducido: {serial_code}")
 
-                currentUserId=str(currentUserId)
-                self.lblNumeroEmpleado.setText(currentUserId)
+         # Evaluar el formato del código serial
+        if len(serial_code) == 17 and serial_code[:2].isalpha():
+            print("Código serial válido:", serial_code)
+            # Aquí puedes añadir más lógica para manejar un código válido
 
-                currentShopOrder=str(currentShopOrder)
-                self.lblNumeroOrden.setText(currentShopOrder)
+            self.lblVerifySerialCode.setText("Codigo capturado")
+            self.lblVerifySerialCode.setStyleSheet("color: green;")
+            self.txtSerialCode.setEnabled(False)
 
-                #Show User and Shop order input confirm Screen
-                self.stackedWidget.setCurrentIndex(5)
-               
-            else:
-                print("Datos no válidos o no cumplen con los requisitos")
+            self.test.result_T1(str(serial_code))
 
-                #Erase textfield information
-                self.txtNumeroEmpleado.setText("")
-                self.txtNumeroOrden.setText("")
-
-                self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
-                self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
-
-                #Show User and Shop order input 
-                #self.stackedWidget.setCurrentIndex(4)
         else:
-            print("Informacion de usuario u orden faltante ")           
-            self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
-            self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
-    
-    def confirm_and_save_userId_and_ShopOrder(self,event):
+            print("Código serial no válido")
+            # Aquí puedes añadir lógica para manejar un código no válido
+            self.lblVerifySerialCode.setText("Codigo invalido")
+            self.lblVerifySerialCode.setStyleSheet("color: red;")
 
-        currentUserId=str(self.lblNumeroEmpleado.text())
-        currentShopOrder=str(self.lblNumeroOrden.text())
+            # Opcional: limpiar el campo de texto después de la evaluación
+            self.txtSerialCode.clear()
 
-        self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
 
-        #Put information in GUI 
-        self.lblCurrentUser.setText(currentUserId)
-        self.lblCurrentOrder.setText(currentShopOrder)
+    def test_2(self):
+        print("Segunda prueba")
+
+
+
+    def update_table_register(self, Barcode,Result,response,program,id):
+        # Codes
+        Etiqueta = str(Barcode)
         
-        #Show first test index screen
-        self.stackedWidget.setCurrentIndex(6)
-    
-    def deny_userId_and_ShopOrder(self,event):
+        current_datetime = datetime.now()
+        formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
 
-        #Erase information in textfields
-        self.txtNumeroEmpleado.setText("")
-        self.txtNumeroOrden.setText("")
+        formatted_time = current_datetime.strftime("%H:%M:%S")
+
+        Current_date = str(formatted_datetime)
+
+        Current_time=str(formatted_time)
+       
+        # Assembling the register
+        # Table register
+        self.register = {"ID":id,"Etiqueta": Etiqueta,"Programa": program,"Resultado": Result, "Hora": Current_time}
+      
+        # Logic to verify number of table registers and only show 9 registers 
+        table_registers = self.ResultsTable.rowCount()
+        if table_registers > 9:
+            self.ResultsTable.removeRow(9)
+  
+        # Register insertion at top of table
+        row = 0  # Insert the new register at the top of the table
+        row_count = self.ResultsTable.rowCount()  # Obtener el número de filas actual en la tabla
+        self.ResultsTable.insertRow(row)  # Insertar una nueva fila en la tabla
+
+        col = 0  # Columna inicial para insertar valores
+
+        for key, value in self.register.items():
+            item = QtWidgets.QTableWidgetItem(str(value))  # Crear un QTableWidgetItem con el valor del diccionario
+            item.setTextAlignment(Qt.AlignCenter)  # Centrar el texto en la celda
+            self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
+            col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
+       
+        self.csv_register = {"ID":id,"Etiqueta": Etiqueta,"Programa":program,"Resultado": Result,"Respuesta sensor":response, "Operador":self.complete_name,"Fecha":Current_date}
         
-        #Show again user input information 
-        self.stackedWidget.setCurrentIndex(4)
-
-    def back_to_inicialize_app(self):
-        self.stackedWidget.setCurrentIndex(0)
-
+        # Call csv register add function 
+        self.csv_registers_add(self.csv_register)
 
 
 
