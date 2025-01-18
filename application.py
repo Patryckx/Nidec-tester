@@ -1,8 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5.QtCore import Qt
-
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer
+from PyQt5.QtGui import QIcon, QColor
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton
 
 from ui.Application import Ui_MainWindow as mainApplication
 
@@ -35,10 +33,21 @@ import socket
 import telnetlib
 
 
+
 class MainWindow(QMainWindow, mainApplication):
+
+#Signals 
+
+    Test_2_signal = pyqtSignal()
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+
+        
+
+
+
         self.connect_signals()
 
         # Eliminar la barra de título y los botones de control
@@ -175,10 +184,14 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtSerialCode.returnPressed.connect(self.test_1)
         self.lblEnter_VerifyCode.mousePressEvent = self.test_1
 
+
+        #Firmware version Test 2
+        self.Test_2_signal.connect(self.Test_2_GUI_changes)
+
     
 ################## CONFIGURATION #############################################
     def show_edit_screen_configuration(self,event):
-        self.stackedWidget.setCurrentIndex(11)
+        self.stackedWidget.setCurrentIndex(13)
         current_config=self.config.get_current_config()
 
         gateway_port=str(current_config[0])
@@ -195,7 +208,7 @@ class MainWindow(QMainWindow, mainApplication):
     
 
     def show_configuration(self,event):
-        self.stackedWidget.setCurrentIndex(10)
+        self.stackedWidget.setCurrentIndex(12)
 
         current_config=self.config.get_current_config()
 
@@ -435,6 +448,10 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.test.result_T1(str(serial_code))
 
+            time.sleep(1)
+            #Continue with Test2
+            self.test_2()
+
         else:
             print("Código serial no válido")
             # Aquí puedes añadir lógica para manejar un código no válido
@@ -447,6 +464,64 @@ class MainWindow(QMainWindow, mainApplication):
 
     def test_2(self):
         print("Segunda prueba")
+
+        #Read register to verify HMI presence in Fixture
+
+        
+
+        '''
+        daemon=True: Esto indica que el hilo será un "hilo daemon", 
+        lo que significa que el hilo se cerrará automáticamente 
+        cuando el programa principal termine. 
+        Si no utilizas daemon=True, 
+        deberías manejar el cierre del hilo manualmente.'''
+        '''# Crear un hilo para leer la bobina sin bloquear el hilo principal
+        hilo_bobina = threading.Thread(target=self.check_handheld_status,daemon=True)
+        # Iniciar el hilo
+        hilo_bobina.start()'''
+
+        print("Enabling command mode in HMI ")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05101010249")
+
+        print("Obtaining firmware version ")
+        firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
+
+        print(f"Firmware response:{firmware_version}")
+
+        if firmware_version:
+            self.txtFirmware.setText(firmware_version)
+
+            self.lblVerifyFirmware.setText("Firmware capturado")
+            self.lblVerifyFirmware.setStyleSheet("color: green;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+
+            self.test.result_T2(firmware_version)
+
+
+       
+        else:
+            self.lblVerifyFirmware.setText("Firmware NO capturado")
+            self.lblVerifySerialCode.setStyleSheet("color: red;")
+
+
+    def Test_2_GUI_changes(self):
+            #Third Test
+            self.stackedWidget.setCurrentIndex(7)  
+
+    def check_handheld_status(self):
+         while True:
+            # Leer la bobina y procesar su estado
+            handheld_status=self.gateway.read_coil(1)
+            if handheld_status:
+                print("Bobina detectada")
+
+            # Esperar un poco antes de volver a leer (por ejemplo, cada 1 segundo)
+            time.sleep(.5)
+
+
 
 
 

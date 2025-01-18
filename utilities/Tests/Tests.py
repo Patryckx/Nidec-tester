@@ -11,9 +11,7 @@ import datetime
 
 
 class Manage_tests():
-    def __init__(self,test1_result,test2_result,
-                test3_result,test4_result,
-                test5_result,test6_result):
+    def __init__(self,):
         self.general_result=None
         self.test1_result=None
         self.test2_result=None
@@ -21,7 +19,7 @@ class Manage_tests():
         self.test4_result=None
         self.test5_result=None
         self.test6_result=None
-        self.record=[]
+        self.record={}
 
     def result (self,global_result:str):
         self.general_result=global_result
