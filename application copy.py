@@ -559,10 +559,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.Camera.read_data()'''
 
         # Ejemplo de llamada a la función
-        #modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-
-        #leds_result= PASS
-        #self.manual_test_3_verification(leds_result,modify_list)
+        modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        self.manual_test_3_verification(modify_list)
 
         
 
@@ -582,12 +580,7 @@ class MainWindow(QMainWindow, mainApplication):
         # Crear un QTimer para emitir la señal después de 3 segundos
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit()) '''
 
-    #def manual_test_3_verification(self, modify_list, event=None):
-    def manual_test_3_verification(self, event=None):
-        #Temporary list declaration
-        modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        leds_result="PASS"
-        
+    def manual_test_3_verification(self, modify_list, event=None):
         led_names = [f"lblLED{i}" for i in range(1, 12)]
         led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
@@ -595,13 +588,6 @@ class MainWindow(QMainWindow, mainApplication):
             if should_modify:
                 getattr(self, led_names[i]).setEnabled(True)
                 getattr(self, led_input_names[i]).setEnabled(False)
-        
-        if leds_result=="PASS":
-            self.btnPrueba3.setStyleSheet("background-color: green;")
-        else:
-            self.btnPrueba3.setStyleSheet("background-color: red;")
-
-        self.test.result_T3(leds_result,modify_list)
 
         # Crear un QTimer para emitir la señal después de 3 segundos
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
@@ -612,21 +598,10 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_3_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(8) 
+        self.stackedWidget.setCurrentIndex(6) 
 
 
 ############## TEST4   #####################################
-
-    def test_4(self):
-
-        print("Prueba 4")
-
-
-
-
-
-
-
     def update_table_register(self, Barcode,Result,response,program,id):
         # Codes
         Etiqueta = str(Barcode)

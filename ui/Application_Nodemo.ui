@@ -1304,7 +1304,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -4329,21 +4329,24 @@ QPushButton &gt; * {
          <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>0</number>
+         <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>60</number>
+         <number>50</number>
         </property>
         <property name="spacing">
          <number>0</number>
         </property>
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_85">
+          <property name="spacing">
+           <number>15</number>
+          </property>
           <property name="leftMargin">
            <number>50</number>
           </property>
-          <property name="rightMargin">
-           <number>50</number>
+          <property name="topMargin">
+           <number>30</number>
           </property>
           <item>
            <widget class="QLabel" name="lblTest1_15">
@@ -4374,13 +4377,13 @@ QPushButton &gt; * {
            <widget class="QLabel" name="lblCode_23">
             <property name="minimumSize">
              <size>
-              <width>400</width>
+              <width>600</width>
               <height>50</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>400</width>
+              <width>600</width>
               <height>50</height>
              </size>
             </property>
@@ -4397,155 +4400,20 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_53">
+           <spacer name="horizontalSpacer_85">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+             <enum>QSizePolicy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>158</width>
+              <width>328</width>
               <height>20</height>
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_23">
-            <item>
-             <widget class="QLabel" name="label_8">
-              <property name="minimumSize">
-               <size>
-                <width>270</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>270</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>16</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Todos los LEDS encendieron
- de manera correcta?</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_71">
-              <item>
-               <spacer name="horizontalSpacer_49">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_70">
-                <item>
-                 <widget class="QLabel" name="lblConfirmLeds">
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_38">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QLabel" name="lblDenyLeds">
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/close.png</pixmap>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_52">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
           </item>
          </layout>
         </item>
@@ -4604,10 +4472,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED1">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_14">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4635,10 +4500,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput1">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
+               <widget class="QLabel" name="lblDeclineLeds_14">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4696,10 +4558,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED2">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_35">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4727,7 +4586,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput2">
+               <widget class="QLabel" name="lblDeclineLeds_35">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4785,10 +4644,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED3">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_36">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4816,7 +4672,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput3">
+               <widget class="QLabel" name="lblDeclineLeds_36">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4874,10 +4730,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED4">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_37">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4905,7 +4758,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput4">
+               <widget class="QLabel" name="lblDeclineLeds_37">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4963,10 +4816,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED5">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_38">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -4994,7 +4844,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput5">
+               <widget class="QLabel" name="lblDeclineLeds_38">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5052,10 +4902,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED6">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_39">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5083,7 +4930,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput6">
+               <widget class="QLabel" name="lblDeclineLeds_39">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5141,10 +4988,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED7">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_40">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5172,7 +5016,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput7">
+               <widget class="QLabel" name="lblDeclineLeds_40">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5230,10 +5074,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED8">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_41">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5261,7 +5102,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput8">
+               <widget class="QLabel" name="lblDeclineLeds_41">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5319,10 +5160,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED9">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_42">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5350,7 +5188,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput9">
+               <widget class="QLabel" name="lblDeclineLeds_42">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5408,10 +5246,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED10">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_46">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5439,7 +5274,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput10">
+               <widget class="QLabel" name="lblDeclineLeds_46">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5497,10 +5332,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLED11">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_47">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5528,7 +5360,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLEDInput11">
+               <widget class="QLabel" name="lblDeclineLeds_47">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5613,24 +5445,27 @@ QPushButton &gt; * {
          <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>0</number>
+         <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>60</number>
+         <number>50</number>
         </property>
         <property name="spacing">
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_130">
+         <layout class="QHBoxLayout" name="horizontalLayout_84">
+          <property name="spacing">
+           <number>15</number>
+          </property>
           <property name="leftMargin">
            <number>50</number>
           </property>
-          <property name="rightMargin">
-           <number>50</number>
+          <property name="topMargin">
+           <number>30</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblTest1_17">
+           <widget class="QLabel" name="lblTest1_14">
             <property name="minimumSize">
              <size>
               <width>71</width>
@@ -5655,16 +5490,16 @@ QPushButton &gt; * {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblCode_25">
+           <widget class="QLabel" name="lblCode_22">
             <property name="minimumSize">
              <size>
-              <width>400</width>
+              <width>600</width>
               <height>50</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>400</width>
+              <width>600</width>
               <height>50</height>
              </size>
             </property>
@@ -5676,160 +5511,25 @@ QPushButton &gt; * {
              </font>
             </property>
             <property name="text">
-             <string>Funcionalidad LCD</string>
+             <string>Funcionalidad Segmentos LCD</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_66">
+           <spacer name="horizontalSpacer_84">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+             <enum>QSizePolicy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>158</width>
+              <width>328</width>
               <height>20</height>
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_25">
-            <item>
-             <widget class="QLabel" name="label_9">
-              <property name="minimumSize">
-               <size>
-                <width>350</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>350</width>
-                <height>80</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>16</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Todos los segmentos encendieron
- de manera correcta?</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_84">
-              <item>
-               <spacer name="horizontalSpacer_69">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_131">
-                <item>
-                 <widget class="QLabel" name="lblConfirmLCDS">
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/right.png</pixmap>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_72">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QLabel" name="lblDenyLCDS">
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="../resources/resources.qrc">:/resources/close.png</pixmap>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_73">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
           </item>
          </layout>
         </item>
@@ -5857,7 +5557,7 @@ QPushButton &gt; * {
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_29">
             <property name="spacing">
-             <number>0</number>
+             <number>1</number>
             </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_118">
@@ -5888,10 +5588,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD0">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_49">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5919,7 +5616,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput0">
+               <widget class="QLabel" name="lblDeclineLeds_49">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -5977,10 +5674,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD1">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_13">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6008,7 +5702,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput1">
+               <widget class="QLabel" name="lblDeclineLeds_13">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6066,10 +5760,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD2">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_27">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6097,7 +5788,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput2">
+               <widget class="QLabel" name="lblDeclineLeds_27">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6155,10 +5846,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD3">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_28">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6186,7 +5874,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput3">
+               <widget class="QLabel" name="lblDeclineLeds_28">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6244,10 +5932,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD4">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_29">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6275,7 +5960,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput4">
+               <widget class="QLabel" name="lblDeclineLeds_29">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6333,10 +6018,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD5">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_30">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6364,7 +6046,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput5">
+               <widget class="QLabel" name="lblDeclineLeds_30">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6422,10 +6104,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD6">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_31">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6453,7 +6132,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput6">
+               <widget class="QLabel" name="lblDeclineLeds_31">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6511,10 +6190,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD7">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_32">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6542,7 +6218,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput7">
+               <widget class="QLabel" name="lblDeclineLeds_32">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6600,10 +6276,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD8">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_33">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6631,7 +6304,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput8">
+               <widget class="QLabel" name="lblDeclineLeds_33">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6689,10 +6362,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD9">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_34">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6720,7 +6390,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput9">
+               <widget class="QLabel" name="lblDeclineLeds_34">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6778,10 +6448,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCD10">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_48">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6809,7 +6476,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblLCDInput10">
+               <widget class="QLabel" name="lblDeclineLeds_48">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -6894,10 +6561,10 @@ QPushButton &gt; * {
          <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>0</number>
+         <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>60</number>
+         <number>50</number>
         </property>
         <property name="spacing">
          <number>0</number>
@@ -7124,10 +6791,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton1">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_12">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7141,7 +6805,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7155,7 +6819,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput1">
+               <widget class="QLabel" name="lblDeclineLeds_12">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7169,7 +6833,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7213,10 +6877,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton2">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_20">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7230,7 +6891,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7244,7 +6905,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput2">
+               <widget class="QLabel" name="lblDeclineLeds_20">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7258,7 +6919,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7302,10 +6963,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton3">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_21">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7319,7 +6977,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7333,7 +6991,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput3">
+               <widget class="QLabel" name="lblDeclineLeds_21">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7347,7 +7005,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7391,10 +7049,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton4">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_22">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7408,7 +7063,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7422,7 +7077,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput4">
+               <widget class="QLabel" name="lblDeclineLeds_22">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7436,7 +7091,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7480,10 +7135,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton5">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_23">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7497,7 +7149,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7511,7 +7163,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput5">
+               <widget class="QLabel" name="lblDeclineLeds_23">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7525,7 +7177,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7569,10 +7221,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton6">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_24">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7586,7 +7235,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7600,7 +7249,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput6">
+               <widget class="QLabel" name="lblDeclineLeds_24">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7614,7 +7263,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7658,10 +7307,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton7">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_25">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7675,7 +7321,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7689,7 +7335,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput7">
+               <widget class="QLabel" name="lblDeclineLeds_25">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7703,7 +7349,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7747,10 +7393,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButton8">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_26">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7764,7 +7407,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -7778,7 +7421,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblButtonInput8">
+               <widget class="QLabel" name="lblDeclineLeds_26">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -7792,7 +7435,7 @@ QPushButton &gt; * {
                  </size>
                 </property>
                 <property name="cursor">
-                 <cursorShape>ArrowCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
                  <string/>
@@ -8093,10 +7736,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigital1">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_15">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8124,7 +7764,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigitalInput1">
+               <widget class="QLabel" name="lblDeclineLeds_15">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8182,10 +7822,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigital2">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_43">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8213,7 +7850,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigitalInput2">
+               <widget class="QLabel" name="lblDeclineLeds_43">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8271,10 +7908,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigital3">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_44">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8302,7 +7936,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigitalInput3">
+               <widget class="QLabel" name="lblDeclineLeds_44">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8360,10 +7994,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigital4">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QLabel" name="lblConfirmLeds_45">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -8391,7 +8022,7 @@ QPushButton &gt; * {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblDigitalInput4">
+               <widget class="QLabel" name="lblDeclineLeds_45">
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
@@ -10988,7 +10619,7 @@ QPushButton &gt; * {
  </widget>
  <resources>
   <include location="../resources/resources.qrc"/>
-  <include location="../resources/resources.qrc"/>
+  <include location="../../Users/Ewin/.designer/resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
