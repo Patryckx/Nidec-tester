@@ -445,6 +445,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblVerifySerialCode.setText("Codigo capturado")
             self.lblVerifySerialCode.setStyleSheet("color: green;")
             self.txtSerialCode.setEnabled(False)
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: green;")
 
             self.test.result_T1(str(serial_code))
 
@@ -457,6 +459,8 @@ class MainWindow(QMainWindow, mainApplication):
             # Aquí puedes añadir lógica para manejar un código no válido
             self.lblVerifySerialCode.setText("Codigo invalido")
             self.lblVerifySerialCode.setStyleSheet("color: red;")
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: red;")
 
             # Opcional: limpiar el campo de texto después de la evaluación
             self.txtSerialCode.clear()
@@ -494,9 +498,11 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.lblVerifyFirmware.setText("Firmware capturado")
             self.lblVerifyFirmware.setStyleSheet("color: green;")
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: green;")
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+            QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
 
             self.test.result_T2(firmware_version)
 
@@ -505,6 +511,9 @@ class MainWindow(QMainWindow, mainApplication):
         else:
             self.lblVerifyFirmware.setText("Firmware NO capturado")
             self.lblVerifySerialCode.setStyleSheet("color: red;")
+
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: red;")
 
 
     def Test_2_GUI_changes(self):
