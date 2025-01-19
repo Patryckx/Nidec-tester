@@ -35,7 +35,7 @@ class Manage_tests():
         self.test2_result=firmware
         self.record["Prueba 2:"] = firmware
 
-    def result_T3(self,leds_result:str,leds_array:dict):
+    def result_T3(self,leds_result:str,leds_array:list):
         self.test3_result=leds_result
 
         self.record["Prueba 3:"] = {

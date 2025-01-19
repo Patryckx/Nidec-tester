@@ -42,6 +42,8 @@ class MainWindow(QMainWindow, mainApplication):
 
     Test_3_signal = pyqtSignal()
 
+    Test_4_signal=pyqtSignal()
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
@@ -190,11 +192,17 @@ class MainWindow(QMainWindow, mainApplication):
         #Firmware version Test 2
         self.Test_2_signal.connect(self.Test_2_GUI_changes)
 
-        self.Test_3_signal.connect(self.Test_3_GUI_changes)
 
         #LEDs test 3
         self.lblConfirmLeds.mousePressEvent = self.manual_test_3_verification
         self.lblDenyLeds.mousePressEvent=self.deny_test_3_verification
+        self.Test_3_signal.connect(self.Test_3_GUI_changes)
+
+        #LCD Test 4
+
+        self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
+        self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
+        self.Test_4_signal.connect(self.Test_4_GUI_changes)
 
     
 ################## CONFIGURATION #############################################
@@ -560,6 +568,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         # Ejemplo de llamada a la función
         #modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
         #leds_result= PASS
         #self.manual_test_3_verification(leds_result,modify_list)
@@ -585,13 +594,13 @@ class MainWindow(QMainWindow, mainApplication):
     #def manual_test_3_verification(self, modify_list, event=None):
     def manual_test_3_verification(self, event=None):
         #Temporary list declaration
-        modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         leds_result="PASS"
         
         led_names = [f"lblLED{i}" for i in range(1, 12)]
         led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-        for i, should_modify in enumerate(modify_list):
+        for i, should_modify in enumerate(self.modify_list):
             if should_modify:
                 getattr(self, led_names[i]).setEnabled(True)
                 getattr(self, led_input_names[i]).setEnabled(False)
@@ -601,13 +610,29 @@ class MainWindow(QMainWindow, mainApplication):
         else:
             self.btnPrueba3.setStyleSheet("background-color: red;")
 
-        self.test.result_T3(leds_result,modify_list)
+        self.test.result_T3(leds_result,self.modify_list)
 
         # Crear un QTimer para emitir la señal después de 3 segundos
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
 
+        #Proceed with test 4
+        self.test_4()
+
     def deny_test_3_verification(self,event=None):
-        self.stackedWidget.setCurrentIndex(6)
+
+        print(self.modify_list)
+
+        leds_results="FAIL"
+
+        self.test.result_T3(leds_results,self.modify_list)
+
+        self.btnPrueba3.setStyleSheet("background-color: red;")
+
+
+
+        self.stackedWidget.setCurrentIndex(8)
+
+
 
 
     def Test_3_GUI_changes(self):
@@ -621,9 +646,79 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Prueba 4")
 
+        print("Encendiendo todos los Segmentos LCDS")
+
+        print("Imprimiendo todos los segmentos con 0 ceros")
+
+        self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
+
+        print("Imprimiendo todos los iconos LCD (PM)")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
+
+
+        
+
+    
+    def manual_test_4_verification(self, event=None):
+        #Temporary list declaration
+        self.lds_results_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        lcds_result="PASS"
+        
+        led_names = [f"lblLCD{i}" for i in range(0, 12)]
+        led_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
+
+        for i, should_modify in enumerate(self.modify_list):
+            if should_modify:
+                getattr(self, led_names[i]).setEnabled(True)
+                getattr(self, led_input_names[i]).setEnabled(False)
+        
+        if lcds_result=="PASS":
+            self.btnPrueba4.setStyleSheet("background-color: green;")
+        else:
+            self.btnPrueba4.setStyleSheet("background-color: red;")
+
+        self.test.result_T4(lcds_result)
+
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
+
+    def deny_test_4_verification(self,event=None):
+
+        print(self.modify_list)
+
+        lcds_results="FAIL"
+
+        self.test.result_T4(lcds_results)
+
+        self.btnPrueba4.setStyleSheet("background-color: red;")
 
 
 
+        self.stackedWidget.setCurrentIndex(9)
+
+    def Test_4_GUI_changes(self):
+
+        self.stackedWidget.setCurrentIndex(9) 
+
+
+##############  TEST 5   ##########################
+
+    def test_5(self):
+        print("Prueba 5")
+
+        print("Configurando el HMI en modo monitor")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05101000248")
+
+        print("Iniciando prueba de pulsacion de botones")
+
+        
+
+
+
+
+        
 
 
 
