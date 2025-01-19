@@ -44,6 +44,12 @@ class MainWindow(QMainWindow, mainApplication):
 
     Test_4_signal=pyqtSignal()
 
+    Test_5_signal=pyqtSignal()
+
+    Test_6_signal=pyqtSignal()
+
+    Test_resume_signal=pyqtSignal()
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
@@ -203,6 +209,18 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
         self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
         self.Test_4_signal.connect(self.Test_4_GUI_changes)
+
+        #Test 5 
+        self.Test_5_signal.connect(self.Test_5_GUI_changes)
+
+        #Test 6
+        self.Test_6_signal.connect(self.Test_6_GUI_changes)
+
+        #Resume test
+
+        self.Test_resume_signal.connect(self.Test_resume_GUI_changes)
+
+
 
     
 ################## CONFIGURATION #############################################
@@ -766,6 +784,10 @@ class MainWindow(QMainWindow, mainApplication):
 
                     self.test.result_T5(button_result)
 
+                    # Crear un QTimer para emitir la señal después de 3 segundos
+                    QTimer.singleShot(5000, lambda: self.Test_5_signal.emit())
+
+
                     self.test_6()
                     break
 
@@ -780,10 +802,146 @@ class MainWindow(QMainWindow, mainApplication):
         getattr(self, button).setEnabled(True)
         getattr(self, button_input).setEnabled(False)
 
+    def Test_5_GUI_changes(self):
+
+        self.stackedWidget.setCurrentIndex(10) 
+
     ################ TEST 6   #######################
     def test_6(self):
-        print("Prueba 6")
+        # Diccionario con el orden específico de los botones
+        digital_order = {
+             "Schedule 1": '01', "Schedule 2": '02',
+            "Schedule 3": '04', "Quick Clean": '08'
+        }
 
+        print(digital_order)
+
+        # Convertir los valores del diccionario en una lista para preservar el orden
+        pending_digital_list = list(digital_order.values())
+
+        # Crear una lista de índices usando enumerate para asociar índices con los botones
+        pending_digital_index = [index + 1 for index, _ in enumerate(pending_digital_list)]
+
+        print("Configurando el HMI en modo monitor")
+
+        print("Iniciando prueba de entradas digitales")
+        # Función que realiza el monitoreo en un hilo
+        def monitor_digital_inputs():
+            # Ciclo para monitorear las respuestas del dispositivo
+            #while pending_digital_list:
+            while True:
+                # Simulación de obtener la respuesta del dispositivo
+                response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+
+                print(response)
+                # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
+                # siempre está en una posición fija dentro de la respuesta.
+                # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
+                # Ajusta estos índices según sea necesario para tu respuesta específica.
+                hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+
+                if hex_value == pending_digital_list[0]:
+                    print(f"Botón detectado: {hex_value}")
+                    current_index = pending_digital_index.pop(0)
+                    print(current_index)
+                    digital = f"lblDigital{current_index}"
+                    button_input = f"lblDigitalInput{current_index}"
+                  
+                    # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
+                    self.update_digital_state(digital,button_input)
+
+                    #Remove element from list
+                    pending_digital_list.pop(0)
+
+
+                if  pending_digital_list:
+                    print("Todos las entradas digitales han sido capturadas.")
+
+                    digital_result="PASS"
+
+                    self.btnPrueba6.setStyleSheet("background-color: green;")
+
+                    self.test.result_T6(digital_result)
+
+                    
+
+                    
+                    self.show_resume()
+                    break
+
+        # Crear y arrancar un hilo para ejecutar la función monitor_buttons
+        monitoring_thread = threading.Thread(target=monitor_digital_inputs)
+        monitoring_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
+        monitoring_thread.start()
+
+    # Método para actualizar la interfaz de usuario de manera segura desde el hilo
+    def update_digital_state(self, digital,digital_input):
+        
+        getattr(self, digital).setEnabled(True)
+        getattr(self, digital_input).setEnabled(False)
+
+    
+    def Test_6_GUI_changes(self):
+
+        self.stackedWidget.setCurrentIndex(11) 
+
+    ################ RESUME ########################################
+
+    def show_resume(self):
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_6_signal.emit()) 
+
+        print("Resumen de prueba")
+
+        #print(self.test.test1_result)
+        Result1=self.test.test1_result
+        self.lblResumenCodigoSerial.setText(Result1)
+        #print(self.test.test2_result)
+        Result2=self.test.test2_result
+        self.lblResumenFirmware.setText(Result2)
+
+        #print(self.test.test3_result)
+
+        Result3=self.test.test3_result
+        self.lblResumenLEDS.setText(Result3)
+
+
+        #print(self.test.test4_result)
+        Result4=self.test.test4_result
+        self.lblResumenLCD.setText(Result4)
+
+        #print(self.test.test5_result)
+
+        Result5=self.test.test5_result
+        self.lblResumenBotones.setText(Result5)
+
+
+        #print(self.test.test6_result)
+
+        Result6=self.test.test6_result
+        self.lblResumeDigitalInputs.setText(Result6)
+
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(8000, lambda: self.Test_resume_signal.emit()) 
+
+    def Test_resume_GUI_changes(self):
+
+        print("Reiniciar pruebas")
+
+        self.stackedWidget.setCurrentIndex(6) 
+
+        self.btnPrueba1.setStyleSheet("background-color: ;")
+        self.btnPrueba2.setStyleSheet("background-color: ;")
+        self.btnPrueba3.setStyleSheet("background-color: ;")
+        self.btnPrueba4.setStyleSheet("background-color: ;")
+        self.btnPrueba5.setStyleSheet("background-color: ;")
+        self.btnPrueba6.setStyleSheet("background-color: ;")
+    
+
+        
+
+
+        
 
     def update_table_register(self, Barcode,Result,response,program,id):
         # Codes
