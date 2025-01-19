@@ -759,6 +759,14 @@ class MainWindow(QMainWindow, mainApplication):
 
                 if not pending_buttons_list:
                     print("Todos los botones han sido capturados.")
+
+                    button_result="PASS"
+
+                    self.btnPrueba5.setStyleSheet("background-color: green;")
+
+                    self.test.result_T5(button_result)
+
+                    self.test_6()
                     break
 
         # Crear y arrancar un hilo para ejecutar la función monitor_buttons
@@ -771,6 +779,11 @@ class MainWindow(QMainWindow, mainApplication):
         
         getattr(self, button).setEnabled(True)
         getattr(self, button_input).setEnabled(False)
+
+    ################ TEST 6   #######################
+    def test_6(self):
+        print("Prueba 6")
+
 
     def update_table_register(self, Barcode,Result,response,program,id):
         # Codes
