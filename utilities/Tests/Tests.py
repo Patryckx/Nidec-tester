@@ -48,20 +48,19 @@ class Manage_tests():
 
         self.record["Prueba 4:"] = ocr_result
 
-    def result_T5(self,buttons_result:str,buttons:dict):
+    def result_T5(self,buttons_result:str):
         self.test5_result=buttons_result
 
         self.record["Prueba 5:"] = {
-            "Resultado": buttons_result,
-            "Botones": buttons
+            "Resultado": buttons_result
         }
 
-    def result_T6(self,result:str,digital_inputs:dict):
+    def result_T6(self,result:str):
         self.test6_result=result
 
         self.record["Prueba 6:"] = {
-            "Resultado": result,
-            "Entradas digitales": digital_inputs
+            "Resultado": result
+            
         }
     
     def get_record(self):
