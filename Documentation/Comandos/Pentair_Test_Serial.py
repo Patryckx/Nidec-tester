@@ -93,13 +93,13 @@ def main():
 
              # Enviar comando de consulta de versión de firmware
             print("Enviando comando Esribir pantalla LCD...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x48, 0x4f, 0x4c, 0x41] )
+            response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x38, 0x38, 0x38, 0x38] )
             print(f"Respuesta recibida: {response.hex().upper()}")
 
-            #  # Enviar comando de consulta de versión de firmware
-            # print("Enviando comando iconos LCD...")
-            # response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x01,0X001] )
-            # print(f"Respuesta recibida: {response.hex().upper()}")
+             # Enviar comando de consulta de versión de firmware
+            print("Enviando comando iconos LCD...")
+            response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x1F,] )
+            print(f"Respuesta recibida: {response.hex().upper()}")
 
     
     except serial.SerialException as e:
