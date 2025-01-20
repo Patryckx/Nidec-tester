@@ -683,13 +683,13 @@ class MainWindow(QMainWindow, mainApplication):
         self.lds_results_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         lcds_result="PASS"
         
-        led_names = [f"lblLCD{i}" for i in range(0, 12)]
-        led_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
+        lcd_names = [f"lblLCD{i}" for i in range(0, 12)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
 
         for i, should_modify in enumerate(self.modify_list):
             if should_modify:
-                getattr(self, led_names[i]).setEnabled(True)
-                getattr(self, led_input_names[i]).setEnabled(False)
+                getattr(self, lcd_names[i]).setEnabled(True)
+                getattr(self, lcd_input_names[i]).setEnabled(False)
         
         if lcds_result=="PASS":
             self.btnPrueba4.setStyleSheet("background-color: green;")
@@ -784,8 +784,9 @@ class MainWindow(QMainWindow, mainApplication):
 
                     self.test.result_T5(button_result)
 
-                    # Crear un QTimer para emitir la señal después de 3 segundos
-                    QTimer.singleShot(5000, lambda: self.Test_5_signal.emit())
+                    time.sleep(5)
+
+                    self.Test_5_signal.emit()
 
 
                     self.test_6()
@@ -863,8 +864,9 @@ class MainWindow(QMainWindow, mainApplication):
 
                     self.test.result_T6(digital_result)
 
-                    
+                    time.sleep(5)
 
+                    self.Test_6_signal.emit()
                     
                     self.show_resume()
                     break
@@ -888,60 +890,111 @@ class MainWindow(QMainWindow, mainApplication):
     ################ RESUME ########################################
 
     def show_resume(self):
-        # Crear un QTimer para emitir la señal después de 3 segundos
-        QTimer.singleShot(5000, lambda: self.Test_6_signal.emit()) 
 
         print("Resumen de prueba")
 
-        #print(self.test.test1_result)
         Result1=self.test.test1_result
         self.lblResumenCodigoSerial.setText(Result1)
-        #print(self.test.test2_result)
+
         Result2=self.test.test2_result
         self.lblResumenFirmware.setText(Result2)
-
-        #print(self.test.test3_result)
 
         Result3=self.test.test3_result
         self.lblResumenLEDS.setText(Result3)
 
-
-        #print(self.test.test4_result)
         Result4=self.test.test4_result
         self.lblResumenLCD.setText(Result4)
-
-        #print(self.test.test5_result)
 
         Result5=self.test.test5_result
         self.lblResumenBotones.setText(Result5)
 
-
-        #print(self.test.test6_result)
-
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
 
-        # Crear un QTimer para emitir la señal después de 3 segundos
-        QTimer.singleShot(8000, lambda: self.Test_resume_signal.emit()) 
+        time.sleep(3)
+
+        self.Test_resume_signal.emit()
 
     def Test_resume_GUI_changes(self):
 
-        print("Reiniciar pruebas")
+        print("Reiniciar parametros de prueba")
 
-        self.stackedWidget.setCurrentIndex(6) 
+        #Reset register
+        self.test.clear_record()
 
+        #Test_1
+        self.txtSerialCode.setText("")
+        self.txtSerialCode.setFocus()
+        self.lblVerifySerialCode.setText("")
+        self.txtSerialCode.setEnabled(True)
         self.btnPrueba1.setStyleSheet("background-color: ;")
+
+        #Test 2
+        self.txtFirmware.setText("")
+        self.lblVerifyFirmware.setText("")
         self.btnPrueba2.setStyleSheet("background-color: ;")
+        
+        #Test 3
+        led_names = [f"lblLED{i}" for i in range(1, 12)]
+        led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
+
+        for i in range (1, 12):
+            getattr(self, led_names[i]).setEnabled(False)
+            getattr(self, led_input_names[i]).setEnabled(True)
+        
         self.btnPrueba3.setStyleSheet("background-color: ;")
+        
+        #Test 4
+
+        lcd_names = [f"lblLCD{i}" for i in range(0, 12)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
+
+        for i in range(0,12):
+           
+            getattr(self, lcd_names[i]).setEnabled(False)
+            getattr(self, lcd_input_names[i]).setEnabled(True)
+
         self.btnPrueba4.setStyleSheet("background-color: ;")
+
+        #Test 5
+        button_names = [f"lblButton{i}" for i in range(0, 12)]
+        button_input_names = [f"lblButtonInput{i}" for i in range(0, 12)]
+
+        for i in range(0,12):
+            
+            getattr(self, button_names[i]).setEnabled(False)
+            getattr(self, button_input_names[i]).setEnabled(True)
+        
         self.btnPrueba5.setStyleSheet("background-color: ;")
+
+        #Test 6
+        digital_names = [f"lblDigital{i}" for i in range(1, 4)]
+        digital_input_names = [f"lblDigitalnInput{i}" for i in range(1,4)]
+
+        for i in range(1,4):
+            
+            getattr(self, digital_names[i]).setEnabled(False)
+            getattr(self, digital_input_names[i]).setEnabled(True)
+
         self.btnPrueba6.setStyleSheet("background-color: ;")
-    
 
-        
+        #Resume
 
+        self.lblResumenCodigoSerial.setText("")
 
-        
+        self.lblResumenFirmware.setText("")
+
+        self.lblResumenLEDS.setText("")
+
+        self.lblResumenLCD.setText("")
+
+        self.lblResumenBotones.setText("")
+
+        self.lblResumeDigitalInputs.setText("")
+
+        #Go back to main Screen test
+        self.stackedWidget.setCurrentIndex(6) 
+      
 
     def update_table_register(self, Barcode,Result,response,program,id):
         # Codes
