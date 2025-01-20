@@ -893,6 +893,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Resumen de prueba")
 
+        self.btnResultados.setStyleSheet("background-color: green;")
+
         Result1=self.test.test1_result
         self.lblResumenCodigoSerial.setText(Result1)
 
@@ -911,7 +913,7 @@ class MainWindow(QMainWindow, mainApplication):
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
 
-        time.sleep(3)
+        time.sleep(6)
 
         self.Test_resume_signal.emit()
 
@@ -992,8 +994,14 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.lblResumeDigitalInputs.setText("")
 
+        self.btnResultados.setStyleSheet("background-color: ;")
+    
         #Go back to main Screen test
         self.stackedWidget.setCurrentIndex(6) 
+
+
+        self.txtSerialCode.setFocus()
+
       
 
     def update_table_register(self, Barcode,Result,response,program,id):
