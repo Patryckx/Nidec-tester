@@ -938,7 +938,7 @@ class MainWindow(QMainWindow, mainApplication):
         led_names = [f"lblLED{i}" for i in range(1, 12)]
         led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-        for i in range (1, 12):
+        for i in range (0, 11):
             getattr(self, led_names[i]).setEnabled(False)
             getattr(self, led_input_names[i]).setEnabled(True)
         
@@ -946,10 +946,10 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Test 4
 
-        lcd_names = [f"lblLCD{i}" for i in range(0, 12)]
-        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
+        lcd_names = [f"lblLCD{i}" for i in range(0, 11)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 11)]
 
-        for i in range(0,12):
+        for i in range(0,10):
            
             getattr(self, lcd_names[i]).setEnabled(False)
             getattr(self, lcd_input_names[i]).setEnabled(True)
@@ -957,10 +957,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnPrueba4.setStyleSheet("background-color: ;")
 
         #Test 5
-        button_names = [f"lblButton{i}" for i in range(0, 12)]
-        button_input_names = [f"lblButtonInput{i}" for i in range(0, 12)]
+        button_names = [f"lblButton{i}" for i in range(1, 9)]
+        button_input_names = [f"lblButtonInput{i}" for i in range(1,9)]
 
-        for i in range(0,12):
+        for i in range(0,8):
             
             getattr(self, button_names[i]).setEnabled(False)
             getattr(self, button_input_names[i]).setEnabled(True)
@@ -968,10 +968,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnPrueba5.setStyleSheet("background-color: ;")
 
         #Test 6
-        digital_names = [f"lblDigital{i}" for i in range(1, 4)]
-        digital_input_names = [f"lblDigitalnInput{i}" for i in range(1,4)]
+        digital_names = [f"lblDigital{i}" for i in range(1, 5)]
+        digital_input_names = [f"lblDigitalInput{i}" for i in range(1,5)]
 
-        for i in range(1,4):
+        for i in range(0,3):
             
             getattr(self, digital_names[i]).setEnabled(False)
             getattr(self, digital_input_names[i]).setEnabled(True)
