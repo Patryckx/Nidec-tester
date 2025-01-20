@@ -342,8 +342,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_28 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_28.setObjectName("horizontalLayout_28")
         self.horizontalLayout_27 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_27.setSpacing(15)
         self.horizontalLayout_27.setObjectName("horizontalLayout_27")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_10.setSpacing(15)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.lblclock_3 = QtWidgets.QLabel(self.widget)
         self.lblclock_3.setMinimumSize(QtCore.QSize(50, 40))
@@ -411,7 +413,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_27.addLayout(self.horizontalLayout_29)
         self.horizontalLayout_28.addLayout(self.horizontalLayout_27)
         self.horizontalLayout_134.addLayout(self.horizontalLayout_28)
-        spacerItem27 = QtWidgets.QSpacerItem(273, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem27 = QtWidgets.QSpacerItem(242, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_134.addItem(spacerItem27)
         self.verticalLayout_26 = QtWidgets.QVBoxLayout()
         self.verticalLayout_26.setObjectName("verticalLayout_26")
@@ -3895,7 +3897,6 @@ class Ui_MainWindow(object):
         self.lblTitleSeriales_20.setText(_translate("MainWindow", "Tiempo de ciclo"))
         self.lblTitleSeriales_21.setText(_translate("MainWindow", "Temporizador (secs)"))
 import resources.resources
-
 
 if __name__ == "__main__":
     import sys
