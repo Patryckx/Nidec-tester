@@ -1068,8 +1068,14 @@ QPushButton {
         <layout class="QHBoxLayout" name="horizontalLayout_28">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <property name="spacing">
+            <number>15</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <property name="spacing">
+              <number>15</number>
+             </property>
              <item>
               <widget class="QLabel" name="lblclock_3">
                <property name="minimumSize">
@@ -1276,7 +1282,7 @@ QPushButton {
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>273</width>
+           <width>242</width>
            <height>17</height>
           </size>
          </property>
