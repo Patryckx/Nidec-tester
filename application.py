@@ -3,7 +3,8 @@ from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.Application import Ui_MainWindow as mainApplication
-
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 #Instruments
 from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
@@ -151,9 +152,33 @@ class MainWindow(QMainWindow, mainApplication):
             print("Se presionó Enter")
             #self.get_validate_Mspec()
             self.Validate_Barcode_and_response(event)
+
+    def close(self, event):
+        reply = QMessageBox.question(
+            self,
+            'Confirmar cierre',
+            '¿Estás seguro de que quieres cerrar la aplicación?',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            event.accept()
+            QApplication.quit()
+        else:
+            event.ignore()
+    def minimize_window(self,event):
+        #Minimize window app
+        self.showMinimized()
+       
   
 
     def connect_signals(self):
+
+        self.lblClose.mousePressEvent=self.close
+
+        self.lblMinize.mousePressEvent=self.minimize_window
+
         self.lblinicialize.mousePressEvent = self.inicialize
 
         #Config button

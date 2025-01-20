@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>cerrar.png</file>
+    <file>menos.png</file>
     <file>enter.png</file>
     <file>clipboard.png</file>
     <file>processing.png</file>
