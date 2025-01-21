@@ -332,7 +332,6 @@ class Ui_MainWindow(object):
         self.widget.setMinimumSize(QtCore.QSize(1024, 80))
         self.widget.setMaximumSize(QtCore.QSize(1110, 90))
         self.widget.setStyleSheet("background-color: rgb(47, 47, 47);\n"
-"\n"
 "")
         self.widget.setObjectName("widget")
         self.horizontalLayout_134 = QtWidgets.QHBoxLayout(self.widget)
@@ -413,7 +412,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_27.addLayout(self.horizontalLayout_29)
         self.horizontalLayout_28.addLayout(self.horizontalLayout_27)
         self.horizontalLayout_134.addLayout(self.horizontalLayout_28)
-        spacerItem27 = QtWidgets.QSpacerItem(242, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem27 = QtWidgets.QSpacerItem(213, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_134.addItem(spacerItem27)
         self.verticalLayout_26 = QtWidgets.QVBoxLayout()
         self.verticalLayout_26.setObjectName("verticalLayout_26")
@@ -3897,6 +3896,7 @@ class Ui_MainWindow(object):
         self.lblTitleSeriales_20.setText(_translate("MainWindow", "Tiempo de ciclo"))
         self.lblTitleSeriales_21.setText(_translate("MainWindow", "Temporizador (secs)"))
 import resources.resources
+
 
 if __name__ == "__main__":
     import sys

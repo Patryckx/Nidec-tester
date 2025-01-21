@@ -18,10 +18,10 @@ class Configuration():
             rs232_port = config.get('RS232', 'address', fallback='None').replace('"', '')
 
             camera_address=config.get('Camera', 'address', fallback='None').replace('"', '')
-            #camera_port=config.get('Camera', 'port', fallback='None').replace('"', '')
+            camera_port=config.get('Camera', 'port', fallback='None').replace('"', '')
 
             timer=config.get('Timer', 'cycle_time', fallback='None')
-            return gateway_port,rs232_port, rs485_port,camera_address,timer
+            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer
         except Exception as e:
             print(f"Error reading settings.ini: {e}")
             return None,None,None,None,None,None
@@ -86,4 +86,25 @@ class Configuration():
                 config.write(configfile)
         except Exception as e:
             print("Error al guardar la informacion del usuario y orden de compra",e)
+
+    def erase_user_and_shop_info(self):
+        try:
+            
+            print("Erasing session info")
+            # Crear un objeto ConfigParser
+            config = configparser.ConfigParser()
+
+            # Cargar el archivo .ini
+            config.read('settings/session.ini')
+
+            # DAQ
+            config.set('Session', 'ID_User', "")
+            # RS232
+            config.set('Session', 'Shop_order', "")
+            
+            # Guardar los cambios en el archivo .ini
+            with open('settings/session.ini', 'w') as configfile:
+                config.write(configfile)
+        except Exception as e:
+            print("Error al borrar la informacion del usuario y orden de compra",e)
 

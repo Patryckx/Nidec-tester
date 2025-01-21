@@ -86,14 +86,7 @@ class MainWindow(QMainWindow, mainApplication):
         hora_column_index = headers.index('Hora')
         self.ResultsTable.setColumnWidth(hora_column_index, 190)  # Ajusta el ancho según sea necesario
 
-        # Show first message stacked widget in GUI 
-        self.stackedWidget_messages.setCurrentIndex(0)
-
-        # Instance to configuration screen
-        ########## Configuration ##########
-        self.configuration_app = Config_Screen()
-
-        self.session_app=Session()'''
+       '''
 
         #Instance config class
         self.config=Configuration()
@@ -101,29 +94,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.gateway=FX3U()
 
         self.test=Manage_tests()
-
         
-
-        # Space bar function initialized flag 
-        self.initialized_flag = None
-
-        # Ethernet connection instance
-        self.controller = None
-
-        self.tn=None
-
-        self.plc=None
-
-        #Threading event scan 
-        self.keep_scanning = threading.Event()
-        
-        '''#Disable stop button 
-        self.lblstop.setEnabled(False)
         #Disable stop button 
-        self.lblEnter.setEnabled(False)
-
-        #Disable txt field
-        self.txtCode.setEnabled(False)'''
+        self.btnLogout.setEnabled(False)
+        
 
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -345,7 +319,7 @@ class MainWindow(QMainWindow, mainApplication):
         widget.setStyleSheet("")  # Resets to default style
         super(type(widget), widget).focusInEvent(event)
     
-###############################################################
+###################  lOGIN USER AND SHOP ORDER    ############################################
 
     
 
@@ -398,6 +372,10 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Show first test index screen
         self.stackedWidget.setCurrentIndex(6)
+
+        #Enable log out button 
+        self.btnLogout.setEnabled(True)
+
         self.txtSerialCode.setFocus()
 
     
@@ -409,6 +387,38 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Show again user input information 
         self.stackedWidget.setCurrentIndex(4)
+
+    def log_out(self,event):
+
+        print("Cerrando sesion actual")
+
+        reply = QMessageBox.question(
+            self,
+            'Cerrar sesion',
+            '¿Estás seguro de que quieres cerrar la sesion actual',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            event.accept()
+            
+            #Erase current session info
+            self.config.erase_user_and_shop_info()
+
+            #Show again first screen app
+            self.stackedWidget.setCurrentIndex(6)
+
+            self.btnLogout.setEnabled(False)
+
+        else:
+            event.ignore()
+
+
+
+
+
+    ################ INICIALIZE  #################################
 
     def back_to_inicialize_app(self):
         self.stackedWidget.setCurrentIndex(0)
@@ -424,6 +434,13 @@ class MainWindow(QMainWindow, mainApplication):
         RS485_port=current_config[2]
         camera_address=current_config[3]
         camera_port=current_config[4]
+        timer = int(current_config[5])  # Asegúrate de convertir el valor a entero
+
+        # Convertir segundos a minutos y segundos
+        minutes, seconds = divmod(timer, 60)
+        formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
+
+        self.lbltimer.setText(formatted_time)
 
         print("Verifiying instruments...")
 
@@ -478,6 +495,9 @@ class MainWindow(QMainWindow, mainApplication):
             #Show first test index screen
             self.stackedWidget.setCurrentIndex(6)
 
+            #Enable log out button 
+            self.btnLogout.setEnabled(True)
+
             self.txtSerialCode.setFocus()
         else:
             print("Datos no válidos o no cumplen con los requisitos")
@@ -506,6 +526,11 @@ class MainWindow(QMainWindow, mainApplication):
             self.txtSerialCode.setEnabled(False)
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: green;")
+
+            #Disable app function once the test is inicalized
+
+            self.btnLogout.setEnabled(False)
+            self.btnConfiguracion.setEnabled(False)
 
             self.test.result_T1(str(serial_code))
 
@@ -1024,6 +1049,9 @@ class MainWindow(QMainWindow, mainApplication):
         #Go back to main Screen test
         self.stackedWidget.setCurrentIndex(6) 
 
+        #Enable app functionality
+        self.btnLogout.setEnabled(False)
+        self.btnConfiguracion.setEnabled(False)
 
         self.txtSerialCode.setFocus()
 
