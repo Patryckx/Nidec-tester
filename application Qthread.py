@@ -303,6 +303,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.lblinicialize.mousePressEvent = self.inicialize
 
+        self.btnLogout.clicked.connect(self.log_out)
+
         #Config button
         self.btnConfiguracion.clicked.connect(self.show_configuration)
         self.lblEditar.mousePressEvent = self.show_edit_screen_configuration
@@ -334,6 +336,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtCameraAddress.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtCameraAddress, event)
 
         #User ID and Shop order textboxes
+        self.txtNumeroEmpleado.returnPressed.connect(self.txtNumeroOrden.setFocus)
+        self.txtNumeroOrden.returnPressed.connect(self.verify_user_and_ShopOrder)
+
         self.txtNumeroEmpleado.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroEmpleado, event)
         self.txtNumeroOrden.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroOrden, event)
 
@@ -500,12 +505,17 @@ class MainWindow(QMainWindow, mainApplication):
                 self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
                 self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
 
+                self.txtNumeroEmpleado.setFocus()
+
                 #Show User and Shop order input 
                 #self.stackedWidget.setCurrentIndex(4)
         else:
             print("Informacion de usuario u orden faltante ")           
             self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
             self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
+
+            self.txtNumeroEmpleado.setFocus()
+
     
     def confirm_and_save_userId_and_ShopOrder(self,event):
 
@@ -536,7 +546,7 @@ class MainWindow(QMainWindow, mainApplication):
         #Show again user input information 
         self.stackedWidget.setCurrentIndex(4)
 
-    def log_out(self,event):
+    def log_out(self):            
 
         print("Cerrando sesion actual")
 
@@ -549,18 +559,21 @@ class MainWindow(QMainWindow, mainApplication):
         )
         
         if reply == QMessageBox.Yes:
-            event.accept()
             
             #Erase current session info
             self.config.erase_user_and_shop_info()
 
             #Show again first screen app
-            self.stackedWidget.setCurrentIndex(6)
+            self.stackedWidget.setCurrentIndex(0)
 
             self.btnLogout.setEnabled(False)
 
+            self.lblCurrentUser.setText("")
+            self.lblCurrentOrder.setText("")
+
+
         else:
-            event.ignore()
+            pass
 
 
 
@@ -652,6 +665,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             #Show User and Shop order input 
             self.stackedWidget.setCurrentIndex(4)
+            self.txtNumeroEmpleado.setFocus()
     
     def test_1(self,event=None):
         
