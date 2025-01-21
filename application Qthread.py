@@ -1051,6 +1051,9 @@ class MainWindow(QMainWindow, mainApplication):
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
 
+        #Add register to GUI table and csv file
+        self.add_register(Result1,Result2,Result3,Result4,Result5,Result6)
+
         # En lugar de time.sleep(6), usamos QTimer
         QTimer.singleShot(10000,self.Test_resume_signal.emit)
         #QTimer.singleShot(6000,self.Test_resume_signal.emit())
@@ -1161,22 +1164,27 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(14)
 
 
-    def update_table_register(self, Barcode,Result,response,program,id):
-        # Codes
-        Etiqueta = str(Barcode)
-        
+    def add_register(self, Codigo,Firmware,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
+
+        #Get current user and shop order
+        session_info = str(self.config.get_current_user())
+
+        user=session_info[0]
+        shop_order=session_info[1]
+
+               
         current_datetime = datetime.now()
         formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
-
-        formatted_time = current_datetime.strftime("%H:%M:%S")
-
         Current_date = str(formatted_datetime)
 
+
+
+        formatted_time = current_datetime.strftime("%H:%M:%S")
         Current_time=str(formatted_time)
        
         # Assembling the register
         # Table register
-        self.register = {"ID":id,"Etiqueta": Etiqueta,"Programa": program,"Resultado": Result, "Hora": Current_time}
+        register = {"Codigo":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
       
         # Logic to verify number of table registers and only show 9 registers 
         table_registers = self.ResultsTable.rowCount()
@@ -1190,16 +1198,16 @@ class MainWindow(QMainWindow, mainApplication):
 
         col = 0  # Columna inicial para insertar valores
 
-        for key, value in self.register.items():
+        for key, value in register.items():
             item = QtWidgets.QTableWidgetItem(str(value))  # Crear un QTableWidgetItem con el valor del diccionario
             item.setTextAlignment(Qt.AlignCenter)  # Centrar el texto en la celda
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        self.csv_register = {"ID":id,"Etiqueta": Etiqueta,"Programa":program,"Resultado": Result,"Respuesta sensor":response, "Operador":self.complete_name,"Fecha":Current_date}
+        csv_register = {"Codigo":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result, "Botones":Buttons_result,"Entradas": Entradas_result,"Empleado":user,"Orden":shop_order, "Fecha": Current_date}
         
         # Call csv register add function 
-        self.csv_registers_add(self.csv_register)
+        self.test.add_csv_register(csv_register,user,shop_order)
 
 
 

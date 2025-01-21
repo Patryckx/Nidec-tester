@@ -9,6 +9,10 @@ import json
 
 import datetime
 
+from datetime import datetime
+
+
+
 
 class Manage_tests():
     def __init__(self,):
@@ -20,7 +24,12 @@ class Manage_tests():
         self.test5_result=None
         self.test6_result=None
         self.record={}
-        
+
+        #Create results folder
+        self.create_results_folder()
+        #Create month results folder
+        self.create_monthly_results_folder()
+
 
     def result (self,global_result:str):
         self.general_result=global_result
@@ -73,14 +82,41 @@ class Manage_tests():
     def clear_record(self):
         # Elimina todas las claves y valores del diccionario, dejándolo vacío
         self.record.clear()
+####################### FOLDER FUNCTIONS ######################################
+    def create_results_folder(self):
+        folder_path = "C:\\"
+        folder_name = "Registros Pentair HMI"  # Nombre de la carpeta que contendrá los resultados
+        full_path = os.path.join(folder_path, folder_name)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+        return full_path
+    
+    def create_monthly_results_folder(self):
+        folder_path = "C:\\Registros Pentair HMI"
 
-
+        '''current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d")'''
+        current_datetime = datetime.now()
+        formatted_datetime = current_datetime.strftime("%m-%Y")
+        Current_date = str(formatted_datetime)
+        folder_name = f"{Current_date}"  # Nombre de la carpeta que contendrá los resultados
+        full_path = os.path.join(folder_path, folder_name)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+        return full_path
+    
+    def create_order_results_folder(self,order):
+        folder_path = "C:\\Registros Pentair HMI"
+        folder_name = f"{order}"  # Nombre de la carpeta que contendrá los resultados
+        full_path = os.path.join(folder_path, folder_name)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+        return full_path
     
 
     ######################## FILE TRACEABILITY FUNCTIONS ########################
 
-    def csv_registers_add(self, register):
-        # Csv registers file
+    def add_csv_register(self, register,user,order):
         # Obtener la fecha y hora actual
         current_datetime = datetime.now()
         formatted_datetime = current_datetime.strftime("%Y-%m-%d")
@@ -88,13 +124,9 @@ class Manage_tests():
         print(Current_date)
 
         # Call folder create function for the csv files
-        self.create_results_folder() 
-
-        # Create folder for specific order
-        folder_path = self.create_results_folder_archive() 
-
-        # Csv_filename = (f"{Current_date}_registers.csv") # Csv file name created in current folder
-        Csv_filename = os.path.join(folder_path, f"{Current_date}_registros.csv") # Created in traceability folder
+        
+        folder_path = self.create_order_results_folder(order) 
+        Csv_filename = os.path.join(folder_path, f"{user}_{Current_date}.csv") # Created in traceability folder
 
         # Add register
         with open(Csv_filename, 'a', newline='') as file:
@@ -104,24 +136,3 @@ class Manage_tests():
                 writer.writeheader()  # Si el archivo está vacío, escribirá los nombres de las columnas
             writer.writerow(register)  # Write in the csv file
     
-    def create_results_folder(self):
-        folder_path = "C:\\Nidec"
-        folder_name = "Registros Pentair Tester"  # Nombre de la carpeta que contendrá los resultados
-        full_path = os.path.join(folder_path, folder_name)
-        if not os.path.exists(full_path):
-            os.makedirs(full_path)
-        return full_path
-    
-    def create_results_folder_archive(self):
-        folder_path = "C:\\Nidec\\Registros Etiqueta Z"
-
-        '''current_datetime = datetime.datetime.now()
-        formatted_datetime = current_datetime.strftime("%Y-%m-%d")'''
-        current_datetime = datetime.now()
-        formatted_datetime = current_datetime.strftime("%Y-%m")
-        Current_date = str(formatted_datetime)
-        folder_name = f"{Current_date}"  # Nombre de la carpeta que contendrá los resultados
-        full_path = os.path.join(folder_path, folder_name)
-        if not os.path.exists(full_path):
-            os.makedirs(full_path)
-        return full_path
