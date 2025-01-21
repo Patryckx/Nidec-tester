@@ -20,6 +20,7 @@ class Manage_tests():
         self.test5_result=None
         self.test6_result=None
         self.record={}
+        
 
     def result (self,global_result:str):
         self.general_result=global_result

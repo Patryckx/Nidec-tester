@@ -140,38 +140,32 @@ class MainWindow(QMainWindow, mainApplication):
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
-        
-
-
-
         self.connect_signals()
 
         # Eliminar la barra de título y los botones de control
         self.setWindowFlags(Qt.FramelessWindowHint)
         #self.setWindowState(Qt.WindowFullScreen)  # Pantalla completa
-
         self.setMouseTracking(True)  # Seguimiento del mouse
         self._startPos = None  # Para guardar la posición inicial del mouse
+        #Preparar tabla ajustar tabla a columnas
+        #self.ResultsTable.horizontalHeader().setSectionResizeMode(1)
+        # Formato a tabla
+        headers = ['Codigo','Firmware','LED', 'LCDS','Botones','Entradas','Fecha' ]
+        # Configuración de la tabla
+        self.ResultsTable.setColumnCount(len(headers))
+        self.ResultsTable.setHorizontalHeaderLabels(headers)
 
-        '''# Formato a tabla
-        headers = ['ID','Codigo','Resultado', 'Programa','Hora' ]
-        # Ajustar el ancho de una columna específica (por ejemplo, la columna "Resultado")
-        id_column_index = headers.index('ID')
-        self.ResultsTable.setColumnWidth(id_column_index, 60)  # Ajusta el ancho según sea necesario
+        # Ajustar el ancho de las columnas
+        self.ResultsTable.setColumnWidth(headers.index('Codigo'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Firmware'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('LED'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('LCDS'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Botones'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Entradas'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Fecha'), 300)
 
-        code_column_index = headers.index('Codigo')
-        self.ResultsTable.setColumnWidth(code_column_index, 160)  # Ajusta el ancho según sea necesario
-
-        program_column_index = headers.index('Programa')
-        self.ResultsTable.setColumnWidth(program_column_index, 140)  # Ajusta el ancho según sea necesario
-
-        result_column_index = headers.index('Resultado')
-        self.ResultsTable.setColumnWidth(result_column_index, 140)  # Ajusta el ancho según sea necesario
-
-        hora_column_index = headers.index('Hora')
-        self.ResultsTable.setColumnWidth(hora_column_index, 190)  # Ajusta el ancho según sea necesario
-
-       '''
+        # Actualizar la vista
+        self.ResultsTable.update()
 
         #Instance config class
         self.config=Configuration()
@@ -226,11 +220,8 @@ class MainWindow(QMainWindow, mainApplication):
         """Función que se ejecuta cuando el temporizador llega a cero."""
         print("Timer finished!")
 
-        
-
         self.Test_6_signal.emit()
         
-       
 
         self.stop_all_threads()
         
@@ -304,6 +295,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblinicialize.mousePressEvent = self.inicialize
 
         self.btnLogout.clicked.connect(self.log_out)
+
+        self.btnTrazabilidad.clicked.connect(self.traceability)
 
         #Config button
         self.btnConfiguracion.clicked.connect(self.show_configuration)
@@ -805,24 +798,6 @@ class MainWindow(QMainWindow, mainApplication):
         #leds_result= PASS
         #self.manual_test_3_verification(leds_result,modify_list)
 
-        
-
-    '''def set_widget_properties(self, widget_names, enabled_state):
-        for name in widget_names:
-            widget = getattr(self, name)
-            widget.setEnabled(enabled_state)
-
-    def manual_test_3_verification(self, event=None):
-        led_names = [f"lblLED{i}" for i in range(1, 12)]
-        led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-        self.set_widget_properties(led_names, True)
-        self.set_widget_properties(led_input_names, False)
-
-
-        # Crear un QTimer para emitir la señal después de 3 segundos
-        QTimer.singleShot(5000, lambda: self.Test_3_signal.emit()) '''
-
     #def manual_test_3_verification(self, modify_list, event=None):
     def manual_test_3_verification(self, event=None):
         #Temporary list declaration
@@ -941,86 +916,6 @@ class MainWindow(QMainWindow, mainApplication):
 
 
 ##############  TEST 5   ##########################
-
-    # def test_5(self):
-    #     # Diccionario con el orden específico de los botones
-    #     buttons_order = {
-    #         "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
-    #         "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
-    #         "Up Arrow": '20', "Down Arrow": '40'
-    #     }
-
-    #     print(buttons_order)
-
-    #     # Convertir los valores del diccionario en una lista para preservar el orden
-    #     pending_buttons_list = list(buttons_order.values())
-
-    #     # Crear una lista de índices usando enumerate para asociar índices con los botones
-    #     pending_buttons_index = [index + 1 for index, _ in enumerate(pending_buttons_list)]
-
-    #     print("Configurando el HMI en modo monitor")
-
-    #     print("Iniciando prueba de pulsacion de botones")
-    #     # Función que realiza el monitoreo en un hilo
-    #     def monitor_buttons():
-    #         # Ciclo para monitorear las respuestas del dispositivo
-    #         while pending_buttons_list:
-    #             # Simulación de obtener la respuesta del dispositivo
-    #             response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-
-    #             print(response)
-    #             # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
-    #             # siempre está en una posición fija dentro de la respuesta.
-    #             # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
-    #             # Ajusta estos índices según sea necesario para tu respuesta específica.
-    #             hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-
-    #             if hex_value == pending_buttons_list[0]:
-    #                 print(f"Botón detectado: {hex_value}")
-    #                 current_index = pending_buttons_index.pop(0)
-    #                 print(current_index)
-    #                 button = f"lblButton{current_index}"
-    #                 button_input = f"lblButtonInput{current_index}"
-                  
-    #                 # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
-    #                 self.update_button_state(button,button_input)
-
-    #                 #Remove element from list
-    #                 pending_buttons_list.pop(0)
-
-
-    #             if not pending_buttons_list:
-    #                 print("Todos los botones han sido capturados.")
-
-    #                 button_result="PASS"
-
-    #                 self.btnPrueba5.setStyleSheet("background-color: green;")
-
-    #                 self.test.result_T5(button_result)
-
-    #                 time.sleep(5)
-
-    #                 self.Test_5_signal.emit()
-
-
-    #                 self.test_6()
-    #                 break
-
-    #     # Crear y arrancar un hilo para ejecutar la función monitor_buttons
-    #     button_inputs_thread = threading.Thread(target=monitor_buttons)
-    #     button_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
-    #     button_inputs_thread.start()
-
-    #     #Add thread to list 
-    #     self.threads.append(button_inputs_thread)
-
-    # # Método para actualizar la interfaz de usuario de manera segura desde el hilo
-    # def update_button_state(self, button,button_input):
-        
-    #     getattr(self, button).setEnabled(True)
-    #     getattr(self, button_input).setEnabled(False)
-
-   
     def test_5(self):
         # Diccionario con el orden específico de los botones
         self.buttons_order = {
@@ -1072,79 +967,6 @@ class MainWindow(QMainWindow, mainApplication):
 
 
     ################ TEST 6   #######################
-    # def test_6(self):
-    #     # Diccionario con el orden específico de los botones
-    #     digital_order = {
-    #          "Schedule 1": '01', "Schedule 2": '02',
-    #         "Schedule 3": '04', "Quick Clean": '08'
-    #     }
-
-    #     print(digital_order)
-
-    #     # Convertir los valores del diccionario en una lista para preservar el orden
-    #     pending_digital_list = list(digital_order.values())
-
-    #     # Crear una lista de índices usando enumerate para asociar índices con los botones
-    #     pending_digital_index = [index + 1 for index, _ in enumerate(pending_digital_list)]
-
-    #     print("Configurando el HMI en modo monitor")
-
-    #     print("Iniciando prueba de entradas digitales")
-    #     # Función que realiza el monitoreo en un hilo
-    #     def monitor_digital_inputs():
-    #         # Ciclo para monitorear las respuestas del dispositivo
-    #         #while pending_digital_list:
-    #         while True:
-    #             # Simulación de obtener la respuesta del dispositivo
-    #             response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-
-    #             print(response)
-    #             # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
-    #             # siempre está en una posición fija dentro de la respuesta.
-    #             # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
-    #             # Ajusta estos índices según sea necesario para tu respuesta específica.
-    #             hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
-
-    #             if hex_value == pending_digital_list[0]:
-    #                 print(f"Botón detectado: {hex_value}")
-    #                 current_index = pending_digital_index.pop(0)
-    #                 print(current_index)
-    #                 digital = f"lblDigital{current_index}"
-    #                 button_input = f"lblDigitalInput{current_index}"
-                  
-    #                 # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
-    #                 self.update_digital_state(digital,button_input)
-
-    #                 #Remove element from list
-    #                 pending_digital_list.pop(0)
-
-
-    #             if  pending_digital_list:
-    #                 print("Todos las entradas digitales han sido capturadas.")
-
-    #                 digital_result="PASS"
-
-    #                 self.btnPrueba6.setStyleSheet("background-color: green;")
-
-    #                 self.test.result_T6(digital_result)
-
-    #                 time.sleep(5)
-
-    #                 self.Test_6_signal.emit()
-
-    #                 #STOP TIMER
-    #                 self.timer.stop()
-                    
-    #                 #self.show_resume()
-    #                 break
-
-    #     # Crear y arrancar un hilo para ejecutar la función monitor_buttons
-    #     digital_inputs_thread = threading.Thread(target=monitor_digital_inputs)
-    #     digital_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
-    #     digital_inputs_thread.start()
-
-    #     #Add thread to list 
-    #     self.threads.append(digital_inputs_thread)
         
 
     def test_6(self):
@@ -1333,6 +1155,11 @@ class MainWindow(QMainWindow, mainApplication):
         self.lbltimer.setText(formatted_time)
 
       
+    ###############   Traceability ########################################○
+    def traceability(self):
+        print("Abriendo trazabilidad")
+        self.stackedWidget.setCurrentIndex(14)
+
 
     def update_table_register(self, Barcode,Result,response,program,id):
         # Codes

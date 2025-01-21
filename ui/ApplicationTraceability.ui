@@ -10992,10 +10992,10 @@ QPushButton &gt; * {
              </font>
             </property>
             <property name="minimum">
-             <number>45</number>
+             <number>30</number>
             </property>
             <property name="maximum">
-             <number>240</number>
+             <number>60</number>
             </property>
            </widget>
           </item>
@@ -11031,7 +11031,7 @@ QPushButton &gt; * {
          <number>30</number>
         </property>
         <property name="verticalSpacing">
-         <number>18</number>
+         <number>12</number>
         </property>
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_135">
@@ -11231,17 +11231,11 @@ QTableWidget::item:selected {
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
-          <attribute name="horizontalHeaderVisible">
-           <bool>true</bool>
-          </attribute>
           <attribute name="horizontalHeaderCascadingSectionResizes">
            <bool>false</bool>
           </attribute>
           <attribute name="horizontalHeaderMinimumSectionSize">
            <number>39</number>
-          </attribute>
-          <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>100</number>
           </attribute>
           <attribute name="horizontalHeaderHighlightSections">
            <bool>true</bool>
@@ -11260,7 +11254,7 @@ QTableWidget::item:selected {
           </attribute>
           <column>
            <property name="text">
-            <string>Codigo</string>
+            <string>Codigo serial</string>
            </property>
            <property name="font">
             <font>
@@ -11356,7 +11350,19 @@ QTableWidget::item:selected {
           </column>
           <column>
            <property name="text">
-            <string>Entradas</string>
+            <string>Ent. Digitales</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Arial Black</family>
+             <pointsize>13</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Resultado</string>
            </property>
            <property name="font">
             <font>
