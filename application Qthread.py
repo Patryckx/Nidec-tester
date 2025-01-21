@@ -33,6 +33,47 @@ import re
 import socket
 import telnetlib
 
+from PyQt5.QtCore import QThread, pyqtSignal, Qt
+
+class MonitorButtonsThread(QThread):
+    # Definir señales para la comunicación con el hilo principal
+    button_detected_signal = pyqtSignal(str)
+    update_button_signal = pyqtSignal(str, str)
+    test_finished_signal = pyqtSignal()
+
+    def __init__(self, buttons_order, rs485, parent=None):
+        super(MonitorButtonsThread, self).__init__(parent)
+        self.buttons_order = buttons_order
+        self.rs485 = rs485
+        self.pending_buttons_list = list(self.buttons_order.values())
+        self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
+        print(self.pending_buttons_list)
+    def run(self):
+        while self.pending_buttons_list:
+            # Simulación de obtener la respuesta del dispositivo
+            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+            print(response)
+
+            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+
+            if hex_value == self.pending_buttons_list[0]:
+                print(f"Botón detectado: {hex_value}")
+                current_index = self.pending_buttons_index.pop(0)
+                print(current_index)
+                button = f"lblButton{current_index}"
+                button_input = f"lblButtonInput{current_index}"
+                
+                # Emitir una señal para actualizar la GUI en el hilo principal
+                self.update_button_signal.emit(button, button_input)
+
+                # Eliminar el botón de la lista
+                self.pending_buttons_list.pop(0)
+
+            if not self.pending_buttons_list:
+                print("Todos los botones han sido capturados.")
+                button_result = "PASS"
+                self.test_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
+                break
 
 
 class MainWindow(QMainWindow, mainApplication):
@@ -94,6 +135,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.gateway=FX3U()
 
         self.test=Manage_tests()
+
+        # Space bar function initialized flag 
+        self.initialized_flag = None
+
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_timer)  # Conectar la señal timeout a la función
@@ -309,7 +354,7 @@ class MainWindow(QMainWindow, mainApplication):
         RS485_port=str(current_config[2])
         camera_address=str(current_config[3])
         #camera_port=current_config[4]
-        timer=str(current_config[4])
+        timer=str(current_config[5])
         self.lblGatewayPort.setText(str(gateway_port))
         self.lbl232Port.setText(str(RS232_port))
         self.lbl485Port.setText(str(RS485_port))
@@ -839,87 +884,131 @@ class MainWindow(QMainWindow, mainApplication):
 
 ##############  TEST 5   ##########################
 
+    # def test_5(self):
+    #     # Diccionario con el orden específico de los botones
+    #     buttons_order = {
+    #         "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
+    #         "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
+    #         "Up Arrow": '20', "Down Arrow": '40'
+    #     }
+
+    #     print(buttons_order)
+
+    #     # Convertir los valores del diccionario en una lista para preservar el orden
+    #     pending_buttons_list = list(buttons_order.values())
+
+    #     # Crear una lista de índices usando enumerate para asociar índices con los botones
+    #     pending_buttons_index = [index + 1 for index, _ in enumerate(pending_buttons_list)]
+
+    #     print("Configurando el HMI en modo monitor")
+
+    #     print("Iniciando prueba de pulsacion de botones")
+    #     # Función que realiza el monitoreo en un hilo
+    #     def monitor_buttons():
+    #         # Ciclo para monitorear las respuestas del dispositivo
+    #         while pending_buttons_list:
+    #             # Simulación de obtener la respuesta del dispositivo
+    #             response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+
+    #             print(response)
+    #             # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
+    #             # siempre está en una posición fija dentro de la respuesta.
+    #             # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
+    #             # Ajusta estos índices según sea necesario para tu respuesta específica.
+    #             hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+
+    #             if hex_value == pending_buttons_list[0]:
+    #                 print(f"Botón detectado: {hex_value}")
+    #                 current_index = pending_buttons_index.pop(0)
+    #                 print(current_index)
+    #                 button = f"lblButton{current_index}"
+    #                 button_input = f"lblButtonInput{current_index}"
+                  
+    #                 # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
+    #                 self.update_button_state(button,button_input)
+
+    #                 #Remove element from list
+    #                 pending_buttons_list.pop(0)
+
+
+    #             if not pending_buttons_list:
+    #                 print("Todos los botones han sido capturados.")
+
+    #                 button_result="PASS"
+
+    #                 self.btnPrueba5.setStyleSheet("background-color: green;")
+
+    #                 self.test.result_T5(button_result)
+
+    #                 time.sleep(5)
+
+    #                 self.Test_5_signal.emit()
+
+
+    #                 self.test_6()
+    #                 break
+
+    #     # Crear y arrancar un hilo para ejecutar la función monitor_buttons
+    #     button_inputs_thread = threading.Thread(target=monitor_buttons)
+    #     button_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
+    #     button_inputs_thread.start()
+
+    #     #Add thread to list 
+    #     self.threads.append(button_inputs_thread)
+
+    # # Método para actualizar la interfaz de usuario de manera segura desde el hilo
+    # def update_button_state(self, button,button_input):
+        
+    #     getattr(self, button).setEnabled(True)
+    #     getattr(self, button_input).setEnabled(False)
+
+   
     def test_5(self):
         # Diccionario con el orden específico de los botones
-        buttons_order = {
+        self.buttons_order = {
             "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
             "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
             "Up Arrow": '20', "Down Arrow": '40'
         }
 
-        print(buttons_order)
+        print(self.buttons_order)
 
-        # Convertir los valores del diccionario en una lista para preservar el orden
-        pending_buttons_list = list(buttons_order.values())
-
-        # Crear una lista de índices usando enumerate para asociar índices con los botones
-        pending_buttons_index = [index + 1 for index, _ in enumerate(pending_buttons_list)]
-
-        print("Configurando el HMI en modo monitor")
-
-        print("Iniciando prueba de pulsacion de botones")
-        # Función que realiza el monitoreo en un hilo
-        def monitor_buttons():
-            # Ciclo para monitorear las respuestas del dispositivo
-            while pending_buttons_list:
-                # Simulación de obtener la respuesta del dispositivo
-                response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-
-                print(response)
-                # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
-                # siempre está en una posición fija dentro de la respuesta.
-                # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
-                # Ajusta estos índices según sea necesario para tu respuesta específica.
-                hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-
-                if hex_value == pending_buttons_list[0]:
-                    print(f"Botón detectado: {hex_value}")
-                    current_index = pending_buttons_index.pop(0)
-                    print(current_index)
-                    button = f"lblButton{current_index}"
-                    button_input = f"lblButtonInput{current_index}"
-                  
-                    # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
-                    self.update_button_state(button,button_input)
-
-                    #Remove element from list
-                    pending_buttons_list.pop(0)
-
-
-                if not pending_buttons_list:
-                    print("Todos los botones han sido capturados.")
-
-                    button_result="PASS"
-
-                    self.btnPrueba5.setStyleSheet("background-color: green;")
-
-                    self.test.result_T5(button_result)
-
-                    time.sleep(5)
-
-                    self.Test_5_signal.emit()
-
-
-                    self.test_6()
-                    break
-
-        # Crear y arrancar un hilo para ejecutar la función monitor_buttons
-        button_inputs_thread = threading.Thread(target=monitor_buttons)
-        button_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
-        button_inputs_thread.start()
-
-        #Add thread to list 
-        self.threads.append(button_inputs_thread)
-
-    # Método para actualizar la interfaz de usuario de manera segura desde el hilo
-    def update_button_state(self, button,button_input):
+        print(self.buttons_order)
         
+        # Crear un hilo para monitorear los botones
+        self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order, self.Rs485)
+        
+        # Conectar las señales del hilo con los métodos de la clase principal
+        self.monitor_buttons_thread.update_button_signal.connect(self.update_button_state)
+        self.monitor_buttons_thread.test_finished_signal.connect(self.on_test_finished)
+
+        # Iniciar el hilo
+        self.monitor_buttons_thread.start()
+
+    def update_button_state(self, button, button_input):
+        # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
+        print(f"Actualizando estado de los botones: {button}, {button_input}")
+
         getattr(self, button).setEnabled(True)
         getattr(self, button_input).setEnabled(False)
+
+    def on_test_finished(self):
+        # Lógica que se ejecuta cuando la prueba ha finalizado
+        print("La prueba de botones ha finalizado.")
+
+        button_result="PASS"
+
+        self.btnPrueba5.setStyleSheet("background-color: green;")
+
+        self.test.result_T5(button_result)
+
+        self.Test_5_signal.emit()
+        self.test_6()  # Llamar a la siguiente prueba
 
     def Test_5_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(10) 
+
 
     ################ TEST 6   #######################
     def test_6(self):
