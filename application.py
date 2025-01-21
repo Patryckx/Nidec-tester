@@ -94,9 +94,50 @@ class MainWindow(QMainWindow, mainApplication):
         self.gateway=FX3U()
 
         self.test=Manage_tests()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_timer)  # Conectar la señal timeout a la función
+        self.remaining_time = 0  # Variable para almacenar el tiempo restante
         
         #Disable stop button 
         self.btnLogout.setEnabled(False)
+    
+    ############# TIMER #####################
+
+    def start_timer_clicked(self):
+        """Inicia el temporizador con un valor inicial."""
+        initial_time = 90  # Puedes cambiar este valor o obtenerlo de la configuración
+        self.start_timer(initial_time)
+    
+    def start_timer(self, initial_time):
+        """Inicia el temporizador con el tiempo dado en segundos."""
+        self.remaining_time = initial_time
+        self.update_timer_display()  # Actualiza inmediatamente el display con el tiempo inicial
+        self.timer.start(1000)  # Comienza el temporizador para emitir cada 1000 ms (1 segundo)
+
+    def update_timer(self):
+        """Actualiza el temporizador cada segundo."""
+        if self.remaining_time > 0:
+            self.remaining_time -= 1
+            self.update_timer_display()
+        else:
+            self.timer.stop()
+            self.timer_finished()  # Llama a la función cuando el temporizador llega a cero
+
+    def update_timer_display(self):
+        """Actualiza la etiqueta del temporizador."""
+        minutes, seconds = divmod(self.remaining_time, 60)
+        formatted_time = f"{minutes:02}:{seconds:02}"
+        self.lbltimer.setText(formatted_time)
+
+    def timer_finished(self):
+        """Función que se ejecuta cuando el temporizador llega a cero."""
+        print("Timer finished!")
+        # Aquí puedes añadir la lógica que necesitas ejecutar cuando el temporizador termine
+        
+        self.Test_resume_GUI_changes()
+
+    ################# APP FUNCTIONS ########################################
         
 
     def mouseDoubleClickEvent(self, event):
@@ -434,10 +475,10 @@ class MainWindow(QMainWindow, mainApplication):
         RS485_port=current_config[2]
         camera_address=current_config[3]
         camera_port=current_config[4]
-        timer = int(current_config[5])  # Asegúrate de convertir el valor a entero
+        self.timer_value = int(current_config[5])  # Asegúrate de convertir el valor a entero
 
         # Convertir segundos a minutos y segundos
-        minutes, seconds = divmod(timer, 60)
+        minutes, seconds = divmod(  self.timer_value, 60)
         formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
 
         self.lbltimer.setText(formatted_time)
@@ -531,6 +572,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.btnLogout.setEnabled(False)
             self.btnConfiguracion.setEnabled(False)
+
+            self.start_timer( self.timer_value)
 
             self.test.result_T1(str(serial_code))
 
@@ -917,6 +960,9 @@ class MainWindow(QMainWindow, mainApplication):
                     time.sleep(5)
 
                     self.Test_6_signal.emit()
+
+                    #STOP TIMER
+                    self.timer.stop()
                     
                     self.show_resume()
                     break
