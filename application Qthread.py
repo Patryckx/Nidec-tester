@@ -76,6 +76,50 @@ class MonitorButtonsThread(QThread):
                 break
 
 
+class MonitorDigitalEntrances(QThread):
+    # Definir señales para la comunicación con el hilo principal
+    digital_input_detected_signal = pyqtSignal(str)
+    update_digital_input_signal = pyqtSignal(str, str)
+    test_6_finished_signal = pyqtSignal()
+
+    def __init__(self, digital_input_order, rs485, parent=None):
+        super(MonitorDigitalEntrances, self).__init__(parent)
+        self.digital_input_order = digital_input_order
+        self.rs485 = rs485
+        self.pending_digital_list = list(self.digital_input_order.values())
+        self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
+        print(self.pending_digital_list)
+    def run(self):
+        while self.pending_digital_list:
+            # Simulación de obtener la respuesta del dispositivo
+            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+            print(response)
+
+            hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+
+            if hex_value == self.pending_digital_list[0]:
+                print(f"Entrada detectada: {hex_value}")
+                current_index = self.pending_digital_index.pop(0)
+                print(current_index)
+                digital = f"lblDigital{current_index}"
+                digital_input = f"lblDigitalInput{current_index}"
+                
+                # Emitir una señal para actualizar la GUI en el hilo principal
+                self.update_digital_input_signal.emit(digital, digital_input)
+
+                # Eliminar el botón de la lista
+                self.pending_digital_list.pop(0)
+
+            #if not self.pending_digital_list: BYPASS 
+            if self.pending_digital_list:
+                print("Todos las señales han sido capturadas.")
+                #button_result = "PASS"
+                self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
+                break
+
+
+
+
 class MainWindow(QMainWindow, mainApplication):
 
 #Signals 
@@ -1002,7 +1046,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.test.result_T5(button_result)
 
-        self.Test_5_signal.emit()
+        # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(6000,self.Test_5_signal.emit)
+        #QTimer.singleShot(6000,self.Test_5_signal.emit())
+        #self.Test_5_signal.emit()
         self.test_6()  # Llamar a la siguiente prueba
 
     def Test_5_GUI_changes(self):
@@ -1011,81 +1058,125 @@ class MainWindow(QMainWindow, mainApplication):
 
 
     ################ TEST 6   #######################
+    # def test_6(self):
+    #     # Diccionario con el orden específico de los botones
+    #     digital_order = {
+    #          "Schedule 1": '01', "Schedule 2": '02',
+    #         "Schedule 3": '04', "Quick Clean": '08'
+    #     }
+
+    #     print(digital_order)
+
+    #     # Convertir los valores del diccionario en una lista para preservar el orden
+    #     pending_digital_list = list(digital_order.values())
+
+    #     # Crear una lista de índices usando enumerate para asociar índices con los botones
+    #     pending_digital_index = [index + 1 for index, _ in enumerate(pending_digital_list)]
+
+    #     print("Configurando el HMI en modo monitor")
+
+    #     print("Iniciando prueba de entradas digitales")
+    #     # Función que realiza el monitoreo en un hilo
+    #     def monitor_digital_inputs():
+    #         # Ciclo para monitorear las respuestas del dispositivo
+    #         #while pending_digital_list:
+    #         while True:
+    #             # Simulación de obtener la respuesta del dispositivo
+    #             response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+
+    #             print(response)
+    #             # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
+    #             # siempre está en una posición fija dentro de la respuesta.
+    #             # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
+    #             # Ajusta estos índices según sea necesario para tu respuesta específica.
+    #             hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+
+    #             if hex_value == pending_digital_list[0]:
+    #                 print(f"Botón detectado: {hex_value}")
+    #                 current_index = pending_digital_index.pop(0)
+    #                 print(current_index)
+    #                 digital = f"lblDigital{current_index}"
+    #                 button_input = f"lblDigitalInput{current_index}"
+                  
+    #                 # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
+    #                 self.update_digital_state(digital,button_input)
+
+    #                 #Remove element from list
+    #                 pending_digital_list.pop(0)
+
+
+    #             if  pending_digital_list:
+    #                 print("Todos las entradas digitales han sido capturadas.")
+
+    #                 digital_result="PASS"
+
+    #                 self.btnPrueba6.setStyleSheet("background-color: green;")
+
+    #                 self.test.result_T6(digital_result)
+
+    #                 time.sleep(5)
+
+    #                 self.Test_6_signal.emit()
+
+    #                 #STOP TIMER
+    #                 self.timer.stop()
+                    
+    #                 #self.show_resume()
+    #                 break
+
+    #     # Crear y arrancar un hilo para ejecutar la función monitor_buttons
+    #     digital_inputs_thread = threading.Thread(target=monitor_digital_inputs)
+    #     digital_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
+    #     digital_inputs_thread.start()
+
+    #     #Add thread to list 
+    #     self.threads.append(digital_inputs_thread)
+        
+
     def test_6(self):
-        # Diccionario con el orden específico de los botones
         digital_order = {
              "Schedule 1": '01', "Schedule 2": '02',
             "Schedule 3": '04', "Quick Clean": '08'
         }
 
         print(digital_order)
+        
+        # Crear un hilo para monitorear los botones
+        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.buttons_order, self.Rs485)
+        
+        # Conectar las señales del hilo con los métodos de la clase principal
+        self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
+        self.monitor_digital_inputs_thread.test_6_finished_signal.connect(self.on_test_6_finished)
 
-        # Convertir los valores del diccionario en una lista para preservar el orden
-        pending_digital_list = list(digital_order.values())
+        # Iniciar el hilo
+        self.monitor_digital_inputs_thread.start()
 
-        # Crear una lista de índices usando enumerate para asociar índices con los botones
-        pending_digital_index = [index + 1 for index, _ in enumerate(pending_digital_list)]
+    def update_button_state_digital(self, digital, digital_input):
+        # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
+        print(f"Actualizando estado de los botones: {digital}, {digital_input}")
 
-        print("Configurando el HMI en modo monitor")
+        getattr(self, digital).setEnabled(True)
+        getattr(self, digital_input).setEnabled(False)
 
-        print("Iniciando prueba de entradas digitales")
-        # Función que realiza el monitoreo en un hilo
-        def monitor_digital_inputs():
-            # Ciclo para monitorear las respuestas del dispositivo
-            #while pending_digital_list:
-            while True:
-                # Simulación de obtener la respuesta del dispositivo
-                response = self.Rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+    def on_test_6_finished(self):
+        # Lógica que se ejecuta cuando la prueba ha finalizado
+        print("La prueba de botones ha finalizado.")
 
-                print(response)
-                # Supongamos que la longitud total de la respuesta es fija, y el valor que buscas
-                # siempre está en una posición fija dentro de la respuesta.
-                # Por ejemplo, el valor que buscas está en los caracteres 22 a 24 (índice 21 a 23)
-                # Ajusta estos índices según sea necesario para tu respuesta específica.
-                hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+        digital_result="PASS"
 
-                if hex_value == pending_digital_list[0]:
-                    print(f"Botón detectado: {hex_value}")
-                    current_index = pending_digital_index.pop(0)
-                    print(current_index)
-                    digital = f"lblDigital{current_index}"
-                    button_input = f"lblDigitalInput{current_index}"
-                  
-                    # Actualizar la GUI usando el método adecuado para hacerlo en el hilo principal
-                    self.update_digital_state(digital,button_input)
+        self.btnPrueba6.setStyleSheet("background-color: green;")
 
-                    #Remove element from list
-                    pending_digital_list.pop(0)
+        self.test.result_T6(digital_result)
 
+         # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(6000,self.Test_6_signal.emit)
+        #QTimer.singleShot(6000,self.Test_6_signal.emit())
 
-                if  pending_digital_list:
-                    print("Todos las entradas digitales han sido capturadas.")
+        #Stop timer
+        self.timer.stop()
 
-                    digital_result="PASS"
-
-                    self.btnPrueba6.setStyleSheet("background-color: green;")
-
-                    self.test.result_T6(digital_result)
-
-                    time.sleep(5)
-
-                    self.Test_6_signal.emit()
-
-                    #STOP TIMER
-                    self.timer.stop()
-                    
-                    #self.show_resume()
-                    break
-
-        # Crear y arrancar un hilo para ejecutar la función monitor_buttons
-        digital_inputs_thread = threading.Thread(target=monitor_digital_inputs)
-        digital_inputs_thread.daemon = True  # Hacer que el hilo termine cuando se cierre la aplicación
-        digital_inputs_thread.start()
-
-        #Add thread to list 
-        self.threads.append(digital_inputs_thread)
-
-
+        
+ 
     # Método para actualizar la interfaz de usuario de manera segura desde el hilo
     def update_digital_state(self, digital,digital_input):
         
@@ -1124,9 +1215,11 @@ class MainWindow(QMainWindow, mainApplication):
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
 
-        time.sleep(6)
+        # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(10000,self.Test_resume_signal.emit)
+        #QTimer.singleShot(6000,self.Test_resume_signal.emit())
 
-        self.Test_resume_signal.emit()
+        #self.Test_resume_signal.emit()
 
     def Test_resume_GUI_changes(self):
 
@@ -1215,6 +1308,15 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnConfiguracion.setEnabled(True)
 
         self.txtSerialCode.setFocus()
+
+        #Rest Timer
+        current_config=self.config.get_current_config()
+        self.timer_value = int(current_config[5])  # Asegúrate de convertir el valor a entero
+
+        # Convertir segundos a minutos y segundos
+        minutes, seconds = divmod(  self.timer_value, 60)
+        formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
+        self.lbltimer.setText(formatted_time)
 
       
 
