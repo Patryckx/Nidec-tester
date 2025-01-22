@@ -236,6 +236,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnPrueba4.setStyleSheet("background-color: red;")
         self.btnPrueba5.setStyleSheet("background-color: red;")
         self.btnPrueba6.setStyleSheet("background-color: red;")
+
+        self.btnResultados.setStyleSheet("background-color: red;")
         self.Test_6_signal.emit()
         
 
