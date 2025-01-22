@@ -1,0 +1,1 @@
+('C:\\Nidec-tester\\build\\Nidec-tester\\PYZ-00.pyz', [])

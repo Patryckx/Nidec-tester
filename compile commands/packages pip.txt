@@ -1,0 +1,4 @@
+>pip install importlib-resources -t "C:\Nidec-tester-release\deploy\Nidec-tester\_internal"
+
+
+pip install setuptools -t "C:\Nidec-tester-release\deploy\Nidec-tester\_internal" 
