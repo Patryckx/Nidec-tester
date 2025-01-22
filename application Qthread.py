@@ -12,7 +12,7 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 
-
+from PyQt5.QtCore import Qt
 #from utilities.Config.Configuration import Config_Screen
 
 # Custom imports
@@ -176,8 +176,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         # Space bar function initialized flag 
         self.initialized_flag = None
+        #Flag to not add register if timer goes up
+        self.dont_add_register=None
 
-
+        #Timer test 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_timer)  # Conectar la señal timeout a la función
         self.remaining_time = 0  # Variable para almacenar el tiempo restante
@@ -220,6 +222,8 @@ class MainWindow(QMainWindow, mainApplication):
         """Función que se ejecuta cuando el temporizador llega a cero."""
         print("Timer finished!")
 
+        #Flag to not add register if test are not performed
+        self.dont_add_register=True
         self.Test_6_signal.emit()
         
 
@@ -255,16 +259,12 @@ class MainWindow(QMainWindow, mainApplication):
 
     def keyPressEvent(self, event):
         
-        if event.key() == Qt.Key_Space and self.initialized_flag is None:
+        if event.key() == Qt.Key_Space :#and self.initialized_flag is None:
             # Initialize application pressing Space Bar
             print("space bar pressed")
-            self.inicialize(event)
 
-        if event.key() == Qt.Key_Return and self.initialized_flag ==True :  
-            # Aquí se ejecuta la acción al presionar Enter
-            print("Se presionó Enter")
-            #self.get_validate_Mspec()
-            self.Validate_Barcode_and_response(event)
+            self.initialized_flag=True
+            self.inicialize(event)
 
     def close(self, event):
         reply = QMessageBox.question(
@@ -1051,8 +1051,10 @@ class MainWindow(QMainWindow, mainApplication):
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
 
-        #Add register to GUI table and csv file
-        self.add_register(Result1,Result2,Result3,Result4,Result5,Result6)
+        if not self.dont_add_register:
+
+            #Add register to GUI table and csv file
+            self.add_register(Result1,Result2,Result3,Result4,Result5,Result6)
 
         # En lugar de time.sleep(6), usamos QTimer
         QTimer.singleShot(10000,self.Test_resume_signal.emit)
@@ -1156,6 +1158,9 @@ class MainWindow(QMainWindow, mainApplication):
         minutes, seconds = divmod(  self.timer_value, 60)
         formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
         self.lbltimer.setText(formatted_time)
+
+        #Retrieve add register flag
+        self.dont_add_register=False
 
       
     ###############   Traceability ########################################○
