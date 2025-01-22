@@ -334,7 +334,8 @@ QPushButton {
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(231, 236, 237);</string>
+            <string notr="true">color: rgb(231, 236, 237);
+background-color: rgb(36, 146, 255);</string>
            </property>
            <property name="text">
             <string>1</string>
@@ -1314,6 +1315,9 @@ QPushButton {
              <property name="toolTip">
               <string>Minimizar </string>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1418,7 +1422,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">
