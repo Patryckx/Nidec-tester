@@ -1094,7 +1094,7 @@ class MainWindow(QMainWindow, mainApplication):
         lcd_names = [f"lblLCD{i}" for i in range(0, 11)]
         lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 11)]
 
-        for i in range(0,10):
+        for i in range(0,11):
            
             getattr(self, lcd_names[i]).setEnabled(False)
             getattr(self, lcd_input_names[i]).setEnabled(True)
@@ -1167,7 +1167,7 @@ class MainWindow(QMainWindow, mainApplication):
     def add_register(self, Codigo,Firmware,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
 
         #Get current user and shop order
-        session_info = str(self.config.get_current_user())
+        session_info = self.config.get_current_user()
 
         user=session_info[0]
         shop_order=session_info[1]
@@ -1188,8 +1188,8 @@ class MainWindow(QMainWindow, mainApplication):
       
         # Logic to verify number of table registers and only show 9 registers 
         table_registers = self.ResultsTable.rowCount()
-        if table_registers > 9:
-            self.ResultsTable.removeRow(9)
+        if table_registers > 17:
+            self.ResultsTable.removeRow(17)
   
         # Register insertion at top of table
         row = 0  # Insert the new register at the top of the table
@@ -1204,7 +1204,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        csv_register = {"Codigo":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result, "Botones":Buttons_result,"Entradas": Entradas_result,"Empleado":user,"Orden":shop_order, "Fecha": Current_date}
+        csv_register = {"Codigo serial":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result,"Numero Empleado":user,"Numero Orden":shop_order, "Hora y Fecha": Current_date}
         
         # Call csv register add function 
         self.test.add_csv_register(csv_register,user,shop_order)

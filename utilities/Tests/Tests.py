@@ -106,7 +106,7 @@ class Manage_tests():
         return full_path
     
     def create_order_results_folder(self,order):
-        folder_path = "C:\\Registros Pentair HMI"
+        folder_path = self.create_monthly_results_folder()
         folder_name = f"{order}"  # Nombre de la carpeta que contendrá los resultados
         full_path = os.path.join(folder_path, folder_name)
         if not os.path.exists(full_path):
@@ -119,7 +119,7 @@ class Manage_tests():
     def add_csv_register(self, register,user,order):
         # Obtener la fecha y hora actual
         current_datetime = datetime.now()
-        formatted_datetime = current_datetime.strftime("%Y-%m-%d")
+        formatted_datetime = current_datetime.strftime("%d-%m-%Y")
         Current_date = str(formatted_datetime)
         print(Current_date)
 
