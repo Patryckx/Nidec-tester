@@ -315,6 +315,9 @@ QPushButton {
          </item>
          <item>
           <widget class="QPushButton" name="btnPrueba1">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>160</width>
@@ -333,9 +336,15 @@ QPushButton {
              <bold>true</bold>
             </font>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="toolTip">
+            <string>Inicializar pruebas</string>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(231, 236, 237);
-background-color: rgb(36, 146, 255);</string>
+</string>
            </property>
            <property name="text">
             <string>1</string>
@@ -1422,7 +1431,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">

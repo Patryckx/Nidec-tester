@@ -222,8 +222,20 @@ class MainWindow(QMainWindow, mainApplication):
         """Función que se ejecuta cuando el temporizador llega a cero."""
         print("Timer finished!")
 
+        print("Enciendiendo pantalla LCD 100%")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
+
+        #putting back HMI in monitor mode
+        self.Rs485.send_command("FF00FFA50060100D04D05101000248")
+
         #Flag to not add register if test are not performed
         self.dont_add_register=True
+
+        self.btnPrueba3.setStyleSheet("background-color: red;")
+        self.btnPrueba4.setStyleSheet("background-color: red;")
+        self.btnPrueba5.setStyleSheet("background-color: red;")
+        self.btnPrueba6.setStyleSheet("background-color: red;")
         self.Test_6_signal.emit()
         
 
@@ -338,6 +350,8 @@ class MainWindow(QMainWindow, mainApplication):
         #Serial code Test I
         self.txtSerialCode.returnPressed.connect(self.test_1)
         self.lblEnter_VerifyCode.mousePressEvent = self.test_1
+
+        self.btnPrueba1.clicked.connect(self.test_inicialize)
 
 
         #Firmware version Test 2
@@ -526,6 +540,11 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Enable log out button 
         self.btnLogout.setEnabled(True)
+        self.btnInicializar.setEnabled(False)
+        self.btnConfiguracion.setEnabled(False)
+
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
         self.txtSerialCode.setFocus()
 
@@ -561,6 +580,16 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.btnLogout.setEnabled(False)
 
+            self.btnPrueba1.setEnabled(False)
+            self.btnPrueba1.setStyleSheet("background-color: ;")
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(True)
+            self.btnConfiguracion.setEnabled(True)
+
+
+            self.disconnect_all_devices()
+
             self.lblCurrentUser.setText("")
             self.lblCurrentOrder.setText("")
 
@@ -568,7 +597,11 @@ class MainWindow(QMainWindow, mainApplication):
         else:
             pass
 
-
+    def disconnect_all_devices(self):
+        self.gateway.close()
+        self.Rs232.disconnect()
+        self.Rs485.disconnect()
+        self.Camera.close_connection()
 
 
 
@@ -645,12 +678,22 @@ class MainWindow(QMainWindow, mainApplication):
 
             currentShopOrder=str(data[1])
             self.lblCurrentOrder.setText(currentShopOrder)
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(False)
             
+            self.btnConfiguracion.setEnabled(False)
+
+
             #Show first test index screen
             self.stackedWidget.setCurrentIndex(6)
 
             #Enable log out button 
             self.btnLogout.setEnabled(True)
+            
+            self.btnPrueba1.setEnabled(True)
+            
+            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
             self.txtSerialCode.setFocus()
         else:
@@ -659,6 +702,11 @@ class MainWindow(QMainWindow, mainApplication):
             #Show User and Shop order input 
             self.stackedWidget.setCurrentIndex(4)
             self.txtNumeroEmpleado.setFocus()
+
+    def test_inicialize(self):
+
+        #Show first test screen
+        self.stackedWidget.setCurrentIndex(6)
     
     def test_1(self,event=None):
         
@@ -685,7 +733,9 @@ class MainWindow(QMainWindow, mainApplication):
             #Disable app function once the test is inicalized
 
             self.btnLogout.setEnabled(False)
-            self.btnConfiguracion.setEnabled(False)
+            self.btnTrazabilidad.setEnabled(False)
+
+            self.btnPrueba1.setEnabled(False)
 
             self.start_timer( self.timer_value)
 
@@ -732,9 +782,14 @@ class MainWindow(QMainWindow, mainApplication):
         print("Obtaining firmware version ")
         firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
 
+        print("Turning off LCD screen")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
+        
+
         print(f"Firmware response:{firmware_version}")
 
-        if firmware_version:
+        if firmware_version != None:
             self.txtFirmware.setText(firmware_version)
 
             self.lblVerifyFirmware.setText("Firmware capturado")
@@ -852,6 +907,12 @@ class MainWindow(QMainWindow, mainApplication):
     def test_4(self):
 
         print("Prueba 4")
+
+        print("Enciendiendo pantalla LCD 100%")
+
+        
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
 
         print("Encendiendo todos los Segmentos LCDS")
 
@@ -1144,9 +1205,12 @@ class MainWindow(QMainWindow, mainApplication):
         #Go back to main Screen test
         self.stackedWidget.setCurrentIndex(6) 
 
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
         #Enable app functionality
         self.btnLogout.setEnabled(True)
-        self.btnConfiguracion.setEnabled(True)
+        self.btnTrazabilidad.setEnabled(True)
 
         self.txtSerialCode.setFocus()
 

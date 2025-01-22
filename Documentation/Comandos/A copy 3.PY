@@ -34,7 +34,7 @@ while True:
     # Imprimir la respuesta en formato legible
     print(formatted_response)
 
-    command = bytes.fromhex('FF00FFA50060100D03D05600024B')
+    command = bytes.fromhex('FF00FFA50060100D04D05C01000253')
     ser.write(command)
 
     # Leer la respuesta
