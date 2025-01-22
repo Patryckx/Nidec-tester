@@ -1,0 +1,24 @@
+a = Analysis(
+    ['application.py'],
+    pathex=[],
+    binaries=[],
+    datas=[],
+    hiddenimports=[
+        'sysconfig', 
+        'pyvisa', 
+        'pyvisa_py', 
+        'pkg_resources', 
+        'infi.instruct.ULInt8',
+        'infi.instruct.ULInt16',
+        'infi.instruct.ULInt32',
+        'infi.instruct.ULInt64',
+        'six.moves',
+        'asyncio.DefaultEventLoopPolicy'
+    ],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    noarchive=True,
+    optimize=0,
+)
