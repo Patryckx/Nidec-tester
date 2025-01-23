@@ -282,6 +282,14 @@ class MainWindow(QMainWindow, mainApplication):
         """Función que se ejecuta cuando el temporizador llega a cero."""
         print("Timer finished!")
 
+        print("Apagando bobina para alimentar 5V a hmi")
+
+        self.gateway.write_coil(16,False)
+
+        #Stoping monithoring thread HMI 
+
+        self.monitor_thread.stop_monitoring_signal.emit()
+
         print("Enciendiendo pantalla LCD 100%")
 
         self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
@@ -713,6 +721,9 @@ class MainWindow(QMainWindow, mainApplication):
             self.stackedWidget.setCurrentIndex(2)
             #return
 
+        #Housekeeping registers gateway
+        self.housekeeping_gateway()
+
         self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
 
         if not self.Rs232.connect():
@@ -777,6 +788,11 @@ class MainWindow(QMainWindow, mainApplication):
             self.stackedWidget.setCurrentIndex(4)
             self.txtNumeroEmpleado.setFocus()
 
+    def housekeeping_gateway(self):
+        '''Function to turn off importar register coils every time the app inicializes'''
+        print("Apagando bobina para alimentar 5V a hmi")
+        self.gateway.write_coil(16,False)
+
     def test_inicialize(self):
 
         #Show first test screen
@@ -819,7 +835,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             time.sleep(1)
             #Continue with Test2
-            self.test_2()
+            self.hmi_in_position_verification()
 
         else:
             print("Código serial no válido")
@@ -849,6 +865,10 @@ class MainWindow(QMainWindow, mainApplication):
 
     def hmi_removed_during_test(self):
         print("HMI removed during test")
+
+        print("Apagando bobina para alimentar 5V a hmi")
+
+        self.gateway.write_coil(16,False)
         #Show message and cancel test 
         self.stackedWidget.setCurrentIndex(15)
 
@@ -882,6 +902,9 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Read register to verify HMI presence in Fixture
 
+        print("Encendiendo bobina para alimentar 5V a hmi")
+
+        self.gateway.write_coil(16,True)
         
 
         '''
@@ -936,6 +959,11 @@ class MainWindow(QMainWindow, mainApplication):
             QTimer.singleShot(3000, lambda: self.failed_firmware_version_signal.emit())
         
     def test_2_failed_firmware_version_response(self):
+
+        print("PAgando bobina para alimentar 5V a hmi")
+
+        self.gateway.write_coil(16,False)
+
         self.btnPrueba1.setEnabled(True)
         self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
@@ -1234,6 +1262,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Stop monitoring Hmi position thread
         self.monitor_thread.stop()
+
+        print("Apagando bobina para alimentar 5V a hmi")
+
+        self.gateway.write_coil(16,False)
    
         self.show_resume()
     ################ RESUME ########################################
