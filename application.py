@@ -1085,7 +1085,8 @@ class MainWindow(QMainWindow, mainApplication):
 
 
 
-        self.stackedWidget.setCurrentIndex(9)
+         # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
 
         #Proceed with test 5
         self.test_5()
