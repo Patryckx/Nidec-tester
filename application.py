@@ -652,6 +652,10 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnInicializar.setEnabled(True)
             self.btnConfiguracion.setEnabled(True)
 
+            #Clear txtfields
+            self.txtNumeroEmpleado.setText("")
+            self.txtNumeroOrden.setText("")
+
 
             self.disconnect_all_devices()
 
@@ -1003,7 +1007,11 @@ class MainWindow(QMainWindow, mainApplication):
 
 
 
-        self.stackedWidget.setCurrentIndex(8)
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
+
+        #Proceed with test 4
+        self.test_4()
 
 
 
