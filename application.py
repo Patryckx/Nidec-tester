@@ -83,10 +83,12 @@ class MonitorHMIPositionThread(QThread):
 
         # Emitir señal de stop cuando el hilo se detenga
         self.stop_monitoring_signal.emit()
+       
+
+    def stop_monithoring_HMI_thread(self):
+        """Método para detener el hilo."""
         print("Monitoreo detenido.")
 
-    def stop(self):
-        """Método para detener el hilo."""
         self._is_running = False
         self.wait()  # Esperar a que el hilo termine
 
@@ -191,6 +193,8 @@ class MainWindow(QMainWindow, mainApplication):
     Test_6_signal=pyqtSignal()
 
     Test_resume_signal=pyqtSignal()
+
+    failed_firmware_version_signal=pyqtSignal()
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -416,11 +420,12 @@ class MainWindow(QMainWindow, mainApplication):
         # Conectar señales
         self.monitor_thread.HMI_success_signal.connect(self.test_2)
         self.monitor_thread.HMI_failure_signal.connect(self.hmi_removed_during_test)
-        self.monitor_thread.stop_monitoring_signal.connect(lambda: print("Hilo de monitoreo HMI detenido."))
+        self.monitor_thread.stop_monitoring_signal.connect(self.monitor_thread.stop_monithoring_HMI_thread)
         self.btnHMIRemoved.clicked.connect(self.cancel_remaining_test_and_functions)
 
         #Firmware version Test 2
         self.Test_2_signal.connect(self.Test_2_GUI_changes)
+        self.failed_firmware_version_signal.connect(self.test_2_failed_firmware_version_response)
 
 
         #LEDs test 3
@@ -694,9 +699,9 @@ class MainWindow(QMainWindow, mainApplication):
 
         # Convertir segundos a minutos y segundos
         minutes, seconds = divmod(  self.timer_value, 60)
-        formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
+        self.formatted_timer_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
 
-        self.lbltimer.setText(formatted_time)
+        self.lbltimer.setText(self.formatted_timer_time)
 
         print("Verifiying instruments...")
 
@@ -919,15 +924,37 @@ class MainWindow(QMainWindow, mainApplication):
 
             #Proceed with test 3
             self.test_3()
-
-
-       
         else:
+
             self.lblVerifyFirmware.setText("Firmware NO capturado")
             self.lblVerifyFirmware.setStyleSheet("color: red;")
 
             #Test Button 
             self.btnPrueba2.setStyleSheet("background-color: red;")
+
+             # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.failed_firmware_version_signal.emit())
+        
+    def test_2_failed_firmware_version_response(self):
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
+        self.btnPrueba2.setStyleSheet("")
+
+        #STOP timer
+        self.timer.stop()
+        self.lbltimer.setText(self.formatted_timer_time)
+
+        #STOP monitoring HMI position thread
+        self.monitor_thread.stop_monithoring_HMI_thread()
+
+        self.txtSerialCode.setText("")
+        self.txtSerialCode.setFocus()
+
+        self.txtFirmware.setText("")
+        
+
+
 
 
     def Test_2_GUI_changes(self):
@@ -1338,13 +1365,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtSerialCode.setFocus()
 
         #Rest Timer
-        current_config=self.config.get_current_config()
-        self.timer_value = int(current_config[5])  # Asegúrate de convertir el valor a entero
-
-        # Convertir segundos a minutos y segundos
-        minutes, seconds = divmod(  self.timer_value, 60)
-        formatted_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
-        self.lbltimer.setText(formatted_time)
+        self.lbltimer.setText(self.formatted_timer_time)
 
         #Retrieve add register flag
         self.dont_add_register=False
