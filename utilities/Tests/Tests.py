@@ -19,6 +19,7 @@ class Manage_tests():
         self.general_result=None
         self.test1_result=None
         self.test2_result=None
+        self.test232_result=None
         self.test3_result=None
         self.test4_result=None
         self.test5_result=None
@@ -44,6 +45,10 @@ class Manage_tests():
     def result_T2(self,firmware:str):
         self.test2_result=firmware
         self.record["Prueba 2:"] = firmware
+
+    def result_232(self,response:str):
+        self.test232_result=response
+        self.record["Prueba 232:"] = response
 
     def result_T3(self,leds_result:str,leds_array:list):
         self.test3_result=leds_result
