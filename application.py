@@ -105,9 +105,10 @@ class MonitorButtonsThread(QThread):
         self.rs485 = rs485
         self.pending_buttons_list = list(self.buttons_order.values())
         self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
+        self.running=True
         print(self.pending_buttons_list)
     def run(self):
-        while self.pending_buttons_list:
+        while self.pending_buttons_list and self.running:
             # Simulación de obtener la respuesta del dispositivo
             response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
             print(response)
@@ -133,6 +134,10 @@ class MonitorButtonsThread(QThread):
                 self.test_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
                 break
 
+    def stop(self):
+        self.running=False
+        #self.monithor_thread.quit()
+        #self.monithor_thread.wait()
 
 class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
@@ -147,8 +152,10 @@ class MonitorDigitalEntrances(QThread):
         self.pending_digital_list = list(self.digital_input_order.values())
         self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
         print(self.pending_digital_list)
+
+        self.digital_entrances_thread_isrunning=True
     def run(self):
-        while self.pending_digital_list:
+        while self.pending_digital_list and self.digital_entrances_thread_isrunning:
             # Simulación de obtener la respuesta del dispositivo
             response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
             print(response)
@@ -174,6 +181,11 @@ class MonitorDigitalEntrances(QThread):
                 #button_result = "PASS"
                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
                 break
+
+    def stop(self):
+        self.digital_entrances_thread_isrunning=False
+        #self.monithor_thread.quit()
+        #self.monithor_thread.wait()
 
 
 
@@ -282,9 +294,23 @@ class MainWindow(QMainWindow, mainApplication):
         """Función que se ejecuta cuando el temporizador llega a cero."""
         print("Timer finished!")
 
+        #Stop buttons thread
+
+        self.monitor_buttons_thread.stop()
+
+        self.monitor_buttons_thread.quit()
+        self.monitor_buttons_thread.wait()
+
+
+        
+
         print("Apagando bobina para alimentar 5V a hmi")
 
-        self.gateway.write_coil(16,False)
+        try: 
+            self.gateway.write_coil(16,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
 
         #Stoping monithoring thread HMI 
 
@@ -877,11 +903,23 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Apagando bobina para alimentar 5V a hmi")
 
-        self.gateway.write_coil(16,False)
+        try: 
+            self.gateway.write_coil(16,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
+
         #Show message and cancel test 
         self.stackedWidget.setCurrentIndex(15)
 
     def cancel_remaining_test_and_functions(self,event=None):
+
+        #Stop monitor buttons thread 
+
+        self.monitor_buttons_thread.stop()
+
+        self.monitor_buttons_thread.quit()
+        self.monitor_buttons_thread.wait()
 
         #Stop timer
         self.timer.stop()
@@ -1012,7 +1050,7 @@ class MainWindow(QMainWindow, mainApplication):
         try: 
             self.gateway.write_coil(16,False)
         except Exception as e:
-            print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
 
 
         self.btnPrueba1.setEnabled(True)
@@ -1249,6 +1287,49 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.stackedWidget.setCurrentIndex(10) 
 
+    def cancel_test_button(self):            
+
+        print("Cancelando prueba 5")
+
+        reply = QMessageBox.question(
+            self,
+            'Cancelar prueba',
+            '¿Estás seguro de que quieres cancelar la prueba',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            
+            #Erase current session info
+            self.config.erase_user_and_shop_info()
+
+            #Show again first screen app
+            self.stackedWidget.setCurrentIndex(0)
+
+            self.btnLogout.setEnabled(False)
+
+            self.btnPrueba1.setEnabled(False)
+            self.btnPrueba1.setStyleSheet("background-color: ;")
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(True)
+            self.btnConfiguracion.setEnabled(True)
+
+            #Clear txtfields
+            self.txtNumeroEmpleado.setText("")
+            self.txtNumeroOrden.setText("")
+
+
+            self.disconnect_all_devices()
+
+            self.lblCurrentUser.setText("")
+            self.lblCurrentOrder.setText("")
+
+
+        else:
+            pass
+
 
     ################ TEST 6   #######################
         
@@ -1313,7 +1394,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Apagando bobina para alimentar 5V a hmi")
 
-        self.gateway.write_coil(16,False)
+        try: 
+            self.gateway.write_coil(16,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
    
         self.show_resume()
     ################ RESUME ########################################
@@ -1370,7 +1454,10 @@ class MainWindow(QMainWindow, mainApplication):
         #Test 2
         self.txtFirmware.setText("")
         self.lblVerifyFirmware.setText("")
+        self.txtComunicacion232.setText("")
+        self.lblVerify232communication.setText("")
         self.btnPrueba2.setStyleSheet("background-color: ;")
+
         
         #Test 3
         led_names = [f"lblLED{i}" for i in range(1, 12)]
@@ -1497,7 +1584,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        csv_register = {"Codigo serial":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result,"Numero Empleado":user,"Numero Orden":shop_order, "Hora y Fecha": Current_date}
+        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigo serial":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
         
         # Call csv register add function 
         self.test.add_csv_register(csv_register,user,shop_order)
