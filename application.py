@@ -448,6 +448,8 @@ class MainWindow(QMainWindow, mainApplication):
         #Test 5 
         self.Test_5_signal.connect(self.Test_5_GUI_changes)
 
+        self.lblCancelTestButtons.mousePressEvent=self.cancel_remaining_test_and_functions
+
         #Test 6
         self.Test_6_signal.connect(self.Test_6_GUI_changes)
 
@@ -789,7 +791,10 @@ class MainWindow(QMainWindow, mainApplication):
     def housekeeping_gateway(self):
         '''Function to turn off importar register coils every time the app inicializes'''
         print("Apagando bobina para alimentar 5V a hmi")
-        self.gateway.write_coil(16,False)
+        try: 
+            self.gateway.write_coil(16,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
 
     def test_inicialize(self):
 
@@ -833,7 +838,9 @@ class MainWindow(QMainWindow, mainApplication):
 
             time.sleep(1)
             #Continue with Test2
-            self.hmi_in_position_verification()
+            #self.hmi_in_position_verification()
+            #Proceed with test 2
+            self.test_2()
 
         else:
             print("Código serial no válido")
@@ -874,7 +881,7 @@ class MainWindow(QMainWindow, mainApplication):
         #Show message and cancel test 
         self.stackedWidget.setCurrentIndex(15)
 
-    def cancel_remaining_test_and_functions(self):
+    def cancel_remaining_test_and_functions(self,event=None):
 
         #Stop timer
         self.timer.stop()
@@ -906,7 +913,11 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Encendiendo bobina para alimentar 5V a hmi")
 
-        self.gateway.write_coil(16,True)
+        try: 
+            self.gateway.write_coil(16,True)
+        except Exception as e:
+            print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
+
         
 
         '''
@@ -983,9 +994,6 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.txtFirmware.setText("")
         
-
-
-
 
     def Test_2_GUI_changes(self):
             #Third Test

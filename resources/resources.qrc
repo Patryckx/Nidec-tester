@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="resources">
+    <file>port.png</file>
     <file>open-folder.png</file>
     <file>folder (1).png</file>
     <file>folder.png</file>
