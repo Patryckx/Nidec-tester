@@ -426,9 +426,7 @@ class MainWindow(QMainWindow, mainApplication):
         #HMI verification 
         
         # Conectar señales
-        self.monitor_thread.HMI_success_signal.connect(self.test_2)
-        self.monitor_thread.HMI_failure_signal.connect(self.hmi_removed_during_test)
-        self.monitor_thread.stop_monitoring_signal.connect(self.monitor_thread.stop_monithoring_HMI_thread)
+        
         self.btnHMIRemoved.clicked.connect(self.cancel_remaining_test_and_functions)
 
         #Firmware version Test 2
@@ -856,6 +854,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         # Crear el objeto del hilo
         self.monitor_thread = MonitorHMIPositionThread(self.gateway)
+
+        self.monitor_thread.HMI_success_signal.connect(self.test_2)
+        self.monitor_thread.HMI_failure_signal.connect(self.hmi_removed_during_test)
+        self.monitor_thread.stop_monitoring_signal.connect(self.monitor_thread.stop_monithoring_HMI_thread)
 
         # Iniciar el hilo
         self.monitor_thread.start()
