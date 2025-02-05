@@ -876,7 +876,7 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 2
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(20000, lambda: self.Test_1_signal.emit())
+            QTimer.singleShot(15000, lambda: self.Test_1_signal.emit())
             #self.test_2()
 
         else:
@@ -986,53 +986,20 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.Rs485.send_command("FF00FFA50060100D04D05101010249")
 
-        
-
-        print("Testing 232 responses")
-        self.Rs232.send_command("FF00FFA50060100D04D05101010249")
-
-        print("Obtaining firmware version via rs232 ")
-        firmware_version232=str(self.Rs232.send_command("FF00FFA50060100D03D05600024B"))
-
-        if firmware_version232 == '':
-            self.lblVerify232communication.setText("Respuesta No obtenida")
-            self.lblVerify232communication.setStyleSheet("color: red;")
-
-            #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: red;")
-
-            #if firmware_version232 != None:
-        else:
-            self.txtComunicacion232.setText(firmware_version232)
-
-            self.lblVerify232communication.setText("Respuesta obtenida")
-            self.lblVerify232communication.setStyleSheet("color: green;")
-
-            self.test.result_232(firmware_version232)
-            
-        
         print("Obtaining firmware version ")
         firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
 
         print("Turning off LCD screen")
 
         self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
+        
+
         print(f"Firmware response:{firmware_version}")
 
-        if firmware_version == '':
-            self.lblVerifyFirmware.setText("Firmware NO capturado")
-            self.lblVerifyFirmware.setStyleSheet("color: red;")
+        #if firmware_version == '':
 
-            #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: red;")
 
-             # Crear un QTimer para emitir la señal después de 3 segundos
-            #QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
-
-            # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
-
-        else:
+        if firmware_version != None:
             self.txtFirmware.setText(firmware_version)
 
             self.lblVerifyFirmware.setText("Firmware capturado")
@@ -1047,21 +1014,49 @@ class MainWindow(QMainWindow, mainApplication):
 
             #Proceed with test 3
             #self.test_3()
+        else:
+
+            self.lblVerifyFirmware.setText("Firmware NO capturado")
+            self.lblVerifyFirmware.setStyleSheet("color: red;")
+
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: red;")
+
+             # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.failed_firmware_version_signal.emit())
+        
+        print("Testing 232 responses")
+        self.Rs232.send_command("FF00FFA50060100D04D05101010249")
+
+        print("Obtaining firmware version via rs232 ")
+        firmware_version232=str(self.Rs232.send_command("FF00FFA50060100D03D05600024B"))
+
+
+        if firmware_version232 != None:
+            self.txtComunicacion232.setText(firmware_version232)
+
+            self.lblVerify232communication.setText("Respuesta obtenida")
+            self.lblVerify232communication.setStyleSheet("color: green;")
             #Test Button 
             self.btnPrueba2.setStyleSheet("background-color: green;")
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+            QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
 
-            
+            self.test.result_232(firmware_version232)
 
             #Proceed with test 3
             self.test_3()
-        
-        
+        else:
 
-            
-        
+            self.lblVerify232communication.setText("Respuesta No obtenida")
+            self.lblVerify232communication.setStyleSheet("color: red;")
+
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: red;")
+
+             # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.failed_firmware_version_signal.emit())
         
 
     def test_2_failed_firmware_version_response(self):
@@ -1087,21 +1082,9 @@ class MainWindow(QMainWindow, mainApplication):
         #self.monitor_thread.stop_monithoring_HMI_thread()
 
         self.txtSerialCode.setText("")
-        self.txtSerialCode.setEnabled(True)
         self.txtSerialCode.setFocus()
 
-        self.lblVerifySerialCode.setText("")
-
-        self.lblRequestHMI.setText("")
-
         self.txtFirmware.setText("")
-
-        self.lblVerifyFirmware.setText("")
-
-        self.txtComunicacion232.setText("")
-
-        self.lblVerify232communication.setText("")
-
         
 
     def Test_2_GUI_changes(self):
