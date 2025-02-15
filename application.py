@@ -139,13 +139,13 @@ class MonitorButtonsThread(QThread):
         #self.monithor_thread.quit()
         #self.monithor_thread.wait()
 
-class MonitorDigitalEntrances(QThread):
+'''class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
     digital_input_detected_signal = pyqtSignal(str)
     update_digital_input_signal = pyqtSignal(str, str)
     test_6_finished_signal = pyqtSignal()
 
-    def __init__(self, digital_input_order, rs485, parent=None):
+    def __init__(self, digital_input_order,digital_actuators_order, rs485, parent=None):
         super(MonitorDigitalEntrances, self).__init__(parent)
         self.digital_input_order = digital_input_order
         self.rs485 = rs485
@@ -185,10 +185,62 @@ class MonitorDigitalEntrances(QThread):
     def stop(self):
         self.digital_entrances_thread_isrunning=False
         #self.monithor_thread.quit()
-        #self.monithor_thread.wait()
+        #self.monithor_thread.wait()'''
+class MonitorDigitalEntrances(QThread):
+    # Definir señales para la comunicación con el hilo principal
+    digital_input_detected_signal = pyqtSignal(str)
+    update_digital_input_signal = pyqtSignal(str, str)
+    test_6_finished_signal = pyqtSignal()
 
+    def __init__(self, digital_input_order, digital_actuators_order, rs485, gateway, parent=None):
+        super(MonitorDigitalEntrances, self).__init__(parent)
+        self.digital_input_order = digital_input_order
+        self.digital_actuators_order = digital_actuators_order
+        self.rs485 = rs485
+        self.gateway = gateway  # Modbus para controlar bobinas
 
+        # Listas pendientes
+        self.pending_digital_list = list(self.digital_input_order.values())
+        self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
+        self.pending_actuator_list = list(self.digital_actuators_order.values())
 
+        self.digital_entrances_thread_isrunning = True
+
+    def run(self):
+        while self.pending_digital_list and self.pending_actuator_list and self.digital_entrances_thread_isrunning:
+            # Obtener el actuador correspondiente
+            current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
+            print(f"Activando bobina {current_coil}")
+            self.gateway.write_coil(current_coil, True)  # Encender bobina
+
+            # Simulación de obtener la respuesta del dispositivo
+            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+            print(response)
+
+            hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+
+            if hex_value == self.pending_digital_list[0]:
+                print(f"Entrada detectada: {hex_value}")
+                current_index = self.pending_digital_index.pop(0)
+                print(current_index)
+                digital = f"lblDigital{current_index}"
+                digital_input = f"lblDigitalInput{current_index}"
+
+                # Emitir una señal para actualizar la GUI en el hilo principal
+                self.update_digital_input_signal.emit(digital, digital_input)
+
+                # Apagar la bobina correspondiente
+                print(f"Desactivando bobina {current_coil}")
+                self.gateway.write_coil(current_coil, False)  # Apagar bobina
+
+                # Eliminar elementos procesados
+                self.pending_digital_list.pop(0)
+                self.pending_actuator_list.pop(0)
+
+            if not self.pending_digital_list:
+                print("Todas las señales han sido capturadas.")
+                self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
+                break
 
 class MainWindow(QMainWindow, mainApplication):
 
@@ -845,14 +897,14 @@ class MainWindow(QMainWindow, mainApplication):
         #Ejemplo formato codigo serial
         #BQ244423100510013
 
-        serial_code=self.txtSerialCode.text()
+        self.serial_code=self.txtSerialCode.text()
 
-        print(f"Codigo introducido: {serial_code}")
+        print(f"Codigo introducido: {self.serial_code}")
 
          # Evaluar el formato del código serial
         #if len(serial_code) == 17 and serial_code[:2].isalpha():
-        if  serial_code[:2].isalpha():
-            print("Código serial válido:", serial_code)
+        if  self.serial_code[:2].isalpha():
+            print("Código serial válido:", self.serial_code)
             # Aquí puedes añadir más lógica para manejar un código válido
             self.serial_code_captured=True
 
@@ -889,9 +941,9 @@ class MainWindow(QMainWindow, mainApplication):
         #Ejemplo formato codigo serial
         #BQ244423100510013
 
-        qrcode=self.txtQrcode.text()
+        self.qrcode=self.txtQrcode.text()
 
-        if qrcode[:2].isalpha() and self.serial_code_captured:
+        if self.qrcode[:2].isalpha() and self.serial_code_captured:
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: green;")
 
@@ -910,7 +962,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.start_timer( self.timer_value)
 
-            self.test.result_T1(str(qrcode))
+            self.test.result_T1(str(self.serial_code),str(self.qrcode))
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido")
 
@@ -1118,12 +1170,7 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 3
             self.test_3()
         
-        
-
-            
-        
-        
-
+  
     def test_2_failed_firmware_version_response(self):
 
         print("Apagando bobina para alimentar 5V a hmi")
@@ -1433,10 +1480,14 @@ class MainWindow(QMainWindow, mainApplication):
             "Schedule 3": '04', "Quick Clean": '08'
         }
 
+        self.digital_actuators_order={
+            "1":2,"2":4,"3":5,"4":3
+        }
+
         print(self.digital_order)
         
         # Crear un hilo para monitorear los botones
-        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.Rs485)
+        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.digital_actuators_order,self.Rs485)
         
         # Conectar las señales del hilo con los métodos de la clase principal
         self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
