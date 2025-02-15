@@ -943,7 +943,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.qrcode=self.txtQrcode.text()
 
-        if self.qrcode[:2].isalpha() and self.serial_code_captured:
+        #if self.qrcode[:2].isalpha() and self.serial_code_captured:
+        if self.qrcode  and self.serial_code_captured:
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: green;")
 
@@ -1131,7 +1132,7 @@ class MainWindow(QMainWindow, mainApplication):
         
         print(f"Firmware response:{firmware_version}")
 
-        if firmware_version == '':
+        if firmware_version == '' or firmware_version=='None':
             self.lblVerifyFirmware.setText("Firmware NO capturado")
             self.lblVerifyFirmware.setStyleSheet("color: red;")
 
@@ -1196,6 +1197,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtSerialCode.setText("")
         self.txtSerialCode.setEnabled(True)
         self.txtSerialCode.setFocus()
+
+        self.txtQrcode.setText("")
+        self.txtQrcode.setEnabled(True)
 
         self.lblVerifySerialCode.setText("")
 

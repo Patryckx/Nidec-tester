@@ -4013,7 +4013,7 @@ QPushButton &gt; * {
              <number>150</number>
             </property>
             <item>
-             <widget class="QLabel" name="lblVerify232communication">
+             <widget class="QLabel" name="lblVerifyFirmware">
               <property name="minimumSize">
                <size>
                 <width>560</width>
@@ -11367,13 +11367,13 @@ QTableWidget::item:selected {
          </property>
         </column>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>30</x>
           <y>20</y>
           <width>1022</width>
-          <height>71</height>
+          <height>575</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_135">
