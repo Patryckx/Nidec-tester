@@ -856,7 +856,14 @@ class MainWindow(QMainWindow, mainApplication):
             # Aquí puedes añadir más lógica para manejar un código válido
             self.serial_code_captured=True
 
+            self.lblVerifySerialCode.setStyleSheet("color: blue;")
+
             self.lblVerifySerialCode.setText("Por favor introduzca el codigo QR")
+
+            self.txtSerialCode.setEnabled(False)
+            
+            self.txtQrcode.setFocus()
+
         else:
             print("Código serial no válido")
             # Aquí puedes añadir lógica para manejar un código no válido
@@ -869,6 +876,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             # Opcional: limpiar el campo de texto después de la evaluación
             self.txtSerialCode.clear()
+            self.txtSerialCode.setFocus()
+
 
         
 
@@ -887,7 +896,11 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnPrueba1.setStyleSheet("background-color: green;")
 
             #Disable app function once the test is inicalized
+            self.lblVerifySerialCode.setStyleSheet("color: green;")
+
             self.lblVerifySerialCode.setText("Codigos capturados")
+
+            self.txtQrcode.setEnabled(False)
 
 
             self.btnLogout.setEnabled(False)
@@ -923,6 +936,16 @@ class MainWindow(QMainWindow, mainApplication):
             # Opcional: limpiar el campo de texto después de la evaluación
             self.txtSerialCode.clear()
             self.txtQrcode.clear()
+
+            self.txtSerialCode.setFocus()
+
+            self.txtSerialCode.setEnabled(True)
+            self.txtQrcode.setEnabled(True)
+
+
+
+
+            
 
 
 
@@ -1021,9 +1044,13 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.Rs485.send_command("FF00FFA50060100D04D05101010249")
 
+        print("Turning off LCD screen")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
+
         
 
-        print("Testing 232 responses")
+        '''print("Testing 232 responses")
         self.Rs232.send_command("FF00FFA50060100D04D05101010249")
 
         print("Obtaining firmware version via rs232 ")
@@ -1043,15 +1070,13 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblVerify232communication.setText("Respuesta obtenida")
             self.lblVerify232communication.setStyleSheet("color: green;")
 
-            self.test.result_232(firmware_version232)
+            self.test.result_232(firmware_version232)'''
             
         
         print("Obtaining firmware version ")
         firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
 
-        print("Turning off LCD screen")
-
-        self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
+        
         print(f"Firmware response:{firmware_version}")
 
         if firmware_version == '':
@@ -1133,9 +1158,9 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.lblVerifyFirmware.setText("")
 
-        self.txtComunicacion232.setText("")
+        #self.txtComunicacion232.setText("")
 
-        self.lblVerify232communication.setText("")
+        #self.lblVerify232communication.setText("")
 
         
 
@@ -1532,8 +1557,8 @@ class MainWindow(QMainWindow, mainApplication):
         #Test 2
         self.txtFirmware.setText("")
         self.lblVerifyFirmware.setText("")
-        self.txtComunicacion232.setText("")
-        self.lblVerify232communication.setText("")
+        #self.txtComunicacion232.setText("")
+        #self.lblVerify232communication.setText("")
         self.btnPrueba2.setStyleSheet("background-color: ;")
 
         
