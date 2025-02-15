@@ -37,10 +37,10 @@ class Manage_tests():
 
         self.record["Resutado general:"] = global_result
 
-    def result_T1(self,serial_code:str):
-        self.test1_result=serial_code
+    def result_T1(self,serial_code:str,qrcode:str):
+        self.test1_result=f"{serial_code} , {qrcode} "
 
-        self.record["Prueba 1:"] = serial_code
+        self.record["Prueba 1:"] = self.test1_result 
 
     def result_T2(self,firmware:str):
         self.test2_result=firmware
