@@ -252,6 +252,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.initialized_flag = None
         #Flag to not add register if timer goes up
         self.dont_add_register=None
+        
+        #Serial Code scanned flag
+        self.serial_code_captured=None
+
 
         #Timer test 
         self.timer = QTimer()
@@ -449,7 +453,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtSerialCode.returnPressed.connect(self.test1_verify_serial_code)
         self.lblEnter_VerifyCode.mousePressEvent = self.test_1
 
-        self.txtQrcode.returnPressed.connect(self.test1)
+        self.txtQrcode.returnPressed.connect(self.test_1)
 
         self.btnPrueba1.clicked.connect(self.test_inicialize)
 
@@ -850,6 +854,7 @@ class MainWindow(QMainWindow, mainApplication):
         if  serial_code[:2].isalpha():
             print("Código serial válido:", serial_code)
             # Aquí puedes añadir más lógica para manejar un código válido
+            self.serial_code_captured=True
 
             self.lblVerifySerialCode.setText("Por favor introduzca el codigo QR")
         else:
@@ -859,6 +864,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblVerifySerialCode.setStyleSheet("color: red;")
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: red;")
+            self.serial_code_captured=False
+
 
             # Opcional: limpiar el campo de texto después de la evaluación
             self.txtSerialCode.clear()
@@ -875,7 +882,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         qrcode=self.txtQrcode.text()
 
-        if qrcode[:2].isalpha():
+        if qrcode[:2].isalpha() and self.serial_code_captured:
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: green;")
 
@@ -908,7 +915,7 @@ class MainWindow(QMainWindow, mainApplication):
         else:
             print("Código serial no válido")
             # Aquí puedes añadir lógica para manejar un código no válido
-            self.lblVerifySerialCode.setText("Codigo invalido")
+            self.lblVerifySerialCode.setText("Codigo(s) invalido o faltante")
             self.lblVerifySerialCode.setStyleSheet("color: red;")
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: red;")
