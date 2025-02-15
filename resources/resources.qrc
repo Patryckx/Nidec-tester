@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>codigo-qr.png</file>
+    <file>qr.png</file>
     <file>port.png</file>
     <file>open-folder.png</file>
     <file>folder (1).png</file>

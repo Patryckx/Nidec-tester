@@ -176,7 +176,7 @@ class MonitorDigitalEntrances(QThread):
                 self.pending_digital_list.pop(0)
 
             #if not self.pending_digital_list: BYPASS 
-            if self.pending_digital_list:
+            if not self.pending_digital_list:
                 print("Todos las señales han sido capturadas.")
                 #button_result = "PASS"
                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
@@ -446,8 +446,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtNumeroOrden.focusInEvent = lambda event: self.clear_placeholder_and_reset_style(self.txtNumeroOrden, event)
 
         #Serial code Test I
-        self.txtSerialCode.returnPressed.connect(self.test_1)
+        self.txtSerialCode.returnPressed.connect(self.test1_verify_serial_code)
         self.lblEnter_VerifyCode.mousePressEvent = self.test_1
+
+        self.txtQrcode.returnPressed.connect(self.test1)
 
         self.btnPrueba1.clicked.connect(self.test_inicialize)
 
@@ -832,10 +834,9 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Show first test screen
         self.stackedWidget.setCurrentIndex(6)
-    
-    def test_1(self,event=None):
-        
-        print("Primera prueba")
+
+    def test1_verify_serial_code(self):
+        print("Primera prueba verificando codigo serial")
 
         #Ejemplo formato codigo serial
         #BQ244423100510013
@@ -845,17 +846,42 @@ class MainWindow(QMainWindow, mainApplication):
         print(f"Codigo introducido: {serial_code}")
 
          # Evaluar el formato del código serial
-        if len(serial_code) == 17 and serial_code[:2].isalpha():
+        #if len(serial_code) == 17 and serial_code[:2].isalpha():
+        if  serial_code[:2].isalpha():
             print("Código serial válido:", serial_code)
             # Aquí puedes añadir más lógica para manejar un código válido
 
-            self.lblVerifySerialCode.setText("Codigo capturado")
-            self.lblVerifySerialCode.setStyleSheet("color: green;")
-            self.txtSerialCode.setEnabled(False)
+            self.lblVerifySerialCode.setText("Por favor introduzca el codigo QR")
+        else:
+            print("Código serial no válido")
+            # Aquí puedes añadir lógica para manejar un código no válido
+            self.lblVerifySerialCode.setText("Codigo invalido")
+            self.lblVerifySerialCode.setStyleSheet("color: red;")
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: red;")
+
+            # Opcional: limpiar el campo de texto después de la evaluación
+            self.txtSerialCode.clear()
+
+        
+
+    
+    def test_1(self,event=None):
+        
+        print("Primera prueba codigo QR")
+
+        #Ejemplo formato codigo serial
+        #BQ244423100510013
+
+        qrcode=self.txtQrcode.text()
+
+        if qrcode[:2].isalpha():
             #Test Button 
             self.btnPrueba1.setStyleSheet("background-color: green;")
 
             #Disable app function once the test is inicalized
+            self.lblVerifySerialCode.setText("Codigos capturados")
+
 
             self.btnLogout.setEnabled(False)
             self.btnTrazabilidad.setEnabled(False)
@@ -864,7 +890,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.start_timer( self.timer_value)
 
-            self.test.result_T1(str(serial_code))
+            self.test.result_T1(str(qrcode))
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido")
 
@@ -889,6 +915,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             # Opcional: limpiar el campo de texto después de la evaluación
             self.txtSerialCode.clear()
+            self.txtQrcode.clear()
+
 
 
 
@@ -1368,15 +1396,15 @@ class MainWindow(QMainWindow, mainApplication):
         
 
     def test_6(self):
-        digital_order = {
+        self.digital_order = {
              "Schedule 1": '01', "Schedule 2": '02',
             "Schedule 3": '04', "Quick Clean": '08'
         }
 
-        print(digital_order)
+        print(self.digital_order)
         
         # Crear un hilo para monitorear los botones
-        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.buttons_order, self.Rs485)
+        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.Rs485)
         
         # Conectar las señales del hilo con los métodos de la clase principal
         self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
@@ -1394,6 +1422,12 @@ class MainWindow(QMainWindow, mainApplication):
 
     def on_test_6_finished(self):
         # Lógica que se ejecuta cuando la prueba ha finalizado
+        #End digital entrances thread
+        self.monitor_digital_inputs_thread.stop()
+
+        self.monitor_digital_inputs_thread.quit()
+        self.monitor_digital_inputs_thread.wait()
+
         print("La prueba de botones ha finalizado.")
 
         digital_result="PASS"
