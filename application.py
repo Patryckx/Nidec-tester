@@ -92,8 +92,7 @@ class MonitorHMIPositionThread(QThread):
         self._is_running = False
         self.wait()  # Esperar a que el hilo termine
 
-
-class MonitorButtonsThread(QThread):
+'''class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
     update_button_signal = pyqtSignal(str, str)
@@ -127,6 +126,70 @@ class MonitorButtonsThread(QThread):
 
                 # Eliminar el botón de la lista
                 self.pending_buttons_list.pop(0)
+
+            if not self.pending_buttons_list:
+                print("Todos los botones han sido capturados.")
+                button_result = "PASS"
+                self.test_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
+                break
+
+    def stop(self):
+        self.running=False
+        #self.monithor_thread.quit()
+        #self.monithor_thread.wait()
+        '''
+class MonitorButtonsThread(QThread):
+    # Definir señales para la comunicación con el hilo principal
+    button_detected_signal = pyqtSignal(str)
+    update_button_signal = pyqtSignal(str, str)
+    test_finished_signal = pyqtSignal()
+
+    def __init__(self, buttons_order,button_actuators_order, rs485,gateway, parent=None):
+        super(MonitorButtonsThread, self).__init__(parent)
+        self.buttons_order = buttons_order
+        self.button_actuators_order=button_actuators_order
+        self.rs485 = rs485
+        self.gateway = gateway  # Modbus para controlar bobinas
+
+
+        self.pending_buttons_list = list(self.buttons_order.values())
+        self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
+
+        self.pending_button_actuator_list = list(self.button_actuators_order.values())
+        self.running=True
+        print(self.pending_buttons_list)
+    def run(self):
+        while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
+
+            current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
+            print(f"Activando bobina {current_coil}")
+            try:
+                self.gateway.write_coil(current_coil, True)  # Encender bobina
+            except Exception as e :
+                print(f"Ocurrio un error al encender la bobina: {e}" )
+            # Simulación de obtener la respuesta del dispositivo
+            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+            print(response)
+
+            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+
+            if hex_value == self.pending_buttons_list[0]:
+                print(f"Botón detectado: {hex_value}")
+                current_index = self.pending_buttons_index.pop(0)
+                print(current_index)
+                button = f"lblButton{current_index}"
+                button_input = f"lblButtonInput{current_index}"
+                
+                # Emitir una señal para actualizar la GUI en el hilo principal
+                self.update_button_signal.emit(button, button_input)
+
+                # Apagar la bobina correspondiente
+                print(f"Desactivando bobina {current_coil}")
+                self.gateway.write_coil(current_coil, False)  # Apagar bobina
+
+                # Eliminar el botón de la lista
+                self.pending_buttons_list.pop(0)
+                self.pending_button_actuator_list.pop(0)
 
             if not self.pending_buttons_list:
                 print("Todos los botones han sido capturados.")
@@ -771,6 +834,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblCurrentUser.setText("")
             self.lblCurrentOrder.setText("")
 
+            #Restore inicialized app flag
             self.initialized_flag=False
 
 
@@ -1398,12 +1462,16 @@ class MainWindow(QMainWindow, mainApplication):
             "Up Arrow": '20', "Down Arrow": '40'
         }
 
+        self.button_actuators_order={
+            "1":2,"2":4,"3":5,"4":3,"5":2,"6":4,"7":5,"8":3
+        }
+
         print(self.buttons_order)
 
         print(self.buttons_order)
         
         # Crear un hilo para monitorear los botones
-        self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order, self.Rs485)
+        self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order,self.button_actuators_order,self.Rs485,self.gateway)
         
         # Conectar las señales del hilo con los métodos de la clase principal
         self.monitor_buttons_thread.update_button_signal.connect(self.update_button_state)
