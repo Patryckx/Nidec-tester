@@ -1606,6 +1606,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblVerifySerialCode.setText("")
         self.txtSerialCode.setEnabled(True)
         self.btnPrueba1.setStyleSheet("background-color: ;")
+        self.txtQrcode.set.setText("")
+        self.txtQrcode.setEnabled(True)
 
         self.lblRequestHMI.setText("")
 
