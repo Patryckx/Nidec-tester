@@ -303,7 +303,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.test=Manage_tests()
 
         # Space bar function initialized flag 
-        self.initialized_flag = None
+        self.initialized_flag = False
         #Flag to not add register if timer goes up
         self.dont_add_register=None
         
@@ -321,6 +321,11 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Disable stop button 
         self.btnLogout.setEnabled(False)
+
+
+        # Asegurar que la ventana pueda recibir eventos de teclado
+        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
     
     ############# TIMER #####################
 
@@ -426,13 +431,12 @@ class MainWindow(QMainWindow, mainApplication):
             event.accept()
 
     def keyPressEvent(self, event):
-        
-        if event.key() == Qt.Key_Space :#and self.initialized_flag is None:
-            # Initialize application pressing Space Bar
-            print("space bar pressed")
-
-            self.initialized_flag=True
-            self.inicialize(event)
+            """ Detectar la barra espaciadora """
+            if event.key() == Qt.Key_Space:
+                print("Barra espaciadora presionada")
+                if not self.initialized_flag:
+                    self.initialized_flag = True
+                    self.inicialize(event)
 
     def close(self, event):
         reply = QMessageBox.question(
@@ -766,6 +770,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.lblCurrentUser.setText("")
             self.lblCurrentOrder.setText("")
+
+            self.initialized_flag=False
 
 
         else:
@@ -1726,7 +1732,7 @@ class MainWindow(QMainWindow, mainApplication):
        
         # Assembling the register
         # Table register
-        register = {"Codigo":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
+        register = {"Codigos":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
       
         # Logic to verify number of table registers and only show 9 registers 
         table_registers = self.ResultsTable.rowCount()
@@ -1746,7 +1752,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigo serial":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
         
         # Call csv register add function 
         self.test.add_csv_register(csv_register,user,shop_order)
