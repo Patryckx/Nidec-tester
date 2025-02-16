@@ -185,8 +185,10 @@ class MonitorButtonsThread(QThread):
 
                 # Apagar la bobina correspondiente
                 print(f"Desactivando bobina {current_coil}")
-                self.gateway.write_coil(current_coil, False)  # Apagar bobina
-
+                try:
+                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
+                except Exception as e:
+                    print(f"Ocurrio un error al desactivar la bobina{e}")
                 # Eliminar el botón de la lista
                 self.pending_buttons_list.pop(0)
                 self.pending_button_actuator_list.pop(0)
@@ -294,9 +296,11 @@ class MonitorDigitalEntrances(QThread):
                 # Emitir una señal para actualizar la GUI en el hilo principal
                 self.update_digital_input_signal.emit(digital, digital_input)
 
-                # Apagar la bobina correspondiente
                 print(f"Desactivando bobina {current_coil}")
-                self.gateway.write_coil(current_coil, False)  # Apagar bobina
+                try:
+                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
+                except Exception as e:
+                    print(f"Ocurrio un error al desactivar la bobina{e}")
 
                 # Eliminar elementos procesados
                 self.pending_digital_list.pop(0)
@@ -1280,6 +1284,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.txtFirmware.setText("")
 
         self.lblVerifyFirmware.setText("")
+
+        #Restore log out button 
+        self.btnLogout.setEnabled(True)
 
         #self.txtComunicacion232.setText("")
 
