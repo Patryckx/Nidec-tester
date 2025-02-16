@@ -310,6 +310,10 @@ class MonitorDigitalEntrances(QThread):
                 print("Todas las señales han sido capturadas.")
                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
                 break
+    def stop(self):
+        self.digital_entrances_thread_isrunning=False
+        #self.monithor_thread.quit()
+        #self.monithor_thread.wait()
 
 class MainWindow(QMainWindow, mainApplication):
 
@@ -432,6 +436,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.monitor_buttons_thread.quit()
         self.monitor_buttons_thread.wait()
+
+        self.monitor_digital_inputs_thread.stop()
+        self.monitor_digital_inputs_thread.quit()
+        self.monitor_digital_inputs_thread.wait()
 
 
         
