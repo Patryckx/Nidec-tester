@@ -41,6 +41,8 @@ escribir LCD puros zeros FF00FFA50060100D07D05D0438383838 033A
 
 esciribr casi todos los iconos (Pm) FF00FFA50060100D04D05E011F 0274
 
+Escribir todos los puntos ,coma e icono (AM) :FF00FFA50060100D04D05E013F 0294
+
 
 100000  00001100
 

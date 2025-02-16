@@ -53,7 +53,7 @@ def split_16bit(value):
 
 def main():
     # Configuración de conexión serial
-    port = "COM4"  # Cambiar por el puerto correcto
+    port = "COM5"  # Cambiar por el puerto correcto
     baudrate = 9600  # Ajustar según especificaciones del HMI
     timeout = 1
     
@@ -88,7 +88,7 @@ def main():
 
              # Enviar comando de consulta de versión de firmware
             print("Enviando comando Control intensidad pantalla...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5C,0x01, 0x64] )
+            response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x3F] )
             print(f"Respuesta recibida: {response.hex().upper()}")
 
             #  # Enviar comando de consulta de versión de firmware

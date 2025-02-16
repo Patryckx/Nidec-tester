@@ -1400,13 +1400,14 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Encendiendo todos los Segmentos LCDS")
 
-        print("Imprimiendo todos los segmentos con 0 ceros")
+        print("Imprimiendo todos los segmentos con 8 ochos")
 
         self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
 
-        print("Imprimiendo todos los iconos LCD (PM)")
+        print("Imprimiendo todos los iconos LCD (AM)")
 
-        self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
+        #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
+        self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
 
 
         
