@@ -1287,6 +1287,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Restore log out button 
         self.btnLogout.setEnabled(True)
+        self.btnTrazabilidad.setEnabled(True)
 
         #self.txtComunicacion232.setText("")
 
