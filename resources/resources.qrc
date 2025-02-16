@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="resources">
+    <file>Entradas_digitales_ayudavisual.png</file>
+    <file>Botones_ayuda_visual.png</file>
+    <file>LCDS_ayuda_visual.png</file>
+    <file>LEDS_ayuda_visual.png</file>
     <file>codigo-qr.png</file>
     <file>qr.png</file>
     <file>port.png</file>
