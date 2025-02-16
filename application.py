@@ -211,8 +211,10 @@ class MonitorDigitalEntrances(QThread):
             # Obtener el actuador correspondiente
             current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
             print(f"Activando bobina {current_coil}")
-            self.gateway.write_coil(current_coil, True)  # Encender bobina
-
+            try:
+                self.gateway.write_coil(current_coil, True)  # Encender bobina
+            except Exception as e :
+                print(f"Ocurrio un error al encender la bobina: {e}" )
             # Simulación de obtener la respuesta del dispositivo
             response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
             print(response)
@@ -1491,7 +1493,7 @@ class MainWindow(QMainWindow, mainApplication):
         print(self.digital_order)
         
         # Crear un hilo para monitorear los botones
-        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.digital_actuators_order,self.Rs485)
+        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.digital_actuators_order,self.Rs485,self.gateway)
         
         # Conectar las señales del hilo con los métodos de la clase principal
         self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
