@@ -94,7 +94,7 @@ class FX3U(DAQ):
 
 if __name__ == '__main__':
     # Puerto COM del RS-485
-    address = 'COM8'
+    address = 'COM7'
     
     plc = FX3U()
     plc.open(address)
@@ -108,29 +108,43 @@ if __name__ == '__main__':
     plc.write_coil(address=0, value=True)
     time.sleep(2)
     plc.write_coil(address=0, value=False)
-    time.sleep(2)
+    time.sleep(2)'''
 
     # Activa Salida Y1, espera y la apaga
     plc.write_coil(address=1, value=True)
-    time.sleep(2)
-    plc.write_coil(address=1, value=False)
-    time.sleep(2)
+    # time.sleep(2)
+    # plc.write_coil(address=3, value=False)
+    # time.sleep(2)
+    # plc.write_coil(address=4, value=False)
+    # time.sleep(2)
+    # plc.write_coil(address=5, value=False)
+    # time.sleep(2)
+
+    # plc.write_coil(address=6, value=False)
+    # time.sleep(2)
+    # plc.write_coil(address=7, value=False)
+    # time.sleep(2)
+    # plc.write_coil(address=8, value=False)
+    # time.sleep(2)
+    # plc.write_coil(address=9, value=False)
+    # time.sleep(2)
+   
     
     # Cierra comunication
-    plc.close()'''
+    plc.close()
     
-    signal=plc.read_coil(address=11)
-    time.sleep(1)
-    print(signal)
-    signal=plc.read_coil(address=11)
-    time.sleep(1)
-    print(signal)
+    # signal=plc.read_coil(address=11)
+    # time.sleep(1)
+    # print(signal)
+    # signal=plc.read_coil(address=11)
+    # time.sleep(1)
+    # print(signal)
 
 
-    signal=plc.read_coil(address=11)
-    time.sleep(1)
+    # signal=plc.read_coil(address=11)
+    # time.sleep(1)
 
-    print(signal)
+    # print(signal)
 
     
     
