@@ -2,7 +2,7 @@ import serial
 
 ## Configuración del puerto serial
 ser = serial.Serial(
-    port='COM7',        # Cambia al puerto correcto
+    port='COM5',        # Cambia al puerto correcto
     baudrate=9600,      # Velocidad de comunicación (verifica con tu dispositivo)
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
@@ -47,18 +47,18 @@ formatted_response = response.hex().upper()
 # Imprimir la respuesta en formato legible
 print(formatted_response)
 
-# command = bytes.fromhex('FF00FFA50060100D04D05E011F0274')
-# ser.write(command)
+command = bytes.fromhex('FF00FFA50060100D04D05101000248')
+ser.write(command)
 
-# # Leer la respuesta
-# response = ser.read(256)
-# #print(response)
+# Leer la respuesta
+response = ser.read(256)
+#print(response)
 
-# # Convertir la respuesta a formato hexadecimal legible
-# formatted_response = response.hex().upper()
+# Convertir la respuesta a formato hexadecimal legible
+formatted_response = response.hex().upper()
 
-# # Imprimir la respuesta en formato legible
-# print(formatted_response)
+# Imprimir la respuesta en formato legible
+print(formatted_response)
 
 
 # command = bytes.fromhex('FF00FFA50060100D07D05D0408080808027A')
