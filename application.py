@@ -1088,6 +1088,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.test.result_T1(str(self.serial_code),str(self.qrcode))
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido")
+            
 
             self.lblRequestHMI.setStyleSheet("color: #00aaff;")
 
@@ -1097,7 +1098,8 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 2
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(20000, lambda: self.Test_1_signal.emit())
+            #QTimer.singleShot(20000, lambda: self.Test_1_signal.emit())
+            QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
             #self.test_2()
 
         else:
@@ -1202,7 +1204,8 @@ class MainWindow(QMainWindow, mainApplication):
         except Exception as e:
             print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
 
-        
+        #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
+        time.sleep(2)
 
         '''
         daemon=True: Esto indica que el hilo será un "hilo daemon", 
@@ -1217,7 +1220,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("Enabling command mode in HMI ")
 
-        self.Rs485.send_command("FF00FFA50060100D04D05101010249")
+        self.Rs485.send_command('FF00FFA50060100D04D05101010249')
 
         print("Turning off LCD screen")
 

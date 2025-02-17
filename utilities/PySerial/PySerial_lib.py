@@ -53,13 +53,13 @@ class SerialDevice:
 
 if __name__ == "__main__":
     # Crear una instancia del dispositivo serial
-    device = SerialDevice(port='COM4', baudrate=9600, timeout=1)
+    device = SerialDevice(port='COM8', baudrate=9600, timeout=1)
 
     # Conectar al dispositivo
     device.connect()
 
     # Enviar un comando al dispositivo
-    command = 'FF00FFA50060100D04D05101000248'  # Comando en formato hexadecimal
+    command = 'FF00FFA50060100D04D05101010249'  # Comando en formato hexadecimal
     response = device.send_command(command)
 
     # Mostrar la respuesta recibida
