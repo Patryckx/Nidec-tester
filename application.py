@@ -1098,8 +1098,8 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 2
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            #QTimer.singleShot(20000, lambda: self.Test_1_signal.emit())
-            QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
+            QTimer.singleShot(15000, lambda: self.Test_1_signal.emit())
+            #QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
             #self.test_2()
 
         else:
