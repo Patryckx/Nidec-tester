@@ -2,7 +2,7 @@ import serial
 
 ## Configuración del puerto serial
 ser = serial.Serial(
-    port='COM5',        # Cambia al puerto correcto
+    port='COM8',        # Cambia al puerto correcto
     baudrate=9600,      # Velocidad de comunicación (verifica con tu dispositivo)
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
