@@ -1,24 +1,45 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+
 a = Analysis(
     ['application.py'],
     pathex=[],
     binaries=[],
     datas=[],
-    hiddenimports=[
-        'sysconfig', 
-        'pyvisa', 
-        'pyvisa_py', 
-        'pkg_resources', 
-        'infi.instruct.ULInt8',
-        'infi.instruct.ULInt16',
-        'infi.instruct.ULInt32',
-        'infi.instruct.ULInt64',
-        'six.moves',
-        'asyncio.DefaultEventLoopPolicy'
-    ],
+    hiddenimports=['sysconfig', 'pyvisa', 'pyvisa_py'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=True,
     optimize=0,
+)
+pyz = PYZ(a.pure)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    [('v', None, 'OPTION')],
+    exclude_binaries=True,
+    name='Nidec-tester',
+    debug=True,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon=['C:\\Nidec-tester\\resources\\app_icon.ico'],
+)
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='Nidec-tester',
 )

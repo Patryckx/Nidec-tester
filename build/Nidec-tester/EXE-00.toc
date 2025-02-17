@@ -67,8 +67,8 @@
  [],
  False,
  False,
- 1737567866,
+ 1739835267,
  [('runw_d.exe',
    'C:\\Nidec-tester\\virtualenv\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw_d.exe',
    'EXECUTABLE')],
- 'C:\\Users\\Ewin\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll')
+ 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll')
