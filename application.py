@@ -1637,7 +1637,7 @@ class MainWindow(QMainWindow, mainApplication):
         }
 
         self.digital_actuators_order={
-            "1":12,"2":13,"3":14,"4":15
+            "1":10,"2":11,"3":12,"4":13
         }
 
         print(self.digital_order)
