@@ -447,7 +447,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Apagando bobina para alimentar 5V a hmi")
 
         try: 
-            self.gateway.write_coil(16,False)
+            self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
 
@@ -966,9 +966,47 @@ class MainWindow(QMainWindow, mainApplication):
         '''Function to turn off importar register coils every time the app inicializes'''
         print("Apagando bobina para alimentar 5V a hmi")
         try: 
-            self.gateway.write_coil(16,False)
+            self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
+        #activating actuator box 
+
+        try: 
+            self.gateway.write_coil(1,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+
+        #Acuators buttons
+        
+        try: 
+            self.gateway.write_coil(2,False)
+            self.gateway.write_coil(3,False)
+            self.gateway.write_coil(4,False)
+            self.gateway.write_coil(5,False)
+            self.gateway.write_coil(6,False)
+            self.gateway.write_coil(7,False)
+            self.gateway.write_coil(8,False)
+            self.gateway.write_coil(9,False)
+
+
+
+        except Exception as e:
+            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+        
+           
+        try: 
+            self.gateway.write_coil(12,False)
+            self.gateway.write_coil(13,False)
+            self.gateway.write_coil(14,False)
+            self.gateway.write_coil(15,False)
+
+
+
+        except Exception as e:
+            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+
+        
 
     def test_inicialize(self):
 
@@ -1112,7 +1150,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Apagando bobina para alimentar 5V a hmi")
 
         try: 
-            self.gateway.write_coil(16,False)
+            self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
 
@@ -1160,7 +1198,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Encendiendo bobina para alimentar 5V a hmi")
 
         try: 
-            self.gateway.write_coil(16,True)
+            self.gateway.write_coil(0,True)
         except Exception as e:
             print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
 
@@ -1261,7 +1299,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Apagando bobina para alimentar 5V a hmi")
 
         try: 
-            self.gateway.write_coil(16,False)
+            self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
 
@@ -1480,8 +1518,17 @@ class MainWindow(QMainWindow, mainApplication):
         }
 
         self.button_actuators_order={
-            "1":2,"2":4,"3":5,"4":3,"5":2,"6":4,"7":5,"8":3
+            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
         }
+
+        #activating actuator box 
+
+        try: 
+            self.gateway.write_coil(1,True)
+        except Exception as e:
+            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+
+        time.sleep(2)
 
         print(self.buttons_order)
 
@@ -1507,6 +1554,15 @@ class MainWindow(QMainWindow, mainApplication):
     def on_test_finished(self):
         # Lógica que se ejecuta cuando la prueba ha finalizado
         print("La prueba de botones ha finalizado.")
+
+        #activating actuator box 
+
+        try: 
+            self.gateway.write_coil(1,False)
+        except Exception as e:
+            print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
+
+        
 
         button_result="PASS"
 
@@ -1578,7 +1634,7 @@ class MainWindow(QMainWindow, mainApplication):
         }
 
         self.digital_actuators_order={
-            "1":2,"2":4,"3":5,"4":3
+            "1":12,"2":13,"3":14,"4":15
         }
 
         print(self.digital_order)
@@ -1642,7 +1698,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Apagando bobina para alimentar 5V a hmi")
 
         try: 
-            self.gateway.write_coil(16,False)
+            self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
    
