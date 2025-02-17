@@ -20,45 +20,45 @@ ser = serial.Serial(
 # print(response)
 
 
-#while True:
-command = bytes.fromhex('FF00FFA50060100D04D05101010249')
-ser.write(command)
+while True:
+    command = bytes.fromhex('FF00FFA50060100D04D05101000248')
+    ser.write(command)
 
-# Leer la respuesta
-response = ser.read(256)
-#print(response)
+    # Leer la respuesta
+    response = ser.read(256)
+    #print(response)
 
-# Convertir la respuesta a formato hexadecimal legible
-formatted_response = response.hex().upper()
+    # Convertir la respuesta a formato hexadecimal legible
+    formatted_response = response.hex().upper()
 
-# Imprimir la respuesta en formato legible
-print(formatted_response)
+    # Imprimir la respuesta en formato legible
+    print(formatted_response)
 
-command = bytes.fromhex('FF00FFA50060100D05D05B0203FF0356')
-ser.write(command)
-#FF00FFA50060100D04D05E011F0274
-# Leer la respuesta
-response = ser.read(256)
-print(response)
+# command = bytes.fromhex('FF00FFA50060100D05D05B0203FF0356')
+# ser.write(command)
+# #FF00FFA50060100D04D05E011F0274
+# # Leer la respuesta
+# response = ser.read(256)
+# print(response)
 
-# Convertir la respuesta a formato hexadecimal legible
-formatted_response = response.hex().upper()
+# # Convertir la respuesta a formato hexadecimal legible
+# formatted_response = response.hex().upper()
 
-# Imprimir la respuesta en formato legible
-print(formatted_response)
+# # Imprimir la respuesta en formato legible
+# print(formatted_response)
 
-command = bytes.fromhex('FF00FFA50060100D04D05101000248')
-ser.write(command)
+# command = bytes.fromhex('FF00FFA50060100D04D05101000248')
+# ser.write(command)
 
-# Leer la respuesta
-response = ser.read(256)
-#print(response)
+# # Leer la respuesta
+# response = ser.read(256)
+# #print(response)
 
-# Convertir la respuesta a formato hexadecimal legible
-formatted_response = response.hex().upper()
+# # Convertir la respuesta a formato hexadecimal legible
+# formatted_response = response.hex().upper()
 
-# Imprimir la respuesta en formato legible
-print(formatted_response)
+# # Imprimir la respuesta en formato legible
+# print(formatted_response)
 
 
 # command = bytes.fromhex('FF00FFA50060100D07D05D0408080808027A')
