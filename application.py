@@ -121,7 +121,7 @@ class Test3Thread(QThread):
         print(resultados_herramientas)
 
         # Determinar si la prueba pasó o falló
-        test_3_results = "FAIL" if "NG" in resultados_herramientas else "PASS"
+        test_3_results = "FAIL" if "NG" in results else "PASS"
 
         # Emitir señales para actualizar la interfaz
         self.update_led_signal.emit(resultados_herramientas)
@@ -174,7 +174,7 @@ class Test4Thread(QThread):
         resultados_herramientas_ocr = self.procesar_respuesta(results)
         print(resultados_herramientas_ocr)
 
-        test_4_results = "FAIL" if "NG" in resultados_herramientas_ocr else "PASS"
+        test_4_results = "FAIL" if "NG" in results else "PASS"
 
         # Emitir señales para actualizar la interfaz
         self.update_lcd_signal.emit(resultados_herramientas_ocr)
@@ -1667,7 +1667,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def process_test_3_verification(self, result):
         self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-
+        self.test.result_T3(result)
         # Esperar 5 segundos antes de continuar con la siguiente prueba
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
         self.test_4()
@@ -1853,10 +1853,10 @@ class MainWindow(QMainWindow, mainApplication):
 
     def process_test_4_verification(self, result):
         self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-
+        self.test.result_T4(result)
         # Esperar 5 segundos antes de continuar con la siguiente prueba
         QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
-        self.test_4()
+        self.test_5()
 
 
     # def test_4(self):
