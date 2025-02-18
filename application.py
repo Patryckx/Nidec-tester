@@ -773,7 +773,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         #LCD Test 4
 
-        self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
+        #self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
         self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
         self.Test_4_signal.connect(self.Test_4_GUI_changes)
 
@@ -1577,7 +1577,7 @@ class MainWindow(QMainWindow, mainApplication):
         #modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
         #self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-        self.process_test_3_verification(self,test_3_results,resultados_herramientas)
+        self.process_test_3_verification(test_3_results,resultados_herramientas)
 
 
         #leds_result= PASS
@@ -1781,7 +1781,7 @@ class MainWindow(QMainWindow, mainApplication):
 
 
         
-        self.process_test_4_verification(self,test_4_results,resultados_herramientas_ocr)
+        self.process_test_4_verification(test_4_results,resultados_herramientas_ocr)
     # def test_4(self):
 
     #     print("Prueba 4")
