@@ -50,13 +50,19 @@ class Manage_tests():
         self.test232_result=response
         self.record["Prueba 232:"] = response
 
-    def result_T3(self,leds_result:str,leds_array:list):
+    # def result_T3(self,leds_result:str,leds_array:list):
+    #     self.test3_result=leds_result
+
+    #     self.record["Prueba 3:"] = {
+    #         "Resultado": leds_result,
+    #         "Leds": leds_array
+    #     }
+
+    def result_T3(self,leds_result:str):
         self.test3_result=leds_result
 
-        self.record["Prueba 3:"] = {
-            "Resultado": leds_result,
-            "Leds": leds_array
-        }
+        self.record["Prueba 3:"] = leds_result
+        
 
     def result_T4(self,ocr_result:str):
         self.test4_result=ocr_result
