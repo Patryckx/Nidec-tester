@@ -95,7 +95,7 @@ class MonitorHMIPositionThread(QThread):
 
 class Test3Thread(QThread):
     update_led_signal = pyqtSignal(dict)  # Señal para actualizar LEDs
-    test_finished_signal = pyqtSignal(str)  # Señal para actualizar el resultado de la prueba
+    test_finished_signal = pyqtSignal(str,dict)  # Señal para actualizar el resultado de la prueba
 
     def __init__(self, rs485, camera, led_program, parent=None):
         super(Test3Thread, self).__init__(parent)
@@ -113,7 +113,9 @@ class Test3Thread(QThread):
         raw_change_program = 'PW,'
         change_program = raw_change_program + self.led_program
         self.Camera.send_data(change_program)
+        time.sleep(1)
         self.Camera.send_data('T2')
+        #self.Camera.send_data('T2')
 
         # Leer la respuesta de la cámara
         results = self.Camera.read_data()
@@ -125,7 +127,7 @@ class Test3Thread(QThread):
 
         # Emitir señales para actualizar la interfaz
         self.update_led_signal.emit(resultados_herramientas)
-        self.test_finished_signal.emit(test_3_results)
+        self.test_finished_signal.emit(test_3_results,resultados_herramientas)
 
     def procesar_respuesta(self, respuesta):
         resultados = {}
@@ -142,7 +144,7 @@ class Test3Thread(QThread):
 
 class Test4Thread(QThread):
     update_lcd_signal = pyqtSignal(dict)  # Señal para actualizar los LCDs
-    test_finished_signal = pyqtSignal(str)  # Señal para actualizar el resultado de la prueba
+    test_finished_signal = pyqtSignal(str,dict)  # Señal para actualizar el resultado de la prueba
 
     def __init__(self, rs485, camera, ocr_program, parent=None):
         super(Test4Thread, self).__init__(parent)
@@ -166,19 +168,40 @@ class Test4Thread(QThread):
         raw_change_program = 'PW,'
         change_program = raw_change_program + self.ocr_program
         self.Camera.send_data(change_program)
+        time.sleep(1)
+        self.Camera.send_data('T2')
+        self.Camera.send_data('T2')
+
+        # Leer la respuesta de la cámara
+        results = self.Camera.read_data()
+        resultados_herramientas = self.procesar_respuesta(results)
+        print(resultados_herramientas)
+
+
+        # Enviar comandos a la cámara
+        '''raw_change_program = 'PW,'
+        change_program = raw_change_program + self.ocr_program
+        self.Camera.send_data(change_program)
+
+        time.sleep(1)
         
         command = 'T2'
         self.Camera.send_data(command)
+
         results = self.Camera.read_data()
 
+        print(results)
+
         resultados_herramientas_ocr = self.procesar_respuesta(results)
-        print(resultados_herramientas_ocr)
+        print(resultados_herramientas_ocr)'''
 
         test_4_results = "FAIL" if "NG" in results else "PASS"
 
+        
+
         # Emitir señales para actualizar la interfaz
-        self.update_lcd_signal.emit(resultados_herramientas_ocr)
-        self.test_finished_signal.emit(test_4_results)
+        self.update_lcd_signal.emit(resultados_herramientas)
+        self.test_finished_signal.emit(test_4_results,resultados_herramientas)
 
     def procesar_respuesta(self, respuesta):
         resultados = {}
@@ -1665,11 +1688,17 @@ class MainWindow(QMainWindow, mainApplication):
                 getattr(self, led_names[i - 1]).setEnabled(True)
                 getattr(self, led_input_names[i - 1]).setEnabled(False)
 
-    def process_test_3_verification(self, result):
+    def process_test_3_verification(self, result,leds_results):
         self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-        self.test.result_T3(result)
+        
+        Test_3_result=f"{result,leds_results}"
+        self.test.result_T3(Test_3_result)
         # Esperar 5 segundos antes de continuar con la siguiente prueba
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
+
+        self.test3_thread.quit()
+        self.test3_thread.wait()
+         
         self.test_4()
 
     def Test_3_GUI_changes(self):
@@ -1851,9 +1880,10 @@ class MainWindow(QMainWindow, mainApplication):
                 if hasattr(self, lcd_input_names[i - 1]):  # Verificar si el atributo existe
                     getattr(self, lcd_input_names[i - 1]).setEnabled(False)
 
-    def process_test_4_verification(self, result):
+    def process_test_4_verification(self, result,lcds_results):
         self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-        self.test.result_T4(result)
+        Test_4_result=f"{result,lcds_results}"
+        self.test.result_T4(Test_4_result)
         # Esperar 5 segundos antes de continuar con la siguiente prueba
         QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
         self.test_5()
