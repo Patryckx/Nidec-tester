@@ -36,7 +36,8 @@ class TelnetClient:
         if not self.connection:
             raise ConnectionError("No hay una conexión activa.")
         try:
-            self.connection.write(data.encode('ascii') + b'\n')
+            #self.connection.write(data.encode('ascii') + b'\n')
+            self.connection.write(data.encode('ascii') + b'\r')
             print(f"Datos enviados: {data}")
         except Exception as e:
             raise RuntimeError(f"Error al enviar datos: {e}")
@@ -68,7 +69,7 @@ class TelnetClient:
 
 if __name__ == "__main__":
     # Configuración del dispositivo para pruebas
-    host = "192.168.1.121"  # Reemplaza con la IP del dispositivo
+    host = "192.168.1.101"  # Reemplaza con la IP del dispositivo
     port = 8500               # Puerto Telnet estándar
 
     # Crear una instancia del cliente Telnet
@@ -77,6 +78,10 @@ if __name__ == "__main__":
     try:
         # Conectar al dispositivo
         client.connect()
+
+        command="OE,1"
+
+        client.send_data(command)
         
         # Enviar un comando de prueba
         #client.send_data("comando_ejemplo")
@@ -85,8 +90,8 @@ if __name__ == "__main__":
             response = client.read_data()
             print(f"Respuesta del dispositivo: {response}")
 
-            if response==client.timeout():
-                break
+            # if response==client.timeout():
+            #     break
     finally:
         # Cerrar la conexión
         client.close_connection()
