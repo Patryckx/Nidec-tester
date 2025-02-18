@@ -1039,9 +1039,6 @@ class MainWindow(QMainWindow, mainApplication):
         camera_address=current_config[3]
         camera_port=current_config[4]
         self.timer_value = int(current_config[5])  # Asegúrate de convertir el valor a entero
-        self.led_program=current_config[6]
-        self.ocr_program=current_config[7]
-
 
         # Convertir segundos a minutos y segundos
         minutes, seconds = divmod(  self.timer_value, 60)
@@ -1545,27 +1542,14 @@ class MainWindow(QMainWindow, mainApplication):
         print("Encendiendo todos los LEDS")
 
         self.Rs485.send_command("FF00FFA50060100D05D05B0203FF0356")
-        
-        #Camera send commands
-        command = 'OE,1'
 
-        self.Camera.send_data(command)
-        
-        raw_change_program='PW,'
-
-        change_program=raw_change_program + self.led_program
-
-        self.Camera.send_data(change_program)
+        '''raw_change_program='PW,'
 
         trigger='T2'
 
         self.Camera.send_data(trigger)
 
-        results=self.Camera.read_data()
-
-        resultados_herramientas = self.procesar_respuesta(results)
-        print(resultados_herramientas)
-        
+        self.Camera.read_data()'''
 
         # Ejemplo de llamada a la función
         #modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -1574,55 +1558,6 @@ class MainWindow(QMainWindow, mainApplication):
         #leds_result= PASS
         #self.manual_test_3_verification(leds_result,modify_list)
 
-    def procesar_respuesta(self, respuesta):
-        """
-        Procesa la respuesta del dispositivo y la convierte en un diccionario de resultados.
-        :param respuesta: Cadena de texto con la respuesta del dispositivo.
-        :return: Diccionario con los resultados en formato {numero: 1 para OK, 0 para NG}.
-        """
-        resultados = {}
-        try:
-            # Dividir la respuesta en secciones usando ',' como separador
-            partes = respuesta.split(',')
-            
-            # Verificar que hay suficientes partes para evitar el error de índice
-            for i in range(3, len(partes), 3):  # Paso de 3 en 3 para obtener el número y el estado
-                if i + 1 < len(partes):  # Comprobar que hay al menos dos elementos para procesar
-                    numero = partes[i]    # El número de la secuencia
-                    estado = partes[i + 1]  # El estado, que debe ser "OK" o "NG"
-                    
-                    # Convertir numero a entero y remover ceros a la izquierda 
-                    numero = int(numero.lstrip('0'))
-
-                    # Almacenar "1" para OK y "0" para NG
-                    resultados[numero] = 0 if estado == "OK" else 1
-                else:
-                    print(f"Advertencia: no se pudo procesar una parte de la respuesta en la posición {i}.")
-                        
-        except Exception as e:
-            print(f"Error al procesar la respuesta: {e}")
-            
-        return resultados
-    
-    def current_controller_program(self):
-
-        read_program='PR'
-
-        # Send command to read program number
-        self.Camera.send_data(read_program.encode('ascii') + b'\r')  # Agregar retorno de carro
-
-        #Read response from controller
-        current_program_response = self.tn.read_until(b'\r')
-        decoded_current_program_response=current_program_response.decode('ascii').strip()
-
-        print(f"Current program controller: {decoded_current_program_response}")
-        
-
-        parts = decoded_current_program_response.split(',')
-        if len(parts) > 1:
-            return parts[1]
-        else:
-            return None 
     #def manual_test_3_verification(self, modify_list, event=None):
     def manual_test_3_verification(self, event=None):
         #Temporary list declaration
