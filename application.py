@@ -1767,8 +1767,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.Camera.send_data(change_program)
         command = 'T2'
 
-        self.Camera.send_data(command)
-        
+        trigger=self.Camera.send_data(command)
+        print(trigger)
         results=self.Camera.read_data()
 
         resultados_herramientas_ocr = self.procesar_respuesta(results)
