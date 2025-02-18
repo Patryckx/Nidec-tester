@@ -21,7 +21,11 @@ class Configuration():
             camera_port=config.get('Camera', 'port', fallback='None').replace('"', '')
 
             timer=config.get('Timer', 'cycle_time', fallback='None')
-            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer
+
+            led_program=config.get('Programs', 'led', fallback='None')
+
+            ocr_program=config.get('Programs', 'ocr', fallback='None')
+            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer,led_program,ocr_program
         except Exception as e:
             print(f"Error reading settings.ini: {e}")
             return None,None,None,None,None,None
