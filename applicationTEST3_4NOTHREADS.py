@@ -92,106 +92,6 @@ class MonitorHMIPositionThread(QThread):
         self._is_running = False
         self.wait()  # Esperar a que el hilo termine
 
-
-class Test3Thread(QThread):
-    update_led_signal = pyqtSignal(dict)  # Señal para actualizar LEDs
-    test_finished_signal = pyqtSignal(str)  # Señal para actualizar el resultado de la prueba
-
-    def __init__(self, rs485, camera, led_program, parent=None):
-        super(Test3Thread, self).__init__(parent)
-        self.Rs485 = rs485
-        self.Camera = camera
-        self.led_program = led_program
-
-    def run(self):
-        print("Tercera prueba")
-        print("Encendiendo todos los LEDS")
-
-        self.Rs485.send_command("FF00FFA50060100D05D05B0203FF0356")
-
-        # Enviar comandos a la cámara
-        raw_change_program = 'PW,'
-        change_program = raw_change_program + self.led_program
-        self.Camera.send_data(change_program)
-        self.Camera.send_data('T2')
-
-        # Leer la respuesta de la cámara
-        results = self.Camera.read_data()
-        resultados_herramientas = self.procesar_respuesta(results)
-        print(resultados_herramientas)
-
-        # Determinar si la prueba pasó o falló
-        test_3_results = "FAIL" if "NG" in resultados_herramientas else "PASS"
-
-        # Emitir señales para actualizar la interfaz
-        self.update_led_signal.emit(resultados_herramientas)
-        self.test_finished_signal.emit(test_3_results)
-
-    def procesar_respuesta(self, respuesta):
-        resultados = {}
-        try:
-            partes = respuesta.split(',')
-            for i in range(3, len(partes), 3):
-                if i + 1 < len(partes):
-                    numero = int(partes[i].lstrip('0'))
-                    resultados[numero] = 1 if partes[i + 1] == "OK" else 0
-        except Exception as e:
-            print(f"Error al procesar la respuesta: {e}")
-        return resultados
-
-
-class Test4Thread(QThread):
-    update_lcd_signal = pyqtSignal(dict)  # Señal para actualizar los LCDs
-    test_finished_signal = pyqtSignal(str)  # Señal para actualizar el resultado de la prueba
-
-    def __init__(self, rs485, camera, ocr_program, parent=None):
-        super(Test4Thread, self).__init__(parent)
-        self.Rs485 = rs485
-        self.Camera = camera
-        self.ocr_program = ocr_program
-
-    def run(self):
-        print("Prueba 4")
-        print("Encendiendo pantalla LCD 100%")
-        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-        
-        print("Encendiendo todos los Segmentos LCDs")
-        print("Imprimiendo todos los segmentos con 8 ochos")
-        self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
-        
-        print("Imprimiendo todos los iconos LCD (AM)")
-        self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
-
-        # Enviar comandos a la cámara
-        raw_change_program = 'PW,'
-        change_program = raw_change_program + self.ocr_program
-        self.Camera.send_data(change_program)
-        
-        command = 'T2'
-        self.Camera.send_data(command)
-        results = self.Camera.read_data()
-
-        resultados_herramientas_ocr = self.procesar_respuesta(results)
-        print(resultados_herramientas_ocr)
-
-        test_4_results = "FAIL" if "NG" in resultados_herramientas_ocr else "PASS"
-
-        # Emitir señales para actualizar la interfaz
-        self.update_lcd_signal.emit(resultados_herramientas_ocr)
-        self.test_finished_signal.emit(test_4_results)
-
-    def procesar_respuesta(self, respuesta):
-        resultados = {}
-        try:
-            partes = respuesta.split(',')
-            for i in range(3, len(partes), 3):
-                if i + 1 < len(partes):
-                    numero = int(partes[i].lstrip('0'))
-                    resultados[numero] = 1 if partes[i + 1] == "OK" else 0
-        except Exception as e:
-            print(f"Error al procesar la respuesta: {e}")
-        return resultados
-
 '''class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
@@ -1640,108 +1540,122 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############## TEST3   #####################################
     def test_3(self):
-        # Crear el hilo de prueba
-        self.test3_thread = Test3Thread(self.Rs485, self.Camera, self.led_program)
 
-        # Conectar señales para actualizar la interfaz
-        self.test3_thread.update_led_signal.connect(self.update_leds)
-        self.test3_thread.test_finished_signal.connect(self.process_test_3_verification)
+        print("Tercera prueba")
+        print("Encendiendo todos los LEDS")
 
-        # Iniciar el hilo
-        self.test3_thread.start()
+        self.Rs485.send_command("FF00FFA50060100D05D05B0203FF0356")
+        
+        #Camera send commands
+        raw_change_program='PW,'
 
-    def update_leds(self, leds_results):
+        change_program=raw_change_program + self.led_program
+
+        self.Camera.send_data(change_program)
+        command = 'T2'
+
+        self.Camera.send_data(command)
+        
+
+
+        # read='RT'
+
+        # self.Camera.send_data(read)
+
+        results=self.Camera.read_data()
+
+        resultados_herramientas = self.procesar_respuesta(results)
+        print(resultados_herramientas)
+
+        if "NG" in resultados_herramientas:
+            test_3_results="FAIL"
+        else:
+            test_3_results="PASS"
+        
+
+        # Ejemplo de llamada a la función
+        #modify_list = [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        #self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+        self.process_test_3_verification(test_3_results,resultados_herramientas)
+
+
+        #leds_result= PASS
+        #self.manual_test_3_verification(leds_result,modify_list)
+
+    def procesar_respuesta(self, respuesta):
+        """
+        Procesa la respuesta del dispositivo y la convierte en un diccionario de resultados.
+        :param respuesta: Cadena de texto con la respuesta del dispositivo.
+        :return: Diccionario con los resultados en formato {numero: 1 para OK, 0 para NG}.
+        """
+        resultados = {}
+        try:
+            # Dividir la respuesta en secciones usando ',' como separador
+            partes = respuesta.split(',')
+            
+            # Verificar que hay suficientes partes para evitar el error de índice
+            for i in range(3, len(partes), 3):  # Paso de 3 en 3 para obtener el número y el estado
+                if i + 1 < len(partes):  # Comprobar que hay al menos dos elementos para procesar
+                    numero = partes[i]    # El número de la secuencia
+                    estado = partes[i + 1]  # El estado, que debe ser "OK" o "NG"
+                    
+                    # Convertir numero a entero y remover ceros a la izquierda 
+                    numero = int(numero.lstrip('0'))
+
+                    # Almacenar "1" para OK y "0" para NG
+                    resultados[numero] = 1 if estado == "OK" else 0
+                else:
+                    print(f"Advertencia: no se pudo procesar una parte de la respuesta en la posición {i}.")
+                        
+        except Exception as e:
+            print(f"Error al procesar la respuesta: {e}")
+            
+        return resultados
+    
+    def current_controller_program(self):
+
+        read_program='PR'
+
+        # Send command to read program number
+        self.Camera.send_data(read_program.encode('ascii') + b'\r')  # Agregar retorno de carro
+
+        #Read response from controller
+        current_program_response = self.tn.read_until(b'\r')
+        decoded_current_program_response=current_program_response.decode('ascii').strip()
+
+        print(f"Current program controller: {decoded_current_program_response}")
+        
+
+        parts = decoded_current_program_response.split(',')
+        if len(parts) > 1:
+            return parts[1]
+        else:
+            return None 
+        
+    def process_test_3_verification(self, result, leds_results):
+        test_3_results = f"{result},{leds_results}"
+        self.test.result_T3(test_3_results)
+
         led_names = [f"lblLED{i}" for i in range(1, 12)]
         led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-        for i in range(1, 12):
-            if i in leds_results and leds_results[i] == 1:
+        for i in range(1, 12):  # Aseguramos que iteramos de 1 a 11
+            if str(i) in leds_results and leds_results[str(i)] == 1:  # Verificamos si la clave existe y es 1
                 getattr(self, led_names[i - 1]).setEnabled(True)
                 getattr(self, led_input_names[i - 1]).setEnabled(False)
 
-    def process_test_3_verification(self, result):
-        self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
+        # Cambiar color del botón según resultado
+        if result == "PASS":
+            self.btnPrueba3.setStyleSheet("background-color: green;")
+        else:
+            self.btnPrueba3.setStyleSheet("background-color: red;")
 
-        # Esperar 5 segundos antes de continuar con la siguiente prueba
+        # Crear un QTimer para emitir la señal después de 5 segundos
         QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
+
+        # Proceed with test 4
         self.test_4()
-
-    def Test_3_GUI_changes(self):
-
-        self.stackedWidget.setCurrentIndex(8) 
-    # def procesar_respuesta(self, respuesta):
-    #     """
-    #     Procesa la respuesta del dispositivo y la convierte en un diccionario de resultados.
-    #     :param respuesta: Cadena de texto con la respuesta del dispositivo.
-    #     :return: Diccionario con los resultados en formato {numero: 1 para OK, 0 para NG}.
-    #     """
-    #     resultados = {}
-    #     try:
-    #         # Dividir la respuesta en secciones usando ',' como separador
-    #         partes = respuesta.split(',')
-            
-    #         # Verificar que hay suficientes partes para evitar el error de índice
-    #         for i in range(3, len(partes), 3):  # Paso de 3 en 3 para obtener el número y el estado
-    #             if i + 1 < len(partes):  # Comprobar que hay al menos dos elementos para procesar
-    #                 numero = partes[i]    # El número de la secuencia
-    #                 estado = partes[i + 1]  # El estado, que debe ser "OK" o "NG"
-                    
-    #                 # Convertir numero a entero y remover ceros a la izquierda 
-    #                 numero = int(numero.lstrip('0'))
-
-    #                 # Almacenar "1" para OK y "0" para NG
-    #                 resultados[numero] = 1 if estado == "OK" else 0
-    #             else:
-    #                 print(f"Advertencia: no se pudo procesar una parte de la respuesta en la posición {i}.")
-                        
-    #     except Exception as e:
-    #         print(f"Error al procesar la respuesta: {e}")
-            
-    #     return resultados
-    
-    # def current_controller_program(self):
-
-    #     read_program='PR'
-
-    #     # Send command to read program number
-    #     self.Camera.send_data(read_program.encode('ascii') + b'\r')  # Agregar retorno de carro
-
-    #     #Read response from controller
-    #     current_program_response = self.tn.read_until(b'\r')
-    #     decoded_current_program_response=current_program_response.decode('ascii').strip()
-
-    #     print(f"Current program controller: {decoded_current_program_response}")
-        
-
-    #     parts = decoded_current_program_response.split(',')
-    #     if len(parts) > 1:
-    #         return parts[1]
-    #     else:
-    #         return None 
-        
-    # def process_test_3_verification(self, result, leds_results):
-    #     test_3_results = f"{result},{leds_results}"
-    #     self.test.result_T3(test_3_results)
-
-    #     led_names = [f"lblLED{i}" for i in range(1, 12)]
-    #     led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-    #     for i in range(1, 12):  # Aseguramos que iteramos de 1 a 11
-    #         if str(i) in leds_results and leds_results[str(i)] == 1:  # Verificamos si la clave existe y es 1
-    #             getattr(self, led_names[i - 1]).setEnabled(True)
-    #             getattr(self, led_input_names[i - 1]).setEnabled(False)
-
-    #     # Cambiar color del botón según resultado
-    #     if result == "PASS":
-    #         self.btnPrueba3.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba3.setStyleSheet("background-color: red;")
-
-    #     # Crear un QTimer para emitir la señal después de 5 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     # Proceed with test 4
-    #     self.test_4()
         
     # def process_test_3_verification(self,result,leds_results):
 
@@ -1771,86 +1685,103 @@ class MainWindow(QMainWindow, mainApplication):
     #     self.test_4()
 
     #def manual_test_3_verification(self, modify_list, event=None):
-    # def manual_test_3_verification(self, event=None):
-    #     #Temporary list declaration
-    #     self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    #     leds_result="PASS"
+    def manual_test_3_verification(self, event=None):
+        #Temporary list declaration
+        self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        leds_result="PASS"
         
-    #     led_names = [f"lblLED{i}" for i in range(1, 12)]
-    #     led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
+        led_names = [f"lblLED{i}" for i in range(1, 12)]
+        led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-    #     for i, should_modify in enumerate(self.modify_list):
-    #         if should_modify:
-    #             getattr(self, led_names[i]).setEnabled(True)
-    #             getattr(self, led_input_names[i]).setEnabled(False)
+        for i, should_modify in enumerate(self.modify_list):
+            if should_modify:
+                getattr(self, led_names[i]).setEnabled(True)
+                getattr(self, led_input_names[i]).setEnabled(False)
         
-    #     if leds_result=="PASS":
-    #         self.btnPrueba3.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba3.setStyleSheet("background-color: red;")
+        if leds_result=="PASS":
+            self.btnPrueba3.setStyleSheet("background-color: green;")
+        else:
+            self.btnPrueba3.setStyleSheet("background-color: red;")
 
-    #     self.test.result_T3(leds_result,self.modify_list)
+        self.test.result_T3(leds_result,self.modify_list)
 
-    #     # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
 
-    #     #Proceed with test 4
-    #     self.test_4()
+        #Proceed with test 4
+        self.test_4()
 
-    # def deny_test_3_verification(self,event=None):
+    def deny_test_3_verification(self,event=None):
 
-    #     print(self.modify_list)
+        print(self.modify_list)
 
-    #     leds_results="FAIL"
+        leds_results="FAIL"
 
-    #     self.test.result_T3(leds_results,self.modify_list)
+        self.test.result_T3(leds_results,self.modify_list)
 
-    #     self.btnPrueba3.setStyleSheet("background-color: red;")
-
-
-
-    #     # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     #Proceed with test 4
-    #     self.test_4()
+        self.btnPrueba3.setStyleSheet("background-color: red;")
 
 
 
+        # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
 
-  
-
-
-############## TEST4   #####################################
-
-    def test_4(self):
-        # Crear el hilo de prueba
-        self.test4_thread = Test4Thread(self.Rs485, self.Camera, self.ocr_program)
-
-        # Conectar señales para actualizar la interfaz
-        self.test4_thread.update_lcd_signal.connect(self.update_lcds)
-        self.test4_thread.test_finished_signal.connect(self.process_test_4_verification)
-
-        # Iniciar el hilo
-        self.test4_thread.start()
-
-    def update_lcds(self, lcds_results):
-        lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
-        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
-
-        for i in range(0, 12):
-            if i in lcds_results and lcds_results[i] == 1:
-                getattr(self, lcd_names[i]).setEnabled(True)
-                getattr(self, lcd_input_names[i]).setEnabled(False)
-
-    def process_test_4_verification(self, result):
-        self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-
-        # Esperar 5 segundos antes de continuar con la siguiente prueba
-        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
+        #Proceed with test 4
         self.test_4()
 
 
+
+
+    def Test_3_GUI_changes(self):
+
+        self.stackedWidget.setCurrentIndex(8) 
+
+
+############## TEST4   #####################################
+    def test_4(self):
+
+        print("Prueba 4")
+
+        print("Enciendiendo pantalla LCD 100%")
+
+        
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
+
+        print("Encendiendo todos los Segmentos LCDS")
+
+        print("Imprimiendo todos los segmentos con 8 ochos")
+
+        self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
+
+        print("Imprimiendo todos los iconos LCD (AM)")
+
+        #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
+        self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
+
+        #Camera send commands
+        raw_change_program='PW,'
+
+        change_program=raw_change_program + self.ocr_program
+
+        self.Camera.send_data(change_program)
+        command = 'T2'
+
+        trigger=self.Camera.send_data(command)
+        print(trigger)
+        results=self.Camera.read_data()
+
+        resultados_herramientas_ocr = self.procesar_respuesta(results)
+        print(resultados_herramientas_ocr)
+
+        if "NG" in resultados_herramientas_ocr:
+            test_4_results="FAIL"
+        else:
+            test_4_results="PASS"
+
+
+        
+        self.process_test_4_verification(test_4_results,resultados_herramientas_ocr)
     # def test_4(self):
 
     #     print("Prueba 4")
@@ -1872,75 +1803,31 @@ class MainWindow(QMainWindow, mainApplication):
     #     #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
     #     self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
 
-    #     #Camera send commands
-    #     raw_change_program='PW,'
+    def process_test_4_verification(self, result, lcds_results):
+        # Enviar el resultado a la función result_T4
+        test_4_results = f"{result},{lcds_results}"
+        self.test.result_T4(test_4_results)
 
-    #     change_program=raw_change_program + self.ocr_program
+        lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
 
-    #     self.Camera.send_data(change_program)
-    #     command = 'T2'
+        # Iterar del 0 al 11 para validar las claves del diccionario
+        for i in range(0, 12):
+            if str(i) in lcds_results and lcds_results[str(i)] == 1:  # Si la clave existe y es 1, habilitar
+                getattr(self, lcd_names[i]).setEnabled(True)
+                getattr(self, lcd_input_names[i]).setEnabled(False)
 
-    #     trigger=self.Camera.send_data(command)
-    #     print(trigger)
-    #     results=self.Camera.read_data()
+        # Cambiar el color del botón según el resultado
+        if result == "PASS":
+            self.btnPrueba4.setStyleSheet("background-color: green;")
+        else:
+            self.btnPrueba4.setStyleSheet("background-color: red;")
 
-    #     resultados_herramientas_ocr = self.procesar_respuesta(results)
-    #     print(resultados_herramientas_ocr)
+        # Emitir la señal después de 5 segundos
+        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
 
-    #     if "NG" in resultados_herramientas_ocr:
-    #         test_4_results="FAIL"
-    #     else:
-    #         test_4_results="PASS"
-
-
-        
-    #     self.process_test_4_verification(test_4_results,resultados_herramientas_ocr)
-    # def test_4(self):
-
-    #     print("Prueba 4")
-
-    #     print("Enciendiendo pantalla LCD 100%")
-
-        
-
-    #     self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-
-    #     print("Encendiendo todos los Segmentos LCDS")
-
-    #     print("Imprimiendo todos los segmentos con 8 ochos")
-
-    #     self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
-
-    #     print("Imprimiendo todos los iconos LCD (AM)")
-
-    #     #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
-    #     self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
-
-    # def process_test_4_verification(self, result, lcds_results):
-    #     # Enviar el resultado a la función result_T4
-    #     test_4_results = f"{result},{lcds_results}"
-    #     self.test.result_T4(test_4_results)
-
-    #     lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
-    #     lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
-
-    #     # Iterar del 0 al 11 para validar las claves del diccionario
-    #     for i in range(0, 12):
-    #         if str(i) in lcds_results and lcds_results[str(i)] == 1:  # Si la clave existe y es 1, habilitar
-    #             getattr(self, lcd_names[i]).setEnabled(True)
-    #             getattr(self, lcd_input_names[i]).setEnabled(False)
-
-    #     # Cambiar el color del botón según el resultado
-    #     if result == "PASS":
-    #         self.btnPrueba4.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba4.setStyleSheet("background-color: red;")
-
-    #     # Emitir la señal después de 5 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
-
-    #     # Continuar con el siguiente test
-    #     self.test_5()
+        # Continuar con el siguiente test
+        self.test_5()
 
         
 
@@ -1971,23 +1858,23 @@ class MainWindow(QMainWindow, mainApplication):
     #     #Proceed with test 5
     #     self.test_5()
 
-    # def deny_test_4_verification(self,event=None):
+    def deny_test_4_verification(self,event=None):
 
-    #     print(self.modify_list)
+        print(self.modify_list)
 
-    #     lcds_results="FAIL"
+        lcds_results="FAIL"
 
-    #     self.test.result_T4(lcds_results)
+        self.test.result_T4(lcds_results)
 
-    #     self.btnPrueba4.setStyleSheet("background-color: red;")
+        self.btnPrueba4.setStyleSheet("background-color: red;")
 
 
 
-    #      # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
+         # Crear un QTimer para emitir la señal después de 3 segundos
+        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
 
-    #     #Proceed with test 5
-    #     self.test_5()
+        #Proceed with test 5
+        self.test_5()
 
     def Test_4_GUI_changes(self):
 
