@@ -1547,19 +1547,20 @@ class MainWindow(QMainWindow, mainApplication):
         self.Rs485.send_command("FF00FFA50060100D05D05B0203FF0356")
         
         #Camera send commands
-        command = 'OE,1'
-
-        self.Camera.send_data(command)
-        
         raw_change_program='PW,'
 
         change_program=raw_change_program + self.led_program
 
         self.Camera.send_data(change_program)
+        command = 'T2'
 
-        trigger='T2'
+        self.Camera.send_data(command)
+        
 
-        self.Camera.send_data(trigger)
+
+        # read='RT'
+
+        # self.Camera.send_data(read)
 
         results=self.Camera.read_data()
 
@@ -1595,7 +1596,7 @@ class MainWindow(QMainWindow, mainApplication):
                     numero = int(numero.lstrip('0'))
 
                     # Almacenar "1" para OK y "0" para NG
-                    resultados[numero] = 0 if estado == "OK" else 1
+                    resultados[numero] = 1 if estado == "OK" else 0
                 else:
                     print(f"Advertencia: no se pudo procesar una parte de la respuesta en la posición {i}.")
                         
