@@ -186,8 +186,14 @@ class Test4Thread(QThread):
             partes = respuesta.split(',')
             for i in range(3, len(partes), 3):
                 if i + 1 < len(partes):
-                    numero = int(partes[i].lstrip('0'))
-                    resultados[numero] = 1 if partes[i + 1] == "OK" else 0
+                    try:
+                        numero = int(partes[i].lstrip('0'))  # Intentar convertir el número
+                    except ValueError:
+                        continue  # Si no es un número, ignorar esta parte y continuar
+
+                    estado = 1 if partes[i + 1] == "OK" else 0  # Verificar si el estado es OK o NG
+                    if 1 <= numero <= 10:  # Solo agregar los números entre 1 y 10
+                        resultados[numero] = estado
         except Exception as e:
             print(f"Error al procesar la respuesta: {e}")
         return resultados
@@ -1838,10 +1844,12 @@ class MainWindow(QMainWindow, mainApplication):
         lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
         lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
 
-        for i in range(0, 12):
+        for i in range(1, 12):
             if i in lcds_results and lcds_results[i] == 1:
-                getattr(self, lcd_names[i]).setEnabled(True)
-                getattr(self, lcd_input_names[i]).setEnabled(False)
+                if hasattr(self, lcd_names[i - 1]):  # Verificar si el atributo existe
+                    getattr(self, lcd_names[i - 1]).setEnabled(True)
+                if hasattr(self, lcd_input_names[i - 1]):  # Verificar si el atributo existe
+                    getattr(self, lcd_input_names[i - 1]).setEnabled(False)
 
     def process_test_4_verification(self, result):
         self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
