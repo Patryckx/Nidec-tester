@@ -136,9 +136,83 @@ class MonitorHMIPositionThread(QThread):
     def stop(self):
         self.running=False
         #self.monithor_thread.quit()
-        #self.monithor_thread.wait()
-        '''
+        #self.monithor_thread.wait()'''
+
 class MonitorButtonsThread(QThread):
+    # Definir señales para la comunicación con el hilo principal
+    button_detected_signal = pyqtSignal(str)
+    update_button_signal = pyqtSignal(str, str)
+    test_finished_signal = pyqtSignal()
+
+    def __init__(self, buttons_order, button_actuators_order, rs485, gateway, parent=None):
+        super(MonitorButtonsThread, self).__init__(parent)
+        self.buttons_order = buttons_order
+        self.button_actuators_order = button_actuators_order
+        self.rs485 = rs485
+        self.gateway = gateway  # Modbus para controlar bobinas
+
+        self.pending_buttons_list = list(self.buttons_order.values())
+        self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
+        self.pending_button_actuator_list = list(self.button_actuators_order.values())
+        self.running = True
+
+    def run(self):
+        while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
+            current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
+            print(f"Activando bobina {current_coil}")
+            
+            try:
+                self.gateway.write_coil(current_coil, True)  # Encender bobina
+            except Exception as e:
+                print(f"Ocurrió un error al encender la bobina: {e}")
+                
+            attempts = 0  # Contador de intentos
+            max_attempts = 5
+            detected = False
+
+            while attempts < max_attempts and self.running:
+                response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
+                print(response)
+                
+                hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+                
+                if hex_value == self.pending_buttons_list[0]:
+                    print(f"Botón detectado: {hex_value}")
+                    current_index = self.pending_buttons_index.pop(0)
+                    button = f"lblButton{current_index}"
+                    button_input = f"lblButtonInput{current_index}"
+                    
+                    # Emitir señal para actualizar la GUI
+                    self.update_button_signal.emit(button, button_input)
+                    detected = True
+                    break  # Salir del bucle de intentos
+                
+                attempts += 1
+                print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
+
+            # Apagar la bobina y procesar el resultado
+            print(f"Desactivando bobina {current_coil}")
+            try:
+                self.gateway.write_coil(current_coil, False)  # Apagar bobina
+            except Exception as e:
+                print(f"Ocurrió un error al desactivar la bobina: {e}")
+
+            if not detected:
+                print("Botón no detectado tras 5 intentos.")
+            
+            # Eliminar el botón de la lista
+            self.pending_buttons_list.pop(0)
+            self.pending_button_actuator_list.pop(0)
+            
+            if not self.pending_buttons_list:
+                print("Todos los botones han sido procesados.")
+                self.test_finished_signal.emit()
+                break
+
+    def stop(self):
+        self.running = False
+        
+'''class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
     update_button_signal = pyqtSignal(str, str)
@@ -202,7 +276,7 @@ class MonitorButtonsThread(QThread):
     def stop(self):
         self.running=False
         #self.monithor_thread.quit()
-        #self.monithor_thread.wait()
+        #self.monithor_thread.wait()'''
 
 '''class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
@@ -251,6 +325,70 @@ class MonitorButtonsThread(QThread):
         self.digital_entrances_thread_isrunning=False
         #self.monithor_thread.quit()
         #self.monithor_thread.wait()'''
+# class MonitorDigitalEntrances(QThread):
+#     # Definir señales para la comunicación con el hilo principal
+#     digital_input_detected_signal = pyqtSignal(str)
+#     update_digital_input_signal = pyqtSignal(str, str)
+#     test_6_finished_signal = pyqtSignal()
+
+#     def __init__(self, digital_input_order, digital_actuators_order, rs485, gateway, parent=None):
+#         super(MonitorDigitalEntrances, self).__init__(parent)
+#         self.digital_input_order = digital_input_order
+#         self.digital_actuators_order = digital_actuators_order
+#         self.rs485 = rs485
+#         self.gateway = gateway  # Modbus para controlar bobinas
+
+#         # Listas pendientes
+#         self.pending_digital_list = list(self.digital_input_order.values())
+#         self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
+#         self.pending_actuator_list = list(self.digital_actuators_order.values())
+
+#         self.digital_entrances_thread_isrunning = True
+
+#     def run(self):
+#         while self.pending_digital_list and self.pending_actuator_list and self.digital_entrances_thread_isrunning:
+#             # Obtener el actuador correspondiente
+#             current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
+#             print(f"Activando bobina {current_coil}")
+#             try:
+#                 self.gateway.write_coil(current_coil, True)  # Encender bobina
+#             except Exception as e :
+#                 print(f"Ocurrio un error al encender la bobina: {e}" )
+#             # Simulación de obtener la respuesta del dispositivo
+#             response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
+#             print(response)
+
+#             hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+
+#             if hex_value == self.pending_digital_list[0]:
+#                 print(f"Entrada detectada: {hex_value}")
+#                 current_index = self.pending_digital_index.pop(0)
+#                 print(current_index)
+#                 digital = f"lblDigital{current_index}"
+#                 digital_input = f"lblDigitalInput{current_index}"
+
+#                 # Emitir una señal para actualizar la GUI en el hilo principal
+#                 self.update_digital_input_signal.emit(digital, digital_input)
+
+#                 print(f"Desactivando bobina {current_coil}")
+#                 try:
+#                     self.gateway.write_coil(current_coil, False)  # Apagar bobina
+#                 except Exception as e:
+#                     print(f"Ocurrio un error al desactivar la bobina{e}")
+
+#                 # Eliminar elementos procesados
+#                 self.pending_digital_list.pop(0)
+#                 self.pending_actuator_list.pop(0)
+
+#             if not self.pending_digital_list:
+#                 print("Todas las señales han sido capturadas.")
+#                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
+#                 break
+#     def stop(self):
+#         self.digital_entrances_thread_isrunning=False
+#         #self.monithor_thread.quit()
+#         #self.monithor_thread.wait()
+
 class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
     digital_input_detected_signal = pyqtSignal(str)
@@ -273,47 +411,56 @@ class MonitorDigitalEntrances(QThread):
 
     def run(self):
         while self.pending_digital_list and self.pending_actuator_list and self.digital_entrances_thread_isrunning:
-            # Obtener el actuador correspondiente
             current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
+            attempts = 0  # Contador de intentos
+            max_attempts = 5
+            
             print(f"Activando bobina {current_coil}")
             try:
                 self.gateway.write_coil(current_coil, True)  # Encender bobina
-            except Exception as e :
-                print(f"Ocurrio un error al encender la bobina: {e}" )
-            # Simulación de obtener la respuesta del dispositivo
-            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-            print(response)
+            except Exception as e:
+                print(f"Ocurrio un error al encender la bobina: {e}")
+                
+            while attempts < max_attempts:
+                response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Obtener respuesta
+                print(response)
+                hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+                
+                if hex_value == self.pending_digital_list[0]:
+                    print(f"Entrada detectada: {hex_value}")
+                    current_index = self.pending_digital_index.pop(0)
+                    print(current_index)
+                    digital = f"lblDigital{current_index}"
+                    digital_input = f"lblDigitalInput{current_index}"
 
-            hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
+                    # Emitir una señal para actualizar la GUI en el hilo principal
+                    self.update_digital_input_signal.emit(digital, digital_input)
+                    break
+                
+                attempts += 1
+                print(f"Intento {attempts} de {max_attempts} para detectar la entrada")
+            
+            print(f"Desactivando bobina {current_coil}")
+            try:
+                self.gateway.write_coil(current_coil, False)  # Apagar bobina
+            except Exception as e:
+                print(f"Ocurrio un error al desactivar la bobina: {e}")
 
-            if hex_value == self.pending_digital_list[0]:
-                print(f"Entrada detectada: {hex_value}")
-                current_index = self.pending_digital_index.pop(0)
-                print(current_index)
-                digital = f"lblDigital{current_index}"
-                digital_input = f"lblDigitalInput{current_index}"
-
-                # Emitir una señal para actualizar la GUI en el hilo principal
-                self.update_digital_input_signal.emit(digital, digital_input)
-
-                print(f"Desactivando bobina {current_coil}")
-                try:
-                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
-                except Exception as e:
-                    print(f"Ocurrio un error al desactivar la bobina{e}")
-
-                # Eliminar elementos procesados
-                self.pending_digital_list.pop(0)
-                self.pending_actuator_list.pop(0)
+            if attempts >= max_attempts:
+                print(f"Entrada no detectada después de {max_attempts} intentos.")
+            
+            # Eliminar elementos procesados
+            self.pending_digital_list.pop(0)
+            self.pending_actuator_list.pop(0)
 
             if not self.pending_digital_list:
                 print("Todas las señales han sido capturadas.")
                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
                 break
+
     def stop(self):
-        self.digital_entrances_thread_isrunning=False
-        #self.monithor_thread.quit()
-        #self.monithor_thread.wait()
+        self.digital_entrances_thread_isrunning = False
+
 
 class MainWindow(QMainWindow, mainApplication):
 
