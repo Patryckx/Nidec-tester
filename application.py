@@ -432,14 +432,21 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Stop buttons thread
 
-        self.monitor_buttons_thread.stop()
+        try:
 
-        self.monitor_buttons_thread.quit()
-        self.monitor_buttons_thread.wait()
+            self.monitor_buttons_thread.stop()
 
-        self.monitor_digital_inputs_thread.stop()
-        self.monitor_digital_inputs_thread.quit()
-        self.monitor_digital_inputs_thread.wait()
+            self.monitor_buttons_thread.quit()
+            self.monitor_buttons_thread.wait()
+        except Exception as e :
+            print("Error al detener el hilo de monitoreo de botones")
+
+        try:
+            self.monitor_digital_inputs_thread.stop()
+            self.monitor_digital_inputs_thread.quit()
+            self.monitor_digital_inputs_thread.wait()
+        except Exception as e:
+            print("Error al detener el hilo de monitoreo de entradas digitales")
 
 
         
@@ -450,6 +457,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.gateway.write_coil(0,False)
         except Exception as e:
             print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
+        self.housekeeping_gateway()
 
 
         #Stoping monithoring thread HMI 
@@ -525,6 +534,11 @@ class MainWindow(QMainWindow, mainApplication):
         if reply == QMessageBox.Yes:
             event.accept()
             QApplication.quit()
+
+            try:
+                self.housekeeping_gateway()
+            except Exception as e:
+                print("Error al apagar bobinas")
         else:
             event.ignore()
     def minimize_window(self,event):
@@ -1164,10 +1178,25 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Stop monitor buttons thread 
 
-        self.monitor_buttons_thread.stop()
+        self.housekeeping_gateway()
 
-        self.monitor_buttons_thread.quit()
-        self.monitor_buttons_thread.wait()
+        try:
+
+            self.monitor_buttons_thread.stop()
+
+            self.monitor_buttons_thread.quit()
+            self.monitor_buttons_thread.wait()
+        except Exception as e :
+            print("Error al detener el hilo de monitoreo de botones")
+
+        try:
+            self.monitor_digital_inputs_thread.stop()
+            self.monitor_digital_inputs_thread.quit()
+            self.monitor_digital_inputs_thread.wait()
+        except Exception as e:
+            print("Error al detener el hilo de monitoreo de entradas digitales")
+
+   
 
         #Stop timer
         self.timer.stop()
@@ -1205,7 +1234,7 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
 
         #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
-        time.sleep(2)
+        time.sleep(4)
 
         '''
         daemon=True: Esto indica que el hilo será un "hilo daemon", 
@@ -1598,7 +1627,7 @@ class MainWindow(QMainWindow, mainApplication):
         if reply == QMessageBox.Yes:
             
             #Erase current session info
-            self.config.erase_user_and_shop_info()
+            #self.config.erase_user_and_shop_info()
 
             #Show again first screen app
             self.stackedWidget.setCurrentIndex(0)
