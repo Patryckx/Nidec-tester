@@ -867,14 +867,14 @@ class MainWindow(QMainWindow, mainApplication):
 
 
         #LEDs test 3
-        self.lblConfirmLeds.mousePressEvent = self.manual_test_3_verification
-        self.lblDenyLeds.mousePressEvent=self.deny_test_3_verification
+        #self.lblConfirmLeds.mousePressEvent = self.manual_test_3_verification
+        #self.lblDenyLeds.mousePressEvent=self.deny_test_3_verification
         self.Test_3_signal.connect(self.Test_3_GUI_changes)
 
         #LCD Test 4
 
         #self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
-        self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
+        #self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
         self.Test_4_signal.connect(self.Test_4_GUI_changes)
 
         #Test 5 
