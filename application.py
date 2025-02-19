@@ -114,11 +114,22 @@ class Test3Thread(QThread):
         change_program = raw_change_program + self.led_program
         self.Camera.send_data(change_program)
         #time.sleep(1)
-        #elf.Camera.send_data('T2')
+        '''#elf.Camera.send_data('T2')
         self.Camera.send_data('T2')
 
         # Leer la respuesta de la cámara
         results = self.Camera.read_data()
+        resultados_herramientas = self.procesar_respuesta(results)
+        print(resultados_herramientas)'''
+
+        # Limpiar el buffer antes de realizar el disparo
+        self.Camera.read_and_clear_buffer()
+
+        # Realizar el disparo y leer la respuesta
+        self.Camera.send_data('T2')
+        time.sleep(0.5)  # Esperar un breve momento
+        results = self.Camera.read_data()
+
         resultados_herramientas = self.procesar_respuesta(results)
         print(resultados_herramientas)
 
@@ -168,7 +179,7 @@ class Test4Thread(QThread):
         raw_change_program = 'PW,'
         change_program = raw_change_program + self.ocr_program
         self.Camera.send_data(change_program)
-        self.Camera.send_data('T2')
+        '''self.Camera.send_data('T2')
         #time.sleep(1)
         #self.Camera.send_data('T2')
         #self.Camera.send_data('T2')
@@ -177,10 +188,19 @@ class Test4Thread(QThread):
         results_ocr = self.Camera.read_data()
 
 
-        print(results_ocr)
-        resultados_herramientas = self.procesar_respuesta(results_ocr)
-        print(resultados_herramientas)
+        print(results_ocr)'''
 
+        # Limpiar el buffer antes de realizar el disparo
+        self.Camera.read_and_clear_buffer()
+
+        # Realizar el disparo y leer la respuesta
+        self.Camera.send_data('T2')
+        time.sleep(0.5)  # Esperar un breve momento
+        results = self.Camera.read_data()
+
+        resultados_herramientas = self.procesar_respuesta(results)
+        print(resultados_herramientas)
+        
 
         # Enviar comandos a la cámara
         '''raw_change_program = 'PW,'
@@ -199,7 +219,7 @@ class Test4Thread(QThread):
         resultados_herramientas_ocr = self.procesar_respuesta(results)
         print(resultados_herramientas_ocr)'''
 
-        test_4_results = "FAIL" if "NG" in results_ocr else "PASS"
+        test_4_results = "FAIL" if "NG" in results else "PASS"
 
         
 

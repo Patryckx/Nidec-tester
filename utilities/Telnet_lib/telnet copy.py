@@ -1,6 +1,7 @@
 import telnetlib
 import time
 
+
 class TelnetClient:
     def __init__(self, host, port, timeout=10):
         """
@@ -23,8 +24,9 @@ class TelnetClient:
             print(f"Conexión establecida con {self.host}:{self.port}")
             return True
         except Exception as e:
-            print(f"No se pudo conectar a {self.host}:{self.port}. Error: {e}")
+            print((f"No se pudo conectar a {self.host}:{self.port}. Error: {e}"))
             return False
+            #raise ConnectionError(f"No se pudo conectar a {self.host}:{self.port}. Error: {e}")
 
     def send_data(self, data):
         """
@@ -34,6 +36,7 @@ class TelnetClient:
         if not self.connection:
             raise ConnectionError("No hay una conexión activa.")
         try:
+            #self.connection.write(data.encode('ascii') + b'\n')
             self.connection.write(data.encode('ascii') + b'\r')
             print(f"Datos enviados: {data}")
         except Exception as e:
@@ -54,19 +57,6 @@ class TelnetClient:
             return response
         except Exception as e:
             raise RuntimeError(f"Error al leer datos: {e}")
-
-    def read_and_clear_buffer(self):
-        """
-        Lee y descarta cualquier dato en el buffer.
-        """
-        if not self.connection:
-            raise ConnectionError("No hay una conexión activa.")
-        try:
-            # Lee todo lo que está en el buffer y lo descarta
-            self.connection.read_very_eager()
-            print("Buffer limpiado correctamente.")
-        except Exception as e:
-            raise RuntimeError(f"Error al limpiar el buffer: {e}")
 
     def close_connection(self):
         """
