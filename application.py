@@ -179,16 +179,6 @@ class Test4Thread(QThread):
         raw_change_program = 'PW,'
         change_program = raw_change_program + self.ocr_program
         self.Camera.send_data(change_program)
-        '''self.Camera.send_data('T2')
-        #time.sleep(1)
-        #self.Camera.send_data('T2')
-        #self.Camera.send_data('T2')
-
-        # Leer la respuesta de la cámara
-        results_ocr = self.Camera.read_data()
-
-
-        print(results_ocr)'''
 
         # Limpiar el buffer antes de realizar el disparo
         self.Camera.read_and_clear_buffer()
@@ -201,28 +191,8 @@ class Test4Thread(QThread):
         resultados_herramientas = self.procesar_respuesta(results)
         print(resultados_herramientas)
         
-
-        # Enviar comandos a la cámara
-        '''raw_change_program = 'PW,'
-        change_program = raw_change_program + self.ocr_program
-        self.Camera.send_data(change_program)
-
-        time.sleep(1)
-        
-        command = 'T2'
-        self.Camera.send_data(command)
-
-        results = self.Camera.read_data()
-
-        print(results)
-
-        resultados_herramientas_ocr = self.procesar_respuesta(results)
-        print(resultados_herramientas_ocr)'''
-
         test_4_results = "FAIL" if "NG" in results else "PASS"
-
-        
-
+      
         # Emitir señales para actualizar la interfaz
         self.update_lcd_signal.emit(resultados_herramientas)
         self.test_finished_signal.emit(test_4_results,resultados_herramientas)
@@ -245,57 +215,12 @@ class Test4Thread(QThread):
             print(f"Error al procesar la respuesta: {e}")
         return resultados
 
-'''class MonitorButtonsThread(QThread):
-    # Definir señales para la comunicación con el hilo principal
-    button_detected_signal = pyqtSignal(str)
-    update_button_signal = pyqtSignal(str, str)
-    test_finished_signal = pyqtSignal()
-
-    def __init__(self, buttons_order, rs485, parent=None):
-        super(MonitorButtonsThread, self).__init__(parent)
-        self.buttons_order = buttons_order
-        self.rs485 = rs485
-        self.pending_buttons_list = list(self.buttons_order.values())
-        self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
-        self.running=True
-        print(self.pending_buttons_list)
-    def run(self):
-        while self.pending_buttons_list and self.running:
-            # Simulación de obtener la respuesta del dispositivo
-            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-            print(response)
-
-            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-
-            if hex_value == self.pending_buttons_list[0]:
-                print(f"Botón detectado: {hex_value}")
-                current_index = self.pending_buttons_index.pop(0)
-                print(current_index)
-                button = f"lblButton{current_index}"
-                button_input = f"lblButtonInput{current_index}"
-                
-                # Emitir una señal para actualizar la GUI en el hilo principal
-                self.update_button_signal.emit(button, button_input)
-
-                # Eliminar el botón de la lista
-                self.pending_buttons_list.pop(0)
-
-            if not self.pending_buttons_list:
-                print("Todos los botones han sido capturados.")
-                button_result = "PASS"
-                self.test_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
-                break
-
-    def stop(self):
-        self.running=False
-        #self.monithor_thread.quit()
-        #self.monithor_thread.wait()'''
 
 class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
     update_button_signal = pyqtSignal(str, str)
-    test_finished_signal = pyqtSignal()
+    test_finished_signal = pyqtSignal(bool,dict)
 
     def __init__(self, buttons_order, button_actuators_order, rs485, gateway, parent=None):
         super(MonitorButtonsThread, self).__init__(parent)
@@ -308,6 +233,9 @@ class MonitorButtonsThread(QThread):
         self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
         self.pending_button_actuator_list = list(self.button_actuators_order.values())
         self.running = True
+        
+        # Inicializar el diccionario con claves de 1 a n, con valores en None
+        self.button_results_dict = {i + 1: None for i in range(len(self.pending_buttons_list))}
 
     def run(self):
         while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
@@ -323,6 +251,9 @@ class MonitorButtonsThread(QThread):
             max_attempts = 5
             detected = False
 
+            #Flag to check if the test failed
+            fail_on_button_test=False
+
             while attempts < max_attempts and self.running:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
                 print(response)
@@ -334,9 +265,12 @@ class MonitorButtonsThread(QThread):
                     current_index = self.pending_buttons_index.pop(0)
                     button = f"lblButton{current_index}"
                     button_input = f"lblButtonInput{current_index}"
+
+                    #Guardar resultado en el diccionario
+                    self.button_results_dict[current_index] = 1
                     
                     # Emitir señal para actualizar la GUI
-                    self.update_button_signal.emit(button, button_input)
+                    self.update_button_signal.emit(button, button_input,True)
                     detected = True
                     break  # Salir del bucle de intentos
                 
@@ -352,6 +286,15 @@ class MonitorButtonsThread(QThread):
 
             if not detected:
                 print("Botón no detectado tras 5 intentos.")
+                button = f"lblButton{current_index}"
+                button_input = f"lblButtonInput{current_index}"
+                self.update_button_signal.emit(button, button_input,False)
+
+                #Guardar resultado en el diccionario
+                self.button_results_dict[current_index] = 0
+
+                fail_on_button_test=True
+
             
             # Eliminar el botón de la lista
             self.pending_buttons_list.pop(0)
@@ -359,188 +302,14 @@ class MonitorButtonsThread(QThread):
             
             if not self.pending_buttons_list:
                 print("Todos los botones han sido procesados.")
-                self.test_finished_signal.emit()
+                self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)
+
+                #Clear results dictionary button
+                self.button_results_dict.clear()
                 break
 
     def stop(self):
         self.running = False
-        
-'''class MonitorButtonsThread(QThread):
-    # Definir señales para la comunicación con el hilo principal
-    button_detected_signal = pyqtSignal(str)
-    update_button_signal = pyqtSignal(str, str)
-    test_finished_signal = pyqtSignal()
-
-    def __init__(self, buttons_order,button_actuators_order, rs485,gateway, parent=None):
-        super(MonitorButtonsThread, self).__init__(parent)
-        self.buttons_order = buttons_order
-        self.button_actuators_order=button_actuators_order
-        self.rs485 = rs485
-        self.gateway = gateway  # Modbus para controlar bobinas
-
-
-        self.pending_buttons_list = list(self.buttons_order.values())
-        self.pending_buttons_index = [index + 1 for index, _ in enumerate(self.pending_buttons_list)]
-
-        self.pending_button_actuator_list = list(self.button_actuators_order.values())
-        self.running=True
-        print(self.pending_buttons_list)
-    def run(self):
-        while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
-
-            current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
-            print(f"Activando bobina {current_coil}")
-            try:
-                self.gateway.write_coil(current_coil, True)  # Encender bobina
-            except Exception as e :
-                print(f"Ocurrio un error al encender la bobina: {e}" )
-            # Simulación de obtener la respuesta del dispositivo
-            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-            print(response)
-
-            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-
-            if hex_value == self.pending_buttons_list[0]:
-                print(f"Botón detectado: {hex_value}")
-                current_index = self.pending_buttons_index.pop(0)
-                print(current_index)
-                button = f"lblButton{current_index}"
-                button_input = f"lblButtonInput{current_index}"
-                
-                # Emitir una señal para actualizar la GUI en el hilo principal
-                self.update_button_signal.emit(button, button_input)
-
-                # Apagar la bobina correspondiente
-                print(f"Desactivando bobina {current_coil}")
-                try:
-                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
-                except Exception as e:
-                    print(f"Ocurrio un error al desactivar la bobina{e}")
-                # Eliminar el botón de la lista
-                self.pending_buttons_list.pop(0)
-                self.pending_button_actuator_list.pop(0)
-
-            if not self.pending_buttons_list:
-                print("Todos los botones han sido capturados.")
-                button_result = "PASS"
-                self.test_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
-                break
-
-    def stop(self):
-        self.running=False
-        #self.monithor_thread.quit()
-        #self.monithor_thread.wait()'''
-
-'''class MonitorDigitalEntrances(QThread):
-    # Definir señales para la comunicación con el hilo principal
-    digital_input_detected_signal = pyqtSignal(str)
-    update_digital_input_signal = pyqtSignal(str, str)
-    test_6_finished_signal = pyqtSignal()
-
-    def __init__(self, digital_input_order,digital_actuators_order, rs485, parent=None):
-        super(MonitorDigitalEntrances, self).__init__(parent)
-        self.digital_input_order = digital_input_order
-        self.rs485 = rs485
-        self.pending_digital_list = list(self.digital_input_order.values())
-        self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
-        print(self.pending_digital_list)
-
-        self.digital_entrances_thread_isrunning=True
-    def run(self):
-        while self.pending_digital_list and self.digital_entrances_thread_isrunning:
-            # Simulación de obtener la respuesta del dispositivo
-            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-            print(response)
-
-            hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
-
-            if hex_value == self.pending_digital_list[0]:
-                print(f"Entrada detectada: {hex_value}")
-                current_index = self.pending_digital_index.pop(0)
-                print(current_index)
-                digital = f"lblDigital{current_index}"
-                digital_input = f"lblDigitalInput{current_index}"
-                
-                # Emitir una señal para actualizar la GUI en el hilo principal
-                self.update_digital_input_signal.emit(digital, digital_input)
-
-                # Eliminar el botón de la lista
-                self.pending_digital_list.pop(0)
-
-            #if not self.pending_digital_list: BYPASS 
-            if not self.pending_digital_list:
-                print("Todos las señales han sido capturadas.")
-                #button_result = "PASS"
-                self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
-                break
-
-    def stop(self):
-        self.digital_entrances_thread_isrunning=False
-        #self.monithor_thread.quit()
-        #self.monithor_thread.wait()'''
-# class MonitorDigitalEntrances(QThread):
-#     # Definir señales para la comunicación con el hilo principal
-#     digital_input_detected_signal = pyqtSignal(str)
-#     update_digital_input_signal = pyqtSignal(str, str)
-#     test_6_finished_signal = pyqtSignal()
-
-#     def __init__(self, digital_input_order, digital_actuators_order, rs485, gateway, parent=None):
-#         super(MonitorDigitalEntrances, self).__init__(parent)
-#         self.digital_input_order = digital_input_order
-#         self.digital_actuators_order = digital_actuators_order
-#         self.rs485 = rs485
-#         self.gateway = gateway  # Modbus para controlar bobinas
-
-#         # Listas pendientes
-#         self.pending_digital_list = list(self.digital_input_order.values())
-#         self.pending_digital_index = [index + 1 for index, _ in enumerate(self.pending_digital_list)]
-#         self.pending_actuator_list = list(self.digital_actuators_order.values())
-
-#         self.digital_entrances_thread_isrunning = True
-
-#     def run(self):
-#         while self.pending_digital_list and self.pending_actuator_list and self.digital_entrances_thread_isrunning:
-#             # Obtener el actuador correspondiente
-#             current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
-#             print(f"Activando bobina {current_coil}")
-#             try:
-#                 self.gateway.write_coil(current_coil, True)  # Encender bobina
-#             except Exception as e :
-#                 print(f"Ocurrio un error al encender la bobina: {e}" )
-#             # Simulación de obtener la respuesta del dispositivo
-#             response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Esta función debe obtener la respuesta
-#             print(response)
-
-#             hex_value = response[26:28]  # Extrae el valor hexadecimal relevante
-
-#             if hex_value == self.pending_digital_list[0]:
-#                 print(f"Entrada detectada: {hex_value}")
-#                 current_index = self.pending_digital_index.pop(0)
-#                 print(current_index)
-#                 digital = f"lblDigital{current_index}"
-#                 digital_input = f"lblDigitalInput{current_index}"
-
-#                 # Emitir una señal para actualizar la GUI en el hilo principal
-#                 self.update_digital_input_signal.emit(digital, digital_input)
-
-#                 print(f"Desactivando bobina {current_coil}")
-#                 try:
-#                     self.gateway.write_coil(current_coil, False)  # Apagar bobina
-#                 except Exception as e:
-#                     print(f"Ocurrio un error al desactivar la bobina{e}")
-
-#                 # Eliminar elementos procesados
-#                 self.pending_digital_list.pop(0)
-#                 self.pending_actuator_list.pop(0)
-
-#             if not self.pending_digital_list:
-#                 print("Todas las señales han sido capturadas.")
-#                 self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
-#                 break
-#     def stop(self):
-#         self.digital_entrances_thread_isrunning=False
-#         #self.monithor_thread.quit()
-#         #self.monithor_thread.wait()
 
 class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
@@ -1210,7 +979,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
-            #return
+            return
 
         #Housekeeping registers gateway
         self.housekeeping_gateway()
@@ -1228,7 +997,7 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.Rs485.connect():
             print("Serial 485 Device NOT connected connected")
             self.stackedWidget.setCurrentIndex(1)
-            #return
+            return
 
         #Camera Connection through telnet protocol
         
@@ -1237,7 +1006,7 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.Camera.connect():
             print("Camera connection Telnet not established")
             self.stackedWidget.setCurrentIndex(3)
-            #return
+            return
 
         print("All devices sucessfully conected")  
 
@@ -1557,31 +1326,7 @@ class MainWindow(QMainWindow, mainApplication):
         print("Turning off LCD screen")
 
         self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
-
-        
-
-        '''print("Testing 232 responses")
-        self.Rs232.send_command("FF00FFA50060100D04D05101010249")
-
-        print("Obtaining firmware version via rs232 ")
-        firmware_version232=str(self.Rs232.send_command("FF00FFA50060100D03D05600024B"))
-
-        if firmware_version232 == '':
-            self.lblVerify232communication.setText("Respuesta No obtenida")
-            self.lblVerify232communication.setStyleSheet("color: red;")
-
-            #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: red;")
-
-            #if firmware_version232 != None:
-        else:
-            self.txtComunicacion232.setText(firmware_version232)
-
-            self.lblVerify232communication.setText("Respuesta obtenida")
-            self.lblVerify232communication.setStyleSheet("color: green;")
-
-            self.test.result_232(firmware_version232)'''
-            
+         
         
         print("Obtaining firmware version ")
         firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
@@ -1728,154 +1473,7 @@ class MainWindow(QMainWindow, mainApplication):
     def Test_3_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(8) 
-    # def procesar_respuesta(self, respuesta):
-    #     """
-    #     Procesa la respuesta del dispositivo y la convierte en un diccionario de resultados.
-    #     :param respuesta: Cadena de texto con la respuesta del dispositivo.
-    #     :return: Diccionario con los resultados en formato {numero: 1 para OK, 0 para NG}.
-    #     """
-    #     resultados = {}
-    #     try:
-    #         # Dividir la respuesta en secciones usando ',' como separador
-    #         partes = respuesta.split(',')
-            
-    #         # Verificar que hay suficientes partes para evitar el error de índice
-    #         for i in range(3, len(partes), 3):  # Paso de 3 en 3 para obtener el número y el estado
-    #             if i + 1 < len(partes):  # Comprobar que hay al menos dos elementos para procesar
-    #                 numero = partes[i]    # El número de la secuencia
-    #                 estado = partes[i + 1]  # El estado, que debe ser "OK" o "NG"
-                    
-    #                 # Convertir numero a entero y remover ceros a la izquierda 
-    #                 numero = int(numero.lstrip('0'))
-
-    #                 # Almacenar "1" para OK y "0" para NG
-    #                 resultados[numero] = 1 if estado == "OK" else 0
-    #             else:
-    #                 print(f"Advertencia: no se pudo procesar una parte de la respuesta en la posición {i}.")
-                        
-    #     except Exception as e:
-    #         print(f"Error al procesar la respuesta: {e}")
-            
-    #     return resultados
     
-    # def current_controller_program(self):
-
-    #     read_program='PR'
-
-    #     # Send command to read program number
-    #     self.Camera.send_data(read_program.encode('ascii') + b'\r')  # Agregar retorno de carro
-
-    #     #Read response from controller
-    #     current_program_response = self.tn.read_until(b'\r')
-    #     decoded_current_program_response=current_program_response.decode('ascii').strip()
-
-    #     print(f"Current program controller: {decoded_current_program_response}")
-        
-
-    #     parts = decoded_current_program_response.split(',')
-    #     if len(parts) > 1:
-    #         return parts[1]
-    #     else:
-    #         return None 
-        
-    # def process_test_3_verification(self, result, leds_results):
-    #     test_3_results = f"{result},{leds_results}"
-    #     self.test.result_T3(test_3_results)
-
-    #     led_names = [f"lblLED{i}" for i in range(1, 12)]
-    #     led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-    #     for i in range(1, 12):  # Aseguramos que iteramos de 1 a 11
-    #         if str(i) in leds_results and leds_results[str(i)] == 1:  # Verificamos si la clave existe y es 1
-    #             getattr(self, led_names[i - 1]).setEnabled(True)
-    #             getattr(self, led_input_names[i - 1]).setEnabled(False)
-
-    #     # Cambiar color del botón según resultado
-    #     if result == "PASS":
-    #         self.btnPrueba3.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba3.setStyleSheet("background-color: red;")
-
-    #     # Crear un QTimer para emitir la señal después de 5 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     # Proceed with test 4
-    #     self.test_4()
-        
-    # def process_test_3_verification(self,result,leds_results):
-
-    #     leds_results=leds_results
-
-    #     test_3_results=f"{result},{leds_results}"
-
-    #     self.test.result_T3(test_3_results)
-
-    #     led_names = [f"lblLED{i}" for i in range(1, 12)]
-    #     led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-    #     for i, should_modify in enumerate(leds_results):
-    #         if should_modify:
-    #             getattr(self, led_names[i]).setEnabled(True)
-    #             getattr(self, led_input_names[i]).setEnabled(False)
-        
-    #     if result=="PASS":
-    #         self.btnPrueba3.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba3.setStyleSheet("background-color: red;")
-
-    #      # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     #Proceed with test 4
-    #     self.test_4()
-
-    #def manual_test_3_verification(self, modify_list, event=None):
-    # def manual_test_3_verification(self, event=None):
-    #     #Temporary list declaration
-    #     self.modify_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    #     leds_result="PASS"
-        
-    #     led_names = [f"lblLED{i}" for i in range(1, 12)]
-    #     led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-    #     for i, should_modify in enumerate(self.modify_list):
-    #         if should_modify:
-    #             getattr(self, led_names[i]).setEnabled(True)
-    #             getattr(self, led_input_names[i]).setEnabled(False)
-        
-    #     if leds_result=="PASS":
-    #         self.btnPrueba3.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba3.setStyleSheet("background-color: red;")
-
-    #     self.test.result_T3(leds_result,self.modify_list)
-
-    #     # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     #Proceed with test 4
-    #     self.test_4()
-
-    # def deny_test_3_verification(self,event=None):
-
-    #     print(self.modify_list)
-
-    #     leds_results="FAIL"
-
-    #     self.test.result_T3(leds_results,self.modify_list)
-
-    #     self.btnPrueba3.setStyleSheet("background-color: red;")
-
-
-
-    #     # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
-
-    #     #Proceed with test 4
-    #     self.test_4()
-
-
-
 
   
 
@@ -1913,143 +1511,6 @@ class MainWindow(QMainWindow, mainApplication):
         self.test_5()
 
 
-    # def test_4(self):
-
-    #     print("Prueba 4")
-
-    #     print("Enciendiendo pantalla LCD 100%")
-
-        
-
-    #     self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-
-    #     print("Encendiendo todos los Segmentos LCDS")
-
-    #     print("Imprimiendo todos los segmentos con 8 ochos")
-
-    #     self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
-
-    #     print("Imprimiendo todos los iconos LCD (AM)")
-
-    #     #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
-    #     self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
-
-    #     #Camera send commands
-    #     raw_change_program='PW,'
-
-    #     change_program=raw_change_program + self.ocr_program
-
-    #     self.Camera.send_data(change_program)
-    #     command = 'T2'
-
-    #     trigger=self.Camera.send_data(command)
-    #     print(trigger)
-    #     results=self.Camera.read_data()
-
-    #     resultados_herramientas_ocr = self.procesar_respuesta(results)
-    #     print(resultados_herramientas_ocr)
-
-    #     if "NG" in resultados_herramientas_ocr:
-    #         test_4_results="FAIL"
-    #     else:
-    #         test_4_results="PASS"
-
-
-        
-    #     self.process_test_4_verification(test_4_results,resultados_herramientas_ocr)
-    # def test_4(self):
-
-    #     print("Prueba 4")
-
-    #     print("Enciendiendo pantalla LCD 100%")
-
-        
-
-    #     self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-
-    #     print("Encendiendo todos los Segmentos LCDS")
-
-    #     print("Imprimiendo todos los segmentos con 8 ochos")
-
-    #     self.Rs485.send_command("FF00FFA50060100D07D05D0438383838033A")
-
-    #     print("Imprimiendo todos los iconos LCD (AM)")
-
-    #     #self.Rs485.send_command("FF00FFA50060100D04D05E011F0274")
-    #     self.Rs485.send_command("FF00FFA50060100D04D05E013F0294")
-
-    # def process_test_4_verification(self, result, lcds_results):
-    #     # Enviar el resultado a la función result_T4
-    #     test_4_results = f"{result},{lcds_results}"
-    #     self.test.result_T4(test_4_results)
-
-    #     lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
-    #     lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
-
-    #     # Iterar del 0 al 11 para validar las claves del diccionario
-    #     for i in range(0, 12):
-    #         if str(i) in lcds_results and lcds_results[str(i)] == 1:  # Si la clave existe y es 1, habilitar
-    #             getattr(self, lcd_names[i]).setEnabled(True)
-    #             getattr(self, lcd_input_names[i]).setEnabled(False)
-
-    #     # Cambiar el color del botón según el resultado
-    #     if result == "PASS":
-    #         self.btnPrueba4.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba4.setStyleSheet("background-color: red;")
-
-    #     # Emitir la señal después de 5 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
-
-    #     # Continuar con el siguiente test
-    #     self.test_5()
-
-        
-
-    
-    # def manual_test_4_verification(self, event=None):
-    #     #Temporary list declaration
-    #     self.lds_results_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    #     lcds_result="PASS"
-        
-    #     lcd_names = [f"lblLCD{i}" for i in range(0, 12)]
-    #     lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
-
-    #     for i, should_modify in enumerate(self.modify_list):
-    #         if should_modify:
-    #             getattr(self, lcd_names[i]).setEnabled(True)
-    #             getattr(self, lcd_input_names[i]).setEnabled(False)
-        
-    #     if lcds_result=="PASS":
-    #         self.btnPrueba4.setStyleSheet("background-color: green;")
-    #     else:
-    #         self.btnPrueba4.setStyleSheet("background-color: red;")
-
-    #     self.test.result_T4(lcds_result)
-
-    #     # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
-
-    #     #Proceed with test 5
-    #     self.test_5()
-
-    # def deny_test_4_verification(self,event=None):
-
-    #     print(self.modify_list)
-
-    #     lcds_results="FAIL"
-
-    #     self.test.result_T4(lcds_results)
-
-    #     self.btnPrueba4.setStyleSheet("background-color: red;")
-
-
-
-    #      # Crear un QTimer para emitir la señal después de 3 segundos
-    #     QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
-
-    #     #Proceed with test 5
-    #     self.test_5()
 
     def Test_4_GUI_changes(self):
 
@@ -2080,7 +1541,6 @@ class MainWindow(QMainWindow, mainApplication):
 
         print(self.buttons_order)
 
-        print(self.buttons_order)
         
         # Crear un hilo para monitorear los botones
         self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order,self.button_actuators_order,self.Rs485,self.gateway)
@@ -2092,14 +1552,18 @@ class MainWindow(QMainWindow, mainApplication):
         # Iniciar el hilo
         self.monitor_buttons_thread.start()
 
-    def update_button_state(self, button, button_input):
+    def update_button_state(self, button, button_input,status):
         # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
         print(f"Actualizando estado de los botones: {button}, {button_input}")
+        if status==True:
+            getattr(self, button).setEnabled(True)
+            getattr(self, button_input).setEnabled(False)
+        else:
+            getattr(self, button).setEnabled(False)
+            getattr(self, button_input).setEnabled(True)
 
-        getattr(self, button).setEnabled(True)
-        getattr(self, button_input).setEnabled(False)
 
-    def on_test_finished(self):
+    def on_test_finished(self,test_failed,buttons_results):
         # Lógica que se ejecuta cuando la prueba ha finalizado
         print("La prueba de botones ha finalizado.")
 
@@ -2110,13 +1574,18 @@ class MainWindow(QMainWindow, mainApplication):
         except Exception as e:
             print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
 
-        
+        button_result_dict=buttons_results
 
-        button_result="PASS"
+        if test_failed==False:
 
-        self.btnPrueba5.setStyleSheet("background-color: green;")
+            button_result="PASS"
+            self.btnPrueba5.setStyleSheet("background-color: green;")
+        else:
+            button_result="FAIL"
+            self.btnPrueba5.setStyleSheet("background-color: red;")
 
-        self.test.result_T5(button_result)
+
+        self.test.result_T5(button_result,button_result_dict)
 
         # En lugar de time.sleep(6), usamos QTimer
         QTimer.singleShot(6000,self.Test_5_signal.emit)
