@@ -48,77 +48,31 @@ class Palmswitch_inicialize_Thread(QThread):
         super(Palmswitch_inicialize_Thread, self).__init__(parent)
         self.gateway = gateway
         self._is_running = True  # Bandera para controlar el hilo
-
-    # def run(self):
-    #     while self._is_running:
-    #         # Primera verificación
-    #         HMI_in_position = self.gateway.read_coil(0)
-    #         if HMI_in_position:
-    #             print("Primera verificación: HMI en posición.")
-    #             time.sleep(3)  # Esperar 3 segundos para la segunda verificación
-
-    #             # Segunda verificación
-    #             HMI_in_position = self.gateway.read_coil(0)
-    #             if HMI_in_position:
-    #                 print("Segunda verificación: HMI en posición confirmada.")
-    #                 self.HMI_success_signal.emit("HMI en posición confirmada.")  # Emitir señal de éxito
-
-    #                 # Monitoreo continuo
-    #                 while self._is_running:
-    #                     time.sleep(1)  # Monitorear cada 1 segundo
-    #                     HMI_in_position = self.gateway.read_coil(17)
-    #                     if not HMI_in_position:  # Si en algún momento se detecta False
-    #                         print("HMI removida durante el monitoreo. Deteniendo hilo.")
-    #                         self.HMI_failure_signal.emit("HMI removida durante el monitoreo.")
-    #                         self.stop()  # Detener el hilo
-    #                         break
-    #             else:
-    #                 print("Segunda verificación fallida. Volviendo a la primera verificación.")
-    #                 continue  # Volver a la primera verificación
-    #         else:
-    #             print("Primera verificación fallida. HMI no está en posición.")
-
-    #         # Breve pausa antes de reiniciar el proceso
-    #         time.sleep(1)
-
-    #     # Emitir señal de stop cuando el hilo se detenga
-    #     self.stop_monitoring_signal.emit()
-
+        
     def run(self):
-        while self._is_running:
-            # Primera verificación
+        attempts = 0
+        max_attempts = 15
 
+        while attempts < max_attempts and self._is_running:
+            HMI_in_position = self.gateway.read_coil(17)
+            print(HMI_in_position)
 
-            attempts=0
+            if HMI_in_position:
+                self.inicialize_signal.emit()
+                self.stop_monitoring_palm_button_signal.emit()
+                return  # Salimos del bucle si se detecta la bobina
 
-            max_attempts=15
-            while attempts < max_attempts and self._is_running:
-                HMI_in_position = self.gateway.read_coil(17)
-                print(HMI_in_position)
-                if HMI_in_position:
-                    #Inicialize app
-                    self.inicialize_signal.emit()
-                    
-                    #Stop monitoring thread
-                    self.stop_monitoring_palm_button_signal.emit()
-                    break
-                else:
-                    #print("Primera verificación fallida. HMI no está en posición.")
-                    attempts+=1
-                    time.sleep(1)
+            attempts += 1
+            self.msleep(1000)  # Evita bloquear la GUI
 
         self.failed_inicialize_signal.emit()
-        
-        # Emitir señal de stop cuando el hilo se detenga
         self.stop_monitoring_palm_button_signal.emit()
-       
 
     def stop_monithoring_palm_button_thread(self):
-        """Método para detener el hilo."""
         print("Monitoreo detenido.")
-
         self._is_running = False
-        self.wait()  # Esperar a que el hilo termine
+        self.quit()  # Detiene el hilo sin bloquear
+        self.wait()
 
 
 class Test3Thread(QThread):
