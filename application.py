@@ -223,6 +223,9 @@ class MonitorButtonsThread(QThread):
         self.button_results_dict.clear()
 
     def run(self):
+        #Flag to check if the test failed
+        fail_on_button_test=False
+        
         while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
             current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
             print(f"Activando bobina {current_coil}")
@@ -236,8 +239,6 @@ class MonitorButtonsThread(QThread):
             max_attempts = 5
             detected = False
 
-            #Flag to check if the test failed
-            fail_on_button_test=False
 
             while attempts < max_attempts and self.running:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
