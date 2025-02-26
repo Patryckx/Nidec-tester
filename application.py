@@ -219,7 +219,7 @@ class Test4Thread(QThread):
 class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
-    update_button_signal = pyqtSignal(str, str)
+    update_button_signal = pyqtSignal(str, str,bool)
     test_finished_signal = pyqtSignal(bool,dict)
 
     def __init__(self, buttons_order, button_actuators_order, rs485, gateway, parent=None):
@@ -236,6 +236,9 @@ class MonitorButtonsThread(QThread):
         
         # Inicializar el diccionario con claves de 1 a n, con valores en None
         self.button_results_dict = {i + 1: None for i in range(len(self.pending_buttons_list))}
+        print(self.button_results_dict)
+        #Clear results dictionary button
+        self.button_results_dict.clear()
 
     def run(self):
         while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
@@ -286,6 +289,7 @@ class MonitorButtonsThread(QThread):
 
             if not detected:
                 print("Botón no detectado tras 5 intentos.")
+                current_index = self.pending_buttons_index.pop(0)
                 button = f"lblButton{current_index}"
                 button_input = f"lblButtonInput{current_index}"
                 self.update_button_signal.emit(button, button_input,False)
@@ -304,8 +308,7 @@ class MonitorButtonsThread(QThread):
                 print("Todos los botones han sido procesados.")
                 self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)
 
-                #Clear results dictionary button
-                self.button_results_dict.clear()
+                
                 break
 
     def stop(self):
@@ -1681,7 +1684,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.monitor_digital_inputs_thread.quit()
         self.monitor_digital_inputs_thread.wait()
 
-        print("La prueba de botones ha finalizado.")
+        print("La prueba de entradas digitales ha finalizado.")
 
         digital_result="PASS"
 
@@ -1797,10 +1800,12 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Test 4
 
-        lcd_names = [f"lblLCD{i}" for i in range(0, 11)]
-        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 11)]
+        lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
+        #print(lcd_names)
+        #print(lcd_input_names)
 
-        for i in range(0,11):
+        for i in range(1,10):
            
             getattr(self, lcd_names[i]).setEnabled(False)
             getattr(self, lcd_input_names[i]).setEnabled(True)
