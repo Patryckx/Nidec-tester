@@ -38,54 +38,82 @@ from PyQt5.QtCore import QThread, pyqtSignal, Qt
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
 
-class MonitorHMIPositionThread(QThread):
+class Palmswitch_inicialize_Thread(QThread):
     # Señales para comunicar con el hilo principal
-    HMI_success_signal = pyqtSignal(str)  # Señal cuando ambas verificaciones son exitosas
-    HMI_failure_signal = pyqtSignal(str)  # Señal cuando el monitoreo detecta un False y detiene el hilo
-    stop_monitoring_signal = pyqtSignal()  # Señal para indicar que el hilo se detuvo
+    inicialize_signal = pyqtSignal()  # Señal cuando el monitoreo detecta un False y detiene el hilo
+    failed_inicialize_signal = pyqtSignal()  # Señal cuando ambas verificaciones son exitosas
+    stop_monitoring_palm_button_signal = pyqtSignal()  # Señal para indicar que el hilo se detuvo
 
     def __init__(self, gateway, parent=None):
-        super(MonitorHMIPositionThread, self).__init__(parent)
+        super(Palmswitch_inicialize_Thread, self).__init__(parent)
         self.gateway = gateway
         self._is_running = True  # Bandera para controlar el hilo
+
+    # def run(self):
+    #     while self._is_running:
+    #         # Primera verificación
+    #         HMI_in_position = self.gateway.read_coil(0)
+    #         if HMI_in_position:
+    #             print("Primera verificación: HMI en posición.")
+    #             time.sleep(3)  # Esperar 3 segundos para la segunda verificación
+
+    #             # Segunda verificación
+    #             HMI_in_position = self.gateway.read_coil(0)
+    #             if HMI_in_position:
+    #                 print("Segunda verificación: HMI en posición confirmada.")
+    #                 self.HMI_success_signal.emit("HMI en posición confirmada.")  # Emitir señal de éxito
+
+    #                 # Monitoreo continuo
+    #                 while self._is_running:
+    #                     time.sleep(1)  # Monitorear cada 1 segundo
+    #                     HMI_in_position = self.gateway.read_coil(17)
+    #                     if not HMI_in_position:  # Si en algún momento se detecta False
+    #                         print("HMI removida durante el monitoreo. Deteniendo hilo.")
+    #                         self.HMI_failure_signal.emit("HMI removida durante el monitoreo.")
+    #                         self.stop()  # Detener el hilo
+    #                         break
+    #             else:
+    #                 print("Segunda verificación fallida. Volviendo a la primera verificación.")
+    #                 continue  # Volver a la primera verificación
+    #         else:
+    #             print("Primera verificación fallida. HMI no está en posición.")
+
+    #         # Breve pausa antes de reiniciar el proceso
+    #         time.sleep(1)
+
+    #     # Emitir señal de stop cuando el hilo se detenga
+    #     self.stop_monitoring_signal.emit()
 
     def run(self):
         while self._is_running:
             # Primera verificación
-            HMI_in_position = self.gateway.read_coil(0)
-            if HMI_in_position:
-                print("Primera verificación: HMI en posición.")
-                time.sleep(3)  # Esperar 3 segundos para la segunda verificación
 
-                # Segunda verificación
-                HMI_in_position = self.gateway.read_coil(0)
+
+            attempts=0
+
+            max_attempts=15
+            while attempts < max_attempts and self._is_running:
+                HMI_in_position = self.gateway.read_coil(17)
+                print(HMI_in_position)
                 if HMI_in_position:
-                    print("Segunda verificación: HMI en posición confirmada.")
-                    self.HMI_success_signal.emit("HMI en posición confirmada.")  # Emitir señal de éxito
-
-                    # Monitoreo continuo
-                    while self._is_running:
-                        time.sleep(1)  # Monitorear cada 1 segundo
-                        HMI_in_position = self.gateway.read_coil(0)
-                        if not HMI_in_position:  # Si en algún momento se detecta False
-                            print("HMI removida durante el monitoreo. Deteniendo hilo.")
-                            self.HMI_failure_signal.emit("HMI removida durante el monitoreo.")
-                            self.stop()  # Detener el hilo
-                            break
+                    #Inicialize app
+                    self.inicialize_signal.emit()
+                    
+                    #Stop monitoring thread
+                    self.stop_monitoring_palm_button_signal.emit()
+                    break
                 else:
-                    print("Segunda verificación fallida. Volviendo a la primera verificación.")
-                    continue  # Volver a la primera verificación
-            else:
-                print("Primera verificación fallida. HMI no está en posición.")
+                    #print("Primera verificación fallida. HMI no está en posición.")
+                    attempts+=1
+                    time.sleep(1)
 
-            # Breve pausa antes de reiniciar el proceso
-            time.sleep(1)
-
+        self.failed_inicialize_signal.emit()
+        
         # Emitir señal de stop cuando el hilo se detenga
-        self.stop_monitoring_signal.emit()
+        self.stop_monitoring_palm_button_signal.emit()
        
 
-    def stop_monithoring_HMI_thread(self):
+    def stop_monithoring_palm_button_thread(self):
         """Método para detener el hilo."""
         print("Monitoreo detenido.")
 
@@ -1176,10 +1204,21 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.test.result_T1(str(self.serial_code),str(self.qrcode))
 
-            self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido")
+            self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
+
+            Palmswitch_inicialize_Thread
+            self.lblRequestHMI.setStyleSheet("color: #00aaff;")
+
+            # Crear el objeto del hilo
+            self.inicialize_thread = Palmswitch_inicialize_Thread(self.gateway)
+            self.inicialize_thread.inicialize_signal.connect(self.detected_palm_button)
+            self.inicialize_thread.failed_inicialize_signal.connect(self.failed_palm_button_signal)
+            self.inicialize_thread.stop_monitoring_palm_button_signal.connect(self.inicialize_thread.stop_monithoring_palm_button_thread)
+
+            # Iniciar el hilo
+            self.inicialize_thread.start()
             
 
-            self.lblRequestHMI.setStyleSheet("color: #00aaff;")
 
             time.sleep(1)
             #Continue with Test2
@@ -1187,7 +1226,7 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 2
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(15000, lambda: self.Test_1_signal.emit())
+            #QTimer.singleShot(15000, lambda: self.Test_1_signal.emit())
             #QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
             #self.test_2()
 
@@ -1217,37 +1256,6 @@ class MainWindow(QMainWindow, mainApplication):
 
 
 ############# HMI IN POSITION VERIFICATION ######################################
-
-    def hmi_in_position_verification(self):
-
-        print("Waiting for HMI in position")
-
-        # Crear el objeto del hilo
-        self.monitor_thread = MonitorHMIPositionThread(self.gateway)
-
-        self.monitor_thread.HMI_success_signal.connect(self.test_2)
-        self.monitor_thread.HMI_failure_signal.connect(self.hmi_removed_during_test)
-        self.monitor_thread.stop_monitoring_signal.connect(self.monitor_thread.stop_monithoring_HMI_thread)
-
-        # Iniciar el hilo
-        self.monitor_thread.start()
-
-    
-    
-
-    def hmi_removed_during_test(self):
-        print("HMI removed during test")
-
-        print("Apagando bobina para alimentar 5V a hmi")
-
-        try: 
-            self.gateway.write_coil(0,False)
-        except Exception as e:
-            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
-
-
-        #Show message and cancel test 
-        self.stackedWidget.setCurrentIndex(15)
 
     def cancel_remaining_test_and_functions(self,event=None):
 
@@ -1375,6 +1383,28 @@ class MainWindow(QMainWindow, mainApplication):
 
             #Proceed with test 3
             self.test_3()
+
+    def failed_palm_button_signal(self):
+
+        self.lblRequestHMI.setText("Botones NO detectados, prueba no iniciada")
+        self.lblRequestHMI.setStyleSheet("color: red;")
+
+        QTimer.singleShot(3000, lambda: self.test_2_failed_firmware_version_response())
+
+    def detected_palm_button(self):
+
+        self.lblRequestHMI.setText("Botones Detectado")
+        self.lblRequestHMI.setStyleSheet("color: Green;")
+
+        self.inicialize_thread.stop_monithoring_palm_button_thread()
+        self.inicialize_thread.quit()
+        self.inicialize_thread.wait()
+
+        QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
+
+        
+
+
         
   
     def test_2_failed_firmware_version_response(self):
