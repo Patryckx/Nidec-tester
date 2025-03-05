@@ -48,7 +48,7 @@ class Manage_tests():
 
     def result_232(self,result:str):
         self.test232_result=result
-        self.record["Comunicacion 232:"] = result
+        self.record["Verificacion comunicacion 232:"] = result
 
     # def result_T3(self,leds_result:str,leds_array:list):
     #     self.test3_result=leds_result
