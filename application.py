@@ -430,7 +430,7 @@ class MainWindow(QMainWindow, mainApplication):
         #Preparar tabla ajustar tabla a columnas
         #self.ResultsTable.horizontalHeader().setSectionResizeMode(1)
         # Formato a tabla
-        headers = ['Codigo','Firmware','LED', 'LCDS','Botones','Entradas','Fecha' ]
+        headers = ['Codigo','Firmware','Comunicación232','LED', 'LCDS','Botones','Entradas','Fecha' ]
         # Configuración de la tabla
         self.ResultsTable.setColumnCount(len(headers))
         self.ResultsTable.setHorizontalHeaderLabels(headers)
@@ -438,12 +438,12 @@ class MainWindow(QMainWindow, mainApplication):
         # Ajustar el ancho de las columnas
         self.ResultsTable.setColumnWidth(headers.index('Codigo'), 120)
         self.ResultsTable.setColumnWidth(headers.index('Firmware'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Comunicación232'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Comunicación232'), 150)
         self.ResultsTable.setColumnWidth(headers.index('LED'), 120)
         self.ResultsTable.setColumnWidth(headers.index('LCDS'), 120)
         self.ResultsTable.setColumnWidth(headers.index('Botones'), 120)
         self.ResultsTable.setColumnWidth(headers.index('Entradas'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Fecha'), 300)
+        self.ResultsTable.setColumnWidth(headers.index('Fecha'), 200)
 
         # Actualizar la vista
         self.ResultsTable.update()

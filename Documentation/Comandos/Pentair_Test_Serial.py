@@ -53,7 +53,7 @@ def split_16bit(value):
 
 def main():
     # Configuración de conexión serial
-    port = "COM5"  # Cambiar por el puerto correcto
+    port = "COM10"  # Cambiar por el puerto correcto
     baudrate = 9600  # Ajustar según especificaciones del HMI
     timeout = 1
     
@@ -66,10 +66,10 @@ def main():
             send_command(ser, 0x0D, [0xD0, 0x51, 0x01, 0x01])
             time.sleep(1)  # Esperar para recibir respuesta
             
-            # # Enviar comando de consulta de versión de firmware
-            print("Enviando comando de consulta de versión de firmware...")
-            response = send_command(ser, 0x0D, [0xD0, 0x56, 0x00] )
-            print(f"Respuesta recibida: {response.hex().upper()}")
+            # # # Enviar comando de consulta de versión de firmware
+            # print("Enviando comando de consulta de versión de firmware...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x56, 0x00] )
+            # print(f"Respuesta recibida: {response.hex().upper()}")
 
             
             # # Ejemplo de uso
@@ -86,15 +86,15 @@ def main():
             # response = send_command(ser, 0x0D, [0xD0, 0x5B,0x02, 0x01,0x00] )
             # print(f"Respuesta recibida: {response.hex().upper()}")'''
 
-             # Enviar comando de consulta de versión de firmware
-            print("Enviando comando Control intensidad pantalla...")
-            response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x3F] )
-            print(f"Respuesta recibida: {response.hex().upper()}")
+            #  # Enviar comando de consulta de versión de firmware
+            # print("Enviando comando Control intensidad pantalla...")
+            # response = send_command(ser, 0x0D, [0xD0, 0x5E,0x01, 0x3F] )
+            # print(f"Respuesta recibida: {response.hex().upper()}")
 
             #  # Enviar comando de consulta de versión de firmware
-            # print("Enviando comando Esribir pantalla LCD...")
-            # response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x38, 0x38, 0x38, 0x38] )
-            # print(f"Respuesta recibida: {response.hex().upper()}")
+            print("Enviando comando Esribir pantalla LCD...")
+            response = send_command(ser, 0x0D, [0xD0, 0x5D,0x04, 0x0, 0x0, 0x0, 0x0] )
+            print(f"Respuesta recibida: {response.hex().upper()}")
 
             #  # Enviar comando de consulta de versión de firmware
             # print("Enviando comando iconos LCD...")
