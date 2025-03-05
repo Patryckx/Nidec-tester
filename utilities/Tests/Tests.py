@@ -71,18 +71,16 @@ class Manage_tests():
 
     def result_T5(self,result:str,buttons_result:str):
 
-        self.test5_result=f"{result} , {buttons_result} "
+        self.test5_result=f"{result} , {buttons_result} ".replace('(', '').replace(')', '')
 
 
         self.record["Prueba 5:"] = self.test5_result
 
-    def result_T6(self,result:str):
-        self.test6_result=result
+    def result_T6(self,result:str,digital_results:str):
+        self.test6_result=f"{result} , {digital_results} ".replace('(', '').replace(')', '')
 
-        self.record["Prueba 6:"] = {
-            "Resultado": result
-            
-        }
+
+        self.record["Prueba 6:"] = self.test6_result
     
     def get_record(self):
         '''
