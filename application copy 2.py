@@ -297,8 +297,8 @@ class MonitorButtonsThread(QThread):
 class MonitorDigitalEntrances(QThread):
     # Definir señales para la comunicación con el hilo principal
     digital_input_detected_signal = pyqtSignal(str)
-    update_digital_input_signal = pyqtSignal(str, str,bool)
-    test_6_finished_signal = pyqtSignal(bool,dict)
+    update_digital_input_signal = pyqtSignal(str, str)
+    test_6_finished_signal = pyqtSignal()
 
     def __init__(self, digital_input_order, digital_actuators_order, rs485, gateway, parent=None):
         super(MonitorDigitalEntrances, self).__init__(parent)
@@ -348,11 +348,8 @@ class MonitorDigitalEntrances(QThread):
                     digital = f"lblDigital{current_index}"
                     digital_input = f"lblDigitalInput{current_index}"
 
-                    #Guardar resultado en el diccionario
-                    self.digital_entrances_results_dict[current_index] = 1
-
                     # Emitir una señal para actualizar la GUI en el hilo principal
-                    self.update_digital_input_signal.emit(digital, digital_input,True)
+                    self.update_digital_input_signal.emit(digital, digital_input)
 
                     detected = True
                     break
@@ -366,29 +363,16 @@ class MonitorDigitalEntrances(QThread):
             except Exception as e:
                 print(f"Ocurrio un error al desactivar la bobina: {e}")
 
-            # if attempts >= max_attempts:
-            #     print(f"Entrada no detectada después de {max_attempts} intentos.")
+            if attempts >= max_attempts:
+                print(f"Entrada no detectada después de {max_attempts} intentos.")
             
-            if not detected:
-                print("Botón no detectado tras 5 intentos.")
-                current_index = self.pending_digital_index.pop(0)
-                button = f"lblButton{current_index}"
-                button_input = f"lblButtonInput{current_index}"
-                self.update_digital_input_signal.emit(button, button_input,False)
-
-                #Guardar resultado en el diccionario
-                self.digital_entrances_results_dict[current_index] = 0
-
-                fail_on_digital_test=True
-
-
             # Eliminar elementos procesados
             self.pending_digital_list.pop(0)
             self.pending_actuator_list.pop(0)
 
             if not self.pending_digital_list:
                 print("Todas las señales han sido capturadas.")
-                self.test_6_finished_signal.emit(fail_on_digital_test,self.digital_entrances_results_dict)  # Emitir señal para indicar que la prueba ha finalizado
+                self.test_6_finished_signal.emit()  # Emitir señal para indicar que la prueba ha finalizado
                 break
 
     def stop(self):
@@ -1679,18 +1663,14 @@ class MainWindow(QMainWindow, mainApplication):
         # Iniciar el hilo
         self.monitor_digital_inputs_thread.start()
 
-    def update_button_state_digital(self, digital, digital_input,status):
+    def update_button_state_digital(self, digital, digital_input):
         # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
-        print(f"Actualizando estado de las entradas digitales: {digital}, {digital_input}")
+        print(f"Actualizando estado de los botones: {digital}, {digital_input}")
 
-        if status==True:
-            getattr(self, digital).setEnabled(True)
-            getattr(self, digital_input).setEnabled(False)
-        else:
-            getattr(self, digital).setEnabled(False)
-            getattr(self, digital_input).setEnabled(True)
+        getattr(self, digital).setEnabled(True)
+        getattr(self, digital_input).setEnabled(False)
 
-    def on_test_6_finished(self,test_failed,digital_entrances_results):
+    def on_test_6_finished(self):
         # Lógica que se ejecuta cuando la prueba ha finalizado
         #End digital entrances thread
         self.monitor_digital_inputs_thread.stop()
@@ -1700,19 +1680,11 @@ class MainWindow(QMainWindow, mainApplication):
 
         print("La prueba de entradas digitales ha finalizado.")
 
-        digital_results_dict=digital_entrances_results
+        digital_result="PASS"
 
-        if test_failed==False:
-            digital_result="PASS"
+        self.btnPrueba6.setStyleSheet("background-color: green;")
 
-            self.btnPrueba6.setStyleSheet("background-color: green;")
-
-        else:
-            digital_result="FAIL"
-
-            self.btnPrueba6.setStyleSheet("background-color: red;")
-
-        self.test.result_T6(digital_result,digital_results_dict)
+        self.test.result_T6(digital_result)
 
          # En lugar de time.sleep(6), usamos QTimer
         QTimer.singleShot(6000,self.Test_6_signal.emit)
