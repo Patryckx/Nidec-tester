@@ -438,6 +438,7 @@ class MainWindow(QMainWindow, mainApplication):
         # Ajustar el ancho de las columnas
         self.ResultsTable.setColumnWidth(headers.index('Codigo'), 120)
         self.ResultsTable.setColumnWidth(headers.index('Firmware'), 120)
+        self.ResultsTable.setColumnWidth(headers.index('Comunicación232'), 120)
         self.ResultsTable.setColumnWidth(headers.index('LED'), 120)
         self.ResultsTable.setColumnWidth(headers.index('LCDS'), 120)
         self.ResultsTable.setColumnWidth(headers.index('Botones'), 120)
@@ -1816,6 +1817,8 @@ class MainWindow(QMainWindow, mainApplication):
         Result2=self.test.test2_result
         self.lblResumenFirmware.setText(Result2)
 
+        Result232=self.test.test232_result
+
         Result3=self.test.test3_result
         self.lblResumenLEDS.setText(Result3)
 
@@ -1831,7 +1834,7 @@ class MainWindow(QMainWindow, mainApplication):
         if not self.dont_add_register:
 
             #Add register to GUI table and csv file
-            self.add_register(Result1,Result2,Result3,Result4,Result5,Result6)
+            self.add_register(Result1,Result2,Result232,Result3,Result4,Result5,Result6)
 
         # En lugar de time.sleep(6), usamos QTimer
         QTimer.singleShot(8000,self.Test_resume_signal.emit)
@@ -1954,7 +1957,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(14)
 
 
-    def add_register(self, Codigo,Firmware,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
+    def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
 
         #Get current user and shop order
         session_info = self.config.get_current_user()
@@ -1974,7 +1977,7 @@ class MainWindow(QMainWindow, mainApplication):
        
         # Assembling the register
         # Table register
-        register = {"Codigos":Codigo,"Firmware": Firmware,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
+        register = {"Codigos":Codigo,"Firmware": Firmware,"Comunicación232":Comunicacion232,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
       
         # Logic to verify number of table registers and only show 9 registers 
         table_registers = self.ResultsTable.rowCount()
@@ -1994,7 +1997,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
         
         # Call csv register add function 
         self.test.add_csv_register(csv_register,user,shop_order)
