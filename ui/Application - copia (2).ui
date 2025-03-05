@@ -3713,6 +3713,19 @@ QPushButton &gt; * {
               </property>
              </widget>
             </item>
+            <item>
+             <spacer name="horizontalSpacer_76">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>308</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
            </layout>
           </item>
          </layout>
@@ -10936,7 +10949,7 @@ QTableWidget::item:selected {
           </column>
           <column>
            <property name="text">
-            <string>Entradas</string>
+            <string>Ent. Digitales</string>
            </property>
            <property name="font">
             <font>

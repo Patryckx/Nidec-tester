@@ -335,7 +335,7 @@ class MonitorDigitalEntrances(QThread):
 
             detected = False
             #Flag to check if the test failed
-            fail_on_button_test=False
+            fail_on_digital_test=False
             
             while attempts < max_attempts and self.digital_entrances_thread_isrunning:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Obtener respuesta
@@ -1341,11 +1341,11 @@ class MainWindow(QMainWindow, mainApplication):
             # Crear un QTimer para emitir la señal después de 3 segundos
             QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
 
-        elif driver_firmware_232_verification:
+        elif not driver_firmware_232_verification:
 
             self.txtFirmware.setText(firmware_version)
 
-            self.lblVerifyFirmware.setText("Firmware capturado & comunicacion 232 Verificada")
+            self.lblVerifyFirmware.setText("Firmware capturado & comunicación 232 verificada")
             self.lblVerifyFirmware.setStyleSheet("color: green;")
             #Test Button 
             self.btnPrueba2.setStyleSheet("background-color: green;")
@@ -1360,11 +1360,6 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.test.result_232(verificacion_232)
 
-            #Proceed with test 3
-            #self.test_3()
-            #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: green;")
-
             # Crear un QTimer para emitir la señal después de 3 segundos
             QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
 
@@ -1378,9 +1373,9 @@ class MainWindow(QMainWindow, mainApplication):
             self.txtFirmware.setText(firmware_version)
 
             self.lblVerifyFirmware.setText("Firmware capturado, comunicación 232 NO verificada")
-            self.lblVerifyFirmware.setStyleSheet("color: yellow;")
+            self.lblVerifyFirmware.setStyleSheet("color: orange;")
             #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: yellow;")
+            self.btnPrueba2.setStyleSheet("background-color: orange;")
 
             # Crear un QTimer para emitir la señal después de 3 segundos
             #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
@@ -1395,7 +1390,7 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 3
             #self.test_3()
             #Test Button 
-            self.btnPrueba2.setStyleSheet("background-color: green;")
+            self.btnPrueba2.setStyleSheet("background-color: orange;")
 
             # Crear un QTimer para emitir la señal después de 3 segundos
             QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
@@ -1403,7 +1398,7 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 3
             self.test_3()
 
-    def verify_driver_comunication_232(cadena, inicio, fin):
+    def verify_driver_comunication_232(self,cadena):
         """
         Verifica si todos los valores hexadecimales en el rango dado son '0'.
         
@@ -1412,6 +1407,10 @@ class MainWindow(QMainWindow, mainApplication):
         :param fin: Índice de fin de la parte relevante.
         :return: True si todos los valores son '0', False en caso contrario.
         """
+        inicio=44
+
+        fin=80
+
         if inicio < 0 or fin > len(cadena):
             return False  # Evitar errores si los índices están fuera de rango
         
@@ -1422,14 +1421,14 @@ class MainWindow(QMainWindow, mainApplication):
 
     def failed_palm_button_signal(self):
 
-        self.lblRequestHMI.setText("Botones NO detectados, prueba no iniciada")
+        self.lblRequestHMI.setText("Botones NO detectados, prueba NO iniciada")
         self.lblRequestHMI.setStyleSheet("color: red;")
 
         QTimer.singleShot(3000, lambda: self.test_2_failed_firmware_version_response())
 
     def detected_palm_button(self):
 
-        self.lblRequestHMI.setText("Botones detectados,iniciando prueba")
+        self.lblRequestHMI.setText("Botones detectados, iniciando prueba")
         self.lblRequestHMI.setStyleSheet("color: Green;")
 
         self.inicialize_thread.stop_monithoring_palm_button_thread()
