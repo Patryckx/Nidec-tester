@@ -1323,7 +1323,9 @@ class MainWindow(QMainWindow, mainApplication):
         print("Obtaining firmware version ")
         firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
 
-        
+        #Verify driver comunication though 232 
+        driver_firmware_232_verification=self.verify_driver_comunication_232(firmware_version)
+
         print(f"Firmware response:{firmware_version}")
 
         if firmware_version == '' or firmware_version=='None':
@@ -1339,10 +1341,11 @@ class MainWindow(QMainWindow, mainApplication):
             # Crear un QTimer para emitir la señal después de 3 segundos
             QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
 
-        else:
+        elif driver_firmware_232_verification:
+
             self.txtFirmware.setText(firmware_version)
 
-            self.lblVerifyFirmware.setText("Firmware capturado")
+            self.lblVerifyFirmware.setText("Firmware capturado & comunicacion 232 Verificada")
             self.lblVerifyFirmware.setStyleSheet("color: green;")
             #Test Button 
             self.btnPrueba2.setStyleSheet("background-color: green;")
@@ -1351,6 +1354,11 @@ class MainWindow(QMainWindow, mainApplication):
             #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
 
             self.test.result_T2(firmware_version)
+
+            #Store 232 comunication verification result
+            verificacion_232="PASS"
+
+            self.test.result_232(verificacion_232)
 
             #Proceed with test 3
             #self.test_3()
@@ -1365,6 +1373,53 @@ class MainWindow(QMainWindow, mainApplication):
             #Proceed with test 3
             self.test_3()
 
+
+        else:
+            self.txtFirmware.setText(firmware_version)
+
+            self.lblVerifyFirmware.setText("Firmware capturado, comunicación 232 NO verificada")
+            self.lblVerifyFirmware.setStyleSheet("color: yellow;")
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: yellow;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
+
+            self.test.result_T2(firmware_version)
+
+            #Store 232 comunication verification result
+            verificacion_232="FAIL"
+
+            self.test.result_232(verificacion_232)
+
+            #Proceed with test 3
+            #self.test_3()
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: green;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+
+            #Proceed with test 3
+            self.test_3()
+
+    def verify_driver_comunication_232(cadena, inicio, fin):
+        """
+        Verifica si todos los valores hexadecimales en el rango dado son '0'.
+        
+        :param cadena: La cadena hexadecimal completa.
+        :param inicio: Índice de inicio de la parte relevante.
+        :param fin: Índice de fin de la parte relevante.
+        :return: True si todos los valores son '0', False en caso contrario.
+        """
+        if inicio < 0 or fin > len(cadena):
+            return False  # Evitar errores si los índices están fuera de rango
+        
+        parte_relevante = cadena[inicio:fin]  # Extraemos la parte a analizar
+        
+        # Verificamos si todos los caracteres en la parte relevante son '0'
+        return all(c == '0' for c in parte_relevante)
+
     def failed_palm_button_signal(self):
 
         self.lblRequestHMI.setText("Botones NO detectados, prueba no iniciada")
@@ -1374,7 +1429,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def detected_palm_button(self):
 
-        self.lblRequestHMI.setText("Botones Detectado")
+        self.lblRequestHMI.setText("Botones detectados,iniciando prueba")
         self.lblRequestHMI.setStyleSheet("color: Green;")
 
         self.inicialize_thread.stop_monithoring_palm_button_thread()
