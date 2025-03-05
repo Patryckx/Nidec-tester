@@ -42,13 +42,13 @@ class Manage_tests():
 
         self.record["Prueba 1:"] = self.test1_result 
 
-    def result_T2(self,firmware:str):
+    def result_T2(self,firmware:str,):
         self.test2_result=firmware
         self.record["Prueba 2:"] = firmware
 
-    def result_232(self,response:str):
-        self.test232_result=response
-        self.record["Prueba 232:"] = response
+    def result_232(self,result:str):
+        self.test232_result=result
+        self.record["Comunicacion 232:"] = result
 
     # def result_T3(self,leds_result:str,leds_array:list):
     #     self.test3_result=leds_result
