@@ -236,7 +236,7 @@ class MonitorButtonsThread(QThread):
                 print(f"Ocurrió un error al encender la bobina: {e}")
                 
             attempts = 0  # Contador de intentos
-            max_attempts = 5
+            max_attempts = 4
             detected = False
 
 
@@ -986,8 +986,10 @@ class MainWindow(QMainWindow, mainApplication):
         print("Verifiying instruments...")
 
         print("Verifiying Serial port ")
-
-        self.gateway.open(gateway_port)
+        try:
+            self.gateway.open(gateway_port)
+        except Exception as e:
+            print(f"Error de conexion 485: {e}")
 
         if not self.gateway.is_connected():
             self.stackedWidget.setCurrentIndex(2)
@@ -996,24 +998,29 @@ class MainWindow(QMainWindow, mainApplication):
         #Housekeeping registers gateway
         self.housekeeping_gateway()
 
-        self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
+        # self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
 
-        if not self.Rs232.connect():
-            print("Serial 232 Device NOT connected connected")
-            self.stackedWidget.setCurrentIndex(1)
-            #return
+        # if not self.Rs232.connect():
+        #     print("Serial 232 Device NOT connected connected")
+        #     self.stackedWidget.setCurrentIndex(1)
+        #     #return
 
-
-        self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
-
+        try:
+            self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
+        except Exception as e:
+            print(f"Error de conexion 485: {e}")
         if not self.Rs485.connect():
             print("Serial 485 Device NOT connected connected")
             self.stackedWidget.setCurrentIndex(1)
             return
 
         #Camera Connection through telnet protocol
+
+        try:
         
-        self.Camera=TelnetClient(camera_address,camera_port)
+            self.Camera=TelnetClient(camera_address,camera_port)
+        except Exception as e:
+            print(f"Error al conectar con la camara{e}")
 
         if not self.Camera.connect():
             print("Camera connection Telnet not established")
@@ -1201,7 +1208,7 @@ class MainWindow(QMainWindow, mainApplication):
             
 
 
-            time.sleep(1)
+            #time.sleep(1)
             #Continue with Test2
             #self.hmi_in_position_verification()
             #Proceed with test 2
@@ -1298,7 +1305,7 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
 
         #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
-        time.sleep(4)
+        time.sleep(3)
 
         '''
         daemon=True: Esto indica que el hilo será un "hilo daemon", 
@@ -1339,7 +1346,7 @@ class MainWindow(QMainWindow, mainApplication):
             #QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
 
             # Crear un QTimer para emitir la señal después de 3 segundos
-            QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
+            QTimer.singleShot(5000, lambda: self.failed_firmware_version_signal.emit())
 
         elif not driver_firmware_232_verification:
 
@@ -1435,7 +1442,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.inicialize_thread.quit()
         self.inicialize_thread.wait()
 
-        QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
+        QTimer.singleShot(2000, lambda: self.Test_1_signal.emit())
 
         
 
@@ -1493,15 +1500,6 @@ class MainWindow(QMainWindow, mainApplication):
             #Third Test
             self.stackedWidget.setCurrentIndex(7)  
 
-    def check_handheld_status(self):
-         while True:
-            # Leer la bobina y procesar su estado
-            handheld_status=self.gateway.read_coil(1)
-            if handheld_status:
-                print("Bobina detectada")
-
-            # Esperar un poco antes de volver a leer (por ejemplo, cada 1 segundo)
-            time.sleep(.5)
 
 
 ############## TEST3   #####################################
@@ -1530,12 +1528,12 @@ class MainWindow(QMainWindow, mainApplication):
         
         Test_3_result=f"{result,leds_results}"
         self.test.result_T3(Test_3_result)
-        # Esperar 5 segundos antes de continuar con la siguiente prueba
-        QTimer.singleShot(5000, lambda: self.Test_3_signal.emit())
 
         self.test3_thread.quit()
         self.test3_thread.wait()
          
+        # Esperar 5 segundos antes de continuar con la siguiente prueba
+        QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
         self.test_4()
 
     def Test_3_GUI_changes(self):
@@ -1575,7 +1573,11 @@ class MainWindow(QMainWindow, mainApplication):
         Test_4_result=f"{result,lcds_results}"
         self.test.result_T4(Test_4_result)
         # Esperar 5 segundos antes de continuar con la siguiente prueba
-        QTimer.singleShot(5000, lambda: self.Test_4_signal.emit())
+        self.test4_thread.quit()
+        self.test4_thread.wait()
+
+        QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
+
         self.test_5()
 
 
@@ -1656,7 +1658,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.test.result_T5(button_result,button_result_dict)
 
         # En lugar de time.sleep(6), usamos QTimer
-        QTimer.singleShot(6000,self.Test_5_signal.emit)
+        QTimer.singleShot(4000,self.Test_5_signal.emit)
         #QTimer.singleShot(6000,self.Test_5_signal.emit())
         #self.Test_5_signal.emit()
         self.test_6()  # Llamar a la siguiente prueba
@@ -1770,7 +1772,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.test.result_T6(digital_result,digital_results_dict)
 
          # En lugar de time.sleep(6), usamos QTimer
-        QTimer.singleShot(6000,self.Test_6_signal.emit)
+        QTimer.singleShot(4000,self.Test_6_signal.emit)
         #QTimer.singleShot(6000,self.Test_6_signal.emit())
 
         #Stop timer
@@ -1832,7 +1834,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.add_register(Result1,Result2,Result3,Result4,Result5,Result6)
 
         # En lugar de time.sleep(6), usamos QTimer
-        QTimer.singleShot(10000,self.Test_resume_signal.emit)
+        QTimer.singleShot(8000,self.Test_resume_signal.emit)
         #QTimer.singleShot(6000,self.Test_resume_signal.emit())
 
         #self.Test_resume_signal.emit()
