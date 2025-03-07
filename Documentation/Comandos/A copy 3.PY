@@ -21,7 +21,7 @@ ser = serial.Serial(
 
 
 #while True:
-command = bytes.fromhex('FF00FFA50060100D04D05101000248')
+command = bytes.fromhex('FF00FFA50060100D04D05101010249')
 ser.write(command)
 
 # Leer la respuesta
@@ -34,7 +34,7 @@ formatted_response = response.hex().upper()
 # Imprimir la respuesta en formato legible
 print(formatted_response)
 
-command = bytes.fromhex('FF00FFA50010600D04D07101000268')
+command = bytes.fromhex('FF00FFA50060100D07D05D0438383838033A')
 ser.write(command)
 #FF00FFA50060100D04D05E011F0274
 # Leer la respuesta
@@ -47,12 +47,12 @@ print(response)
 # # Imprimir la respuesta en formato legible
 # print(formatted_response)
 
-# command = bytes.fromhex('FF00FFA50060100D07D05D0438383838033A')
-# ser.write(command)
+command = bytes.fromhex('FF00FFA50060100D04D05E013F0294')
+ser.write(command)
 
-# # Leer la respuesta
-# response = ser.read(256)
-#print(response)
+# Leer la respuesta
+response = ser.read(256)
+print(response)
 
 # # Convertir la respuesta a formato hexadecimal legible
 # formatted_response = response.hex().upper()

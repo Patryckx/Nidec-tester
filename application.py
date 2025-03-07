@@ -1436,7 +1436,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def detected_palm_button(self):
 
-        self.lblRequestHMI.setText("Botones detectados, iniciando prueba")
+        self.lblRequestHMI.setText("Botones detectados, iniciando prueba...")
         self.lblRequestHMI.setStyleSheet("color: Green;")
 
         self.inicialize_thread.stop_monithoring_palm_button_thread()
@@ -1559,10 +1559,10 @@ class MainWindow(QMainWindow, mainApplication):
         self.test4_thread.start()
 
     def update_lcds(self, lcds_results):
-        lcd_names = [f"lblLCD{i}" for i in range(1, 12)]
-        lcd_input_names = [f"lblLCDInput{i}" for i in range(0, 12)]
+        lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
 
-        for i in range(1, 12):
+        for i in range(1, 11):
             if i in lcds_results and lcds_results[i] == 1:
                 if hasattr(self, lcd_names[i - 1]):  # Verificar si el atributo existe
                     getattr(self, lcd_names[i - 1]).setEnabled(True)
@@ -1887,7 +1887,7 @@ class MainWindow(QMainWindow, mainApplication):
         #print(lcd_names)
         #print(lcd_input_names)
 
-        for i in range(1,10):
+        for i in range(0,10):
            
             getattr(self, lcd_names[i]).setEnabled(False)
             getattr(self, lcd_input_names[i]).setEnabled(True)

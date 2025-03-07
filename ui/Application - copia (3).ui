@@ -269,7 +269,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -334,7 +333,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -412,7 +410,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -493,7 +490,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -564,7 +560,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -635,7 +630,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -706,7 +700,6 @@ QPushButton {
            <property name="font">
             <font>
              <pointsize>20</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -1165,7 +1158,6 @@ QStackedWidget &gt; * {
                   <property name="font">
                    <font>
                     <pointsize>35</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -1198,7 +1190,6 @@ QStackedWidget &gt; * {
                   <property name="font">
                    <font>
                     <pointsize>28</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -1485,7 +1476,6 @@ barra espaciadora</string>
                 <property name="font">
                  <font>
                   <pointsize>26</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -1547,7 +1537,6 @@ barra espaciadora</string>
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -1586,7 +1575,6 @@ las siguientes fallas:</string>
                   <property name="font">
                    <font>
                     <pointsize>24</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -1856,7 +1844,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>26</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -1918,7 +1905,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -1957,7 +1943,6 @@ las siguientes fallas:</string>
                   <property name="font">
                    <font>
                     <pointsize>24</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -2226,7 +2211,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>26</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -2288,7 +2272,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -2327,7 +2310,6 @@ las siguientes fallas:</string>
                   <property name="font">
                    <font>
                     <pointsize>24</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -2641,7 +2623,6 @@ Direccion IP, máscara etc...</string>
               <property name="font">
                <font>
                 <pointsize>35</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2690,7 +2671,6 @@ Direccion IP, máscara etc...</string>
               <property name="font">
                <font>
                 <pointsize>30</pointsize>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -2743,7 +2723,6 @@ Direccion IP, máscara etc...</string>
               <property name="font">
                <font>
                 <pointsize>24</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2841,7 +2820,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2920,7 +2898,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -3094,7 +3071,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>35</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -3140,7 +3116,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>30</pointsize>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -3324,7 +3299,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -3403,7 +3377,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -3535,7 +3508,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -3704,7 +3676,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -3782,7 +3753,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -4133,7 +4103,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -4223,7 +4192,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4315,7 +4283,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4404,7 +4371,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4493,7 +4459,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4582,7 +4547,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4671,7 +4635,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4760,7 +4723,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4849,7 +4811,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -4938,7 +4899,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -5027,7 +4987,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -5116,7 +5075,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -5281,7 +5239,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>28</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -5505,7 +5462,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>28</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -5705,12 +5661,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>1.-Display 1 (8)</string>
+                 <string>1.-Segmento 1</string>
                 </property>
                </widget>
               </item>
@@ -5794,12 +5749,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>2.-Period 1 (.)</string>
+                 <string>2.-Segmento 2</string>
                 </property>
                </widget>
               </item>
@@ -5883,12 +5837,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>3.-Display 2 (8)</string>
+                 <string>3.-Segmento 3</string>
                 </property>
                </widget>
               </item>
@@ -5972,12 +5925,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>4.-Period 2 (.)</string>
+                 <string>4.-Segmento 4</string>
                 </property>
                </widget>
               </item>
@@ -6061,12 +6013,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>5.-Period 3 (.)</string>
+                 <string>5.-Period 1</string>
                 </property>
                </widget>
               </item>
@@ -6150,12 +6101,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>6.-Period 4 (.)</string>
+                 <string>6.-Period 2</string>
                 </property>
                </widget>
               </item>
@@ -6239,12 +6189,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>7.-Display 3 (8)</string>
+                 <string>7.-Period 3</string>
                 </property>
                </widget>
               </item>
@@ -6328,12 +6277,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>8.-Period 5(.)</string>
+                 <string>8.-Colon</string>
                 </property>
                </widget>
               </item>
@@ -6417,12 +6365,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>9.-Display 4 (8)</string>
+                 <string>9.-PM</string>
                 </property>
                </widget>
               </item>
@@ -6506,7 +6453,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -6685,7 +6631,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -6774,7 +6719,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -6863,7 +6807,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -6952,7 +6895,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -7041,7 +6983,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -7130,7 +7071,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -7219,7 +7159,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -7308,7 +7247,6 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -7476,7 +7414,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>28</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -7523,6 +7460,9 @@ QPushButton &gt; * {
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../resources/resources.qrc">:/resources/close.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -7609,7 +7549,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>28</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -7689,7 +7628,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>22</pointsize>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -7763,12 +7701,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>1.- Entrada digital I</string>
+                 <string>1.- Schedule 1</string>
                 </property>
                </widget>
               </item>
@@ -7852,12 +7789,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>2.- Entrada digital II</string>
+                 <string>2.-Schedule 2</string>
                 </property>
                </widget>
               </item>
@@ -7941,12 +7877,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>3.- Entrada digital III</string>
+                 <string>3.-Schedule 3</string>
                 </property>
                </widget>
               </item>
@@ -8030,12 +7965,11 @@ QPushButton &gt; * {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                 <property name="text">
-                 <string>4.- Entrada digital IV</string>
+                 <string>4.-Quick Clean</string>
                 </property>
                </widget>
               </item>
@@ -8225,7 +8159,6 @@ QPushButton &gt; * {
               <property name="font">
                <font>
                 <pointsize>36</pointsize>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -8833,7 +8766,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>36</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -8954,7 +8886,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -9364,7 +9295,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -9556,7 +9486,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -9761,7 +9690,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>36</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -9919,7 +9847,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -10033,7 +9960,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -10144,7 +10070,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -10255,7 +10180,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -10326,7 +10250,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -10446,7 +10369,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -10517,7 +10439,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>26</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -10631,7 +10552,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -10706,7 +10626,6 @@ QPushButton &gt; * {
             <property name="font">
              <font>
               <pointsize>36</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -10742,7 +10661,6 @@ QPushButton &gt; * {
            <font>
             <family>Arial</family>
             <pointsize>12</pointsize>
-            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -10838,7 +10756,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10860,7 +10777,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10881,7 +10797,6 @@ QTableWidget::item:selected {
            <property name="font">
             <font>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10894,7 +10809,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10916,7 +10830,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10938,7 +10851,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10951,7 +10863,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10964,7 +10875,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -10977,7 +10887,6 @@ QTableWidget::item:selected {
             <font>
              <family>Arial</family>
              <pointsize>13</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -11048,7 +10957,6 @@ QTableWidget::item:selected {
                 <property name="font">
                  <font>
                   <pointsize>26</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -11114,7 +11022,6 @@ QTableWidget::item:selected {
                 <property name="font">
                  <font>
                   <pointsize>22</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -11153,7 +11060,6 @@ las siguientes fallas:</string>
                   <property name="font">
                    <font>
                     <pointsize>24</pointsize>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
