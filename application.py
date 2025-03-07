@@ -116,7 +116,7 @@ class Test3Thread(QThread):
         print(resultados_herramientas)
 
         # Determinar si la prueba pasó o falló
-        test_3_results = "FAIL" if "NG" in results else "PASS"
+        test_3_results = "FAIL" if "NG" or "ER" in results else "PASS"
 
         # Emitir señales para actualizar la interfaz
         self.update_led_signal.emit(resultados_herramientas)
@@ -173,8 +173,8 @@ class Test4Thread(QThread):
         resultados_herramientas = self.procesar_respuesta(results)
         print(resultados_herramientas)
         
-        test_4_results = "FAIL" if "NG" in results else "PASS"
-      
+        test_4_results = "FAIL" if "NG" or "ER" in results else "PASS"
+        #ER,T2,03
         # Emitir señales para actualizar la interfaz
         self.update_lcd_signal.emit(resultados_herramientas)
         self.test_finished_signal.emit(test_4_results,resultados_herramientas)
