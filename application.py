@@ -952,7 +952,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def disconnect_all_devices(self):
         self.gateway.close()
-        self.Rs232.disconnect()
+        #self.Rs232.disconnect()
         self.Rs485.disconnect()
         self.Camera.close_connection()
 
