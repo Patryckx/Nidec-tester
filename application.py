@@ -2004,6 +2004,12 @@ class MainWindow(QMainWindow, mainApplication):
         self.test.add_csv_register(csv_register,user,shop_order)
 
 
+############  PIECE COUNTER ##########################################
+
+# def obtain_piece_register_id(self,filepath):
+
+
+
 
 if __name__ == "__main__":
     app = QApplication([])
