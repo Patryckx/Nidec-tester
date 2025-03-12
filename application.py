@@ -845,6 +845,8 @@ class MainWindow(QMainWindow, mainApplication):
                 currentShopOrder=str(currentShopOrder)
                 self.lblNumeroOrden.setText(currentShopOrder)
 
+                
+
                 #Show User and Shop order input confirm Screen
                 self.stackedWidget.setCurrentIndex(5)
                
@@ -943,6 +945,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblCurrentUser.setText("")
             self.lblCurrentOrder.setText("")
 
+            self.lblCounter.setText("")
             #Restore inicialized app flag
             self.initialized_flag=False
 
@@ -1054,6 +1057,8 @@ class MainWindow(QMainWindow, mainApplication):
             #Show first test index screen
             self.stackedWidget.setCurrentIndex(6)
 
+
+
             #Enable log out button 
             self.btnLogout.setEnabled(True)
             
@@ -1062,6 +1067,15 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
             self.txtSerialCode.setFocus()
+
+             #Obtain file path
+            filepath=self.obtain_filepath()
+            #Obtain id and id test
+            self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
+            print(f"Piece Id{self.piece_id}")
+            print(f"Test Id{self.test_id}")
+
+            self.lblCounter.setText( self.piece_id)
         else:
             print("Datos no válidos o no cumplen con los requisitos")
 
@@ -1113,7 +1127,8 @@ class MainWindow(QMainWindow, mainApplication):
         except Exception as e:
             print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
 
-        
+
+       
 
     def test_inicialize(self):
 
@@ -1196,7 +1211,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
 
-            Palmswitch_inicialize_Thread
+            #Palmswitch_inicialize_Thread
             self.lblRequestHMI.setStyleSheet("color: #00aaff;")
 
             # Crear el objeto del hilo
@@ -1808,6 +1823,8 @@ class MainWindow(QMainWindow, mainApplication):
 
     def show_resume(self):
 
+        
+
         print("Resumen de prueba")
 
         self.btnResultados.setStyleSheet("background-color: green;")
@@ -1831,6 +1848,16 @@ class MainWindow(QMainWindow, mainApplication):
 
         Result6=self.test.test6_result
         self.lblResumeDigitalInputs.setText(Result6)
+
+        #Add test counter 
+        self.test_id+=1
+
+        #Verify if is a good piece
+
+        if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
+            self.piece_id+=1
+
+            self.lblCounter.setText(self.piece_id)
 
         if not self.dont_add_register:
 
@@ -1998,15 +2025,66 @@ class MainWindow(QMainWindow, mainApplication):
             self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
             col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
        
-        csv_register = {"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+        csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
         
         # Call csv register add function 
         self.test.add_csv_register(csv_register,user,shop_order)
 
 
 ############  PIECE COUNTER ##########################################
+    def obtain_piece_register_id_and_test(self, filepath):
+        with open(filepath, mode='r', newline='', encoding='utf-8') as archivo:
+            # Leer el archivo CSV
+            reader = csv.DictReader(archivo)
+            
+            # Obtener la primera fila como un diccionario
+            try:
+                fila = next(reader)  # Esto obtiene solo la primera fila del archivo
+                
+                # Verificar si las columnas existen y devolver 0 si no existen
+                id_prueba = fila['ID_prueba'] if 'ID_prueba' in fila else 0
+                int_id_prueba=int(id_prueba)
+                id = fila['ID'] if 'ID' in fila else 0
+                int_id=int(id)
 
-# def obtain_piece_register_id(self,filepath):
+            except StopIteration:  # En caso de que el archivo esté vacío
+                # Si no hay filas en el archivo, devolver 0 en ambos casos
+                int_id_prueba = 0
+                int_id = 0
+
+            return int_id_prueba, int_id
+
+    def obtain_filepath(self):
+        base_filepath = self.test.create_monthly_results_folder()
+
+        # Obtener información del usuario y orden de tienda
+        session_info = self.config.get_current_user()
+        user = session_info[0]
+        shop_order = session_info[1]
+
+        # Construir el path base
+        fullpath = f"{base_filepath}\\{shop_order}"
+        #fullpath = f"{base_filepath}\\{shop_order}\\{user}"
+
+        # Obtener todos los archivos en el directorio
+        archivos = os.listdir(fullpath)
+
+        # Filtrar solo los archivos que siguen el formato user_fecha
+        archivos_validos = [archivo for archivo in archivos if archivo.startswith(f"{user}_")]
+
+        # Si no se encuentran archivos, retornar None o un valor adecuado
+        if not archivos_validos:
+            return None
+
+        # Ordenar los archivos por fecha (formato: DD-MM-YYYY)
+        archivos_validos.sort(key=lambda x: datetime.strptime(x.split('_')[1], "%d-%m-%Y"), reverse=True)
+
+        # El primer archivo de la lista será el de la fecha más reciente
+        archivo_mas_reciente = archivos_validos[0]
+
+        # Retornar el path completo del archivo más reciente
+        return os.path.join(fullpath, archivo_mas_reciente)
+
 
 
 

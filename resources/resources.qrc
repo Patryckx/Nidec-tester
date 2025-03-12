@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="resources">
+    <file>right.png</file>
     <file>Entradas_digitales_ayudavisual.png</file>
     <file>Botones_ayuda_visual.png</file>
     <file>LCDS_ayuda_visual.png</file>
