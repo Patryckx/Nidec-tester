@@ -949,6 +949,9 @@ class MainWindow(QMainWindow, mainApplication):
             #Restore inicialized app flag
             self.initialized_flag=False
 
+            self.piece_id=0
+            self.test_id=0
+
 
         else:
             pass
@@ -1068,14 +1071,28 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.txtSerialCode.setFocus()
 
-             #Obtain file path
-            filepath=self.obtain_filepath()
-            #Obtain id and id test
-            self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
-            print(f"Piece Id{self.piece_id}")
-            print(f"Test Id{self.test_id}")
+            try:
 
-            self.lblCounter.setText( self.piece_id)
+            # Obtain file path
+                filepath=self.obtain_filepath()
+
+                if filepath:
+                    #Obtain id and id test
+                    self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
+                    print(f"Piece Id{self.piece_id}")
+                    print(f"Test Id{self.test_id}")
+                    self.lblCounter.setText(str( self.piece_id))
+                else:
+                    self.piece_id=0
+                    self.test_id=0
+                    self.lblCounter.setText(str( self.piece_id))
+
+
+            except Exception as e:
+                print(f"Error obtaining most recent path file to csv: {e}")
+            
+
+            
         else:
             print("Datos no válidos o no cumplen con los requisitos")
 
@@ -1857,7 +1874,7 @@ class MainWindow(QMainWindow, mainApplication):
         if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
             self.piece_id+=1
 
-            self.lblCounter.setText(self.piece_id)
+            self.lblCounter.setText(str( self.piece_id))
 
         if not self.dont_add_register:
 
@@ -2033,58 +2050,79 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############  PIECE COUNTER ##########################################
     def obtain_piece_register_id_and_test(self, filepath):
-        with open(filepath, mode='r', newline='', encoding='utf-8') as archivo:
-            # Leer el archivo CSV
-            reader = csv.DictReader(archivo)
-            
-            # Obtener la primera fila como un diccionario
-            try:
-                fila = next(reader)  # Esto obtiene solo la primera fila del archivo
+        try:
+            with open(filepath, mode='r', newline='', encoding='utf-8') as archivo:
+                # Leer el archivo CSV
+                reader = csv.DictReader(archivo)
+                
+                # Leer todas las filas y almacenarlas en una lista
+                filas = list(reader)
+                
+                # Verificar si hay filas en el archivo
+                if not filas:
+                    # Si no hay filas, devolver 0 en ambos casos
+                    return 0, 0
+                
+                # Obtener la última fila
+                ultima_fila = filas[-1]
                 
                 # Verificar si las columnas existen y devolver 0 si no existen
-                id_prueba = fila['ID_prueba'] if 'ID_prueba' in fila else 0
-                int_id_prueba=int(id_prueba)
-                id = fila['ID'] if 'ID' in fila else 0
-                int_id=int(id)
+                id_prueba = ultima_fila.get('ID_Prueba', '0')  # Usar '0' como valor predeterminado
+                id = ultima_fila.get('ID', '0')  # Usar '0' como valor predeterminado
 
-            except StopIteration:  # En caso de que el archivo esté vacío
-                # Si no hay filas en el archivo, devolver 0 en ambos casos
-                int_id_prueba = 0
-                int_id = 0
+                # Convertir a enteros
+                int_id_prueba = int(id_prueba) if id_prueba.isdigit() else 0
+                int_id = int(id) if id.isdigit() else 0
 
-            return int_id_prueba, int_id
+                return  int_id,int_id_prueba
+
+        except FileNotFoundError:
+            print(f"Error: El archivo {filepath} no existe.")
+            return 0, 0
+        except PermissionError:
+            print(f"Error: No tienes permisos para leer el archivo {filepath}.")
+            return 0, 0
+        except Exception as e:
+            print(f"Error inesperado al procesar el archivo {filepath}: {e}")
+            return 0, 0
 
     def obtain_filepath(self):
-        base_filepath = self.test.create_monthly_results_folder()
+        try:
+            base_filepath = self.test.create_monthly_results_folder()
 
-        # Obtener información del usuario y orden de tienda
-        session_info = self.config.get_current_user()
-        user = session_info[0]
-        shop_order = session_info[1]
+            # Obtener información del usuario y orden de tienda
+            session_info = self.config.get_current_user()
+            user = session_info[0]
+            shop_order = session_info[1]
 
-        # Construir el path base
-        fullpath = f"{base_filepath}\\{shop_order}"
-        #fullpath = f"{base_filepath}\\{shop_order}\\{user}"
+            # Construir el path base
+            fullpath = os.path.normpath(f"{base_filepath}\\{shop_order}")
 
-        # Obtener todos los archivos en el directorio
-        archivos = os.listdir(fullpath)
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
 
-        # Filtrar solo los archivos que siguen el formato user_fecha
-        archivos_validos = [archivo for archivo in archivos if archivo.startswith(f"{user}_")]
+            # Obtener todos los archivos en el directorio
+            archivos = os.listdir(fullpath)
 
-        # Si no se encuentran archivos, retornar None o un valor adecuado
-        if not archivos_validos:
+            # Filtrar solo los archivos que siguen el formato user_fecha
+            archivos_validos = [archivo for archivo in archivos if archivo.startswith(f"{user}_")]
+
+            # Si no se encuentran archivos, retornar None o un valor adecuado
+            if not archivos_validos:
+                return None
+
+            # Ordenar los archivos por fecha (formato: DD-MM-YYYY)
+            archivos_validos.sort(key=lambda x: datetime.strptime(x.split('_')[1].split('.')[0], "%d-%m-%Y"), reverse=True)
+
+            # El primer archivo de la lista será el de la fecha más reciente
+            archivo_mas_reciente = archivos_validos[0]
+
+            # Retornar el path completo del archivo más reciente
+            return os.path.join(fullpath, archivo_mas_reciente)
+
+        except Exception as e:
+            print(f"Error inesperado al obtener la ruta del archivo: {e}")
             return None
-
-        # Ordenar los archivos por fecha (formato: DD-MM-YYYY)
-        archivos_validos.sort(key=lambda x: datetime.strptime(x.split('_')[1], "%d-%m-%Y"), reverse=True)
-
-        # El primer archivo de la lista será el de la fecha más reciente
-        archivo_mas_reciente = archivos_validos[0]
-
-        # Retornar el path completo del archivo más reciente
-        return os.path.join(fullpath, archivo_mas_reciente)
-
 
 
 

@@ -127,23 +127,43 @@ class Manage_tests():
 
     ######################## FILE TRACEABILITY FUNCTIONS ########################
 
-    def add_csv_register(self, register,user,order):
+    # def add_csv_register(self, register,user,order):
+    #     # Obtener la fecha y hora actual
+    #     current_datetime = datetime.now()
+    #     formatted_datetime = current_datetime.strftime("%d-%m-%Y")
+    #     Current_date = str(formatted_datetime)
+    #     print(Current_date)
+
+    #     # Call folder create function for the csv files
+        
+    #     folder_path = self.create_order_results_folder(order) 
+    #     Csv_filename = os.path.join(folder_path, f"{user}_{Current_date}.csv") # Created in traceability folder
+
+    #     # Add register
+    #     with open(Csv_filename, 'a', newline='') as file:
+    #         writer = csv.DictWriter(file, fieldnames=register.keys())
+    #         # Verificar si el archivo CSV ya existe o si es nuevo
+    #         if file.tell() == 0:
+    #             writer.writeheader()  # Si el archivo está vacío, escribirá los nombres de las columnas
+    #         writer.writerow(register)  # Write in the csv file
+    def add_csv_register(self, register, user, order):
         # Obtener la fecha y hora actual
         current_datetime = datetime.now()
         formatted_datetime = current_datetime.strftime("%d-%m-%Y")
         Current_date = str(formatted_datetime)
         print(Current_date)
 
-        # Call folder create function for the csv files
-        
-        folder_path = self.create_order_results_folder(order) 
-        Csv_filename = os.path.join(folder_path, f"{user}_{Current_date}.csv") # Created in traceability folder
+        # Crear la carpeta para los archivos CSV
+        folder_path = self.create_order_results_folder(order)
+        Csv_filename = os.path.join(folder_path, f"{user}_{Current_date}.csv")  # Ruta del archivo CSV
 
-        # Add register
-        with open(Csv_filename, 'a', newline='') as file:
+        # Abrir el archivo CSV con codificación UTF-8
+        with open(Csv_filename, 'a', newline='', encoding='utf-8') as file:
             writer = csv.DictWriter(file, fieldnames=register.keys())
+            
             # Verificar si el archivo CSV ya existe o si es nuevo
             if file.tell() == 0:
                 writer.writeheader()  # Si el archivo está vacío, escribirá los nombres de las columnas
-            writer.writerow(register)  # Write in the csv file
-    
+            
+            # Escribir el registro en el archivo CSV
+            writer.writerow(register)
