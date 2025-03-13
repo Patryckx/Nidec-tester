@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # print(value)
 
     # Activa Salida Y0, espera y la apaga
-    plc.write_coil(address=1, value=True)
+    plc.write_coil(address=0, value=True)
     '''plc.write_coil(address=0, value=False)
     time.sleep(2)
     time.sleep(2)'''
