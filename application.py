@@ -223,94 +223,248 @@ class MonitorButtonsThread(QThread):
         #Clear results dictionary button
         self.button_results_dict.clear()
 
-    def run(self):
+    '''def run(self):
+
+        config = configparser.ConfigParser()
+        config.read('settings/settings.ini')
+        actuator_sensor_value = config.get('Instruments', 'actuator_sensor', fallback='False').replace('"', '').lower()
+
+        if actuator_sensor_value=='true':
+            actuator_sensor=True
+        else:
+            actuator_sensor=False
+
         #Flag to check if the test failed
         fail_on_button_test=False
 
         attempts=0
         max_attempts=4
 
-        while attempts < max_attempts and self.running:
+        if actuator_sensor:
 
-            actuator_in_position=self.gateway.read_coil(14)
 
-            attempts=+1
+            while attempts < max_attempts :
 
-            if actuator_in_position:
-        
-                while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
-                    current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
-                    print(f"Activando bobina {current_coil}")
-                    
-                    try:
-                        self.gateway.write_coil(current_coil, True)  # Encender bobina
-                    except Exception as e:
-                        print(f"Ocurrió un error al encender la bobina: {e}")
+                actuator_in_position=self.gateway.read_coil(14)
+
+                attempts=+1
+
+                if actuator_in_position:
+            
+                    while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
+                        current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
+                        print(f"Activando bobina {current_coil}")
                         
-                    attempts = 0  # Contador de intentos
-                    max_attempts = 4
-                    detected = False
+                        try:
+                            self.gateway.write_coil(current_coil, True)  # Encender bobina
+                        except Exception as e:
+                            print(f"Ocurrió un error al encender la bobina: {e}")
+                            
+                        attempts = 0  # Contador de intentos
+                        max_attempts = 4
+                        detected = False
 
 
-                    while attempts < max_attempts and self.running:
-                        response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
-                        print(response)
-                        
-                        hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-                        
-                        if hex_value == self.pending_buttons_list[0]:
-                            print(f"Botón detectado: {hex_value}")
+                        while attempts < max_attempts and self.running:
+                            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
+                            print(response)
+                            
+                            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+                            
+                            if hex_value == self.pending_buttons_list[0]:
+                                print(f"Botón detectado: {hex_value}")
+                                current_index = self.pending_buttons_index.pop(0)
+                                button = f"lblButton{current_index}"
+                                button_input = f"lblButtonInput{current_index}"
+
+                                #Guardar resultado en el diccionario
+                                self.button_results_dict[current_index] = 1
+                                
+                                # Emitir señal para actualizar la GUI
+                                self.update_button_signal.emit(button, button_input,True)
+                                detected = True
+                                break  # Salir del bucle de intentos
+                            
+                            attempts += 1
+                            print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
+
+                        # Apagar la bobina y procesar el resultado
+                        print(f"Desactivando bobina {current_coil}")
+                        try:
+                            self.gateway.write_coil(current_coil, False)  # Apagar bobina
+                        except Exception as e:
+                            print(f"Ocurrió un error al desactivar la bobina: {e}")
+
+                        if not detected:
+                            print("Botón no detectado tras 5 intentos.")
                             current_index = self.pending_buttons_index.pop(0)
                             button = f"lblButton{current_index}"
                             button_input = f"lblButtonInput{current_index}"
+                            self.update_button_signal.emit(button, button_input,False)
 
                             #Guardar resultado en el diccionario
-                            self.button_results_dict[current_index] = 1
-                            
-                            # Emitir señal para actualizar la GUI
-                            self.update_button_signal.emit(button, button_input,True)
-                            detected = True
-                            break  # Salir del bucle de intentos
+                            self.button_results_dict[current_index] = 0
+
+                            fail_on_button_test=True
+
                         
-                        attempts += 1
-                        print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
+                        # Eliminar el botón de la lista
+                        self.pending_buttons_list.pop(0)
+                        self.pending_button_actuator_list.pop(0)
+                        
+                        if not self.pending_buttons_list:
+                            print("Todos los botones han sido procesados.")
+                            self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)               
+                            break
 
-                    # Apagar la bobina y procesar el resultado
-                    print(f"Desactivando bobina {current_coil}")
-                    try:
-                        self.gateway.write_coil(current_coil, False)  # Apagar bobina
-                    except Exception as e:
-                        print(f"Ocurrió un error al desactivar la bobina: {e}")
+                    
+                else:
+                    fail_on_button_test=True
+                    self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)
+                    print("Actuador no detectado")
+                    break
+        else:
 
-                    if not detected:
-                        print("Botón no detectado tras 5 intentos.")
+            while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
+                current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
+                print(f"Activando bobina {current_coil}")
+                
+                try:
+                    self.gateway.write_coil(current_coil, True)  # Encender bobina
+                except Exception as e:
+                    print(f"Ocurrió un error al encender la bobina: {e}")
+                    
+                attempts = 0  # Contador de intentos
+                max_attempts = 4
+                detected = False
+
+
+                while attempts < max_attempts and self.running:
+                    response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
+                    print(response)
+                    
+                    hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
+                    
+                    if hex_value == self.pending_buttons_list[0]:
+                        print(f"Botón detectado: {hex_value}")
                         current_index = self.pending_buttons_index.pop(0)
                         button = f"lblButton{current_index}"
                         button_input = f"lblButtonInput{current_index}"
-                        self.update_button_signal.emit(button, button_input,False)
 
                         #Guardar resultado en el diccionario
-                        self.button_results_dict[current_index] = 0
-
-                        fail_on_button_test=True
-
+                        self.button_results_dict[current_index] = 1
+                        
+                        # Emitir señal para actualizar la GUI
+                        self.update_button_signal.emit(button, button_input,True)
+                        detected = True
+                        break  # Salir del bucle de intentos
                     
-                    # Eliminar el botón de la lista
-                    self.pending_buttons_list.pop(0)
-                    self.pending_button_actuator_list.pop(0)
-                    
-                    if not self.pending_buttons_list:
-                        print("Todos los botones han sido procesados.")
-                        self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)               
-                        break
+                    attempts += 1
+                    print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
+
+                # Apagar la bobina y procesar el resultado
+                print(f"Desactivando bobina {current_coil}")
+                try:
+                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
+                except Exception as e:
+                    print(f"Ocurrió un error al desactivar la bobina: {e}")
+
+                if not detected:
+                    print("Botón no detectado tras 5 intentos.")
+                    current_index = self.pending_buttons_index.pop(0)
+                    button = f"lblButton{current_index}"
+                    button_input = f"lblButtonInput{current_index}"
+                    self.update_button_signal.emit(button, button_input,False)
+
+                    #Guardar resultado en el diccionario
+                    self.button_results_dict[current_index] = 0
+
+                    fail_on_button_test=True
 
                 
-            else:
-                fail_on_button_test=True
-                self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)
-                print("Actuador no detectado")
-                break
-            
+                # Eliminar el botón de la lista
+                self.pending_buttons_list.pop(0)
+                self.pending_button_actuator_list.pop(0)
+                
+                if not self.pending_buttons_list:
+                    print("Todos los botones han sido procesados.")
+                    self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)               
+                    break'''
+    def run(self):
+        config = configparser.ConfigParser()
+        config.read('settings/settings.ini')
+        actuator_sensor = config.get('Instruments', 'actuator_sensor', fallback='False').replace('"', '').lower() == 'true'
+
+        fail_on_button_test = False
+        attempts = 0
+        max_attempts = 4
+
+        if actuator_sensor:
+            while attempts < max_attempts:
+                actuator_in_position = self.gateway.read_coil(14)
+                attempts += 1
+                if actuator_in_position:
+                    self.process_buttons()
+                    return
+            fail_on_button_test = True
+            print("Actuador no detectado")
+        else:
+            self.process_buttons()
+
+        self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict)
+
+    def process_buttons(self):
+        while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
+            current_coil = self.pending_button_actuator_list.pop(0)
+            print(f"Activando bobina {current_coil}")
+
+            try:
+                self.gateway.write_coil(current_coil, True)
+            except Exception as e:
+                print(f"Ocurrió un error al encender la bobina: {e}")
+
+            attempts = 0
+            max_attempts = 4
+            detected = False
+
+            while attempts < max_attempts and self.running:
+                response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
+                print(response)
+                hex_value = response[24:26]
+
+                if hex_value == self.pending_buttons_list[0]:
+                    print(f"Botón detectado: {hex_value}")
+                    current_index = self.pending_buttons_index.pop(0)
+                    button = f"lblButton{current_index}"
+                    button_input = f"lblButtonInput{current_index}"
+                    self.button_results_dict[current_index] = 1
+                    self.update_button_signal.emit(button, button_input, True)
+                    detected = True
+                    break
+
+                attempts += 1
+                print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
+
+            print(f"Desactivando bobina {current_coil}")
+            try:
+                self.gateway.write_coil(current_coil, False)
+            except Exception as e:
+                print(f"Ocurrió un error al desactivar la bobina: {e}")
+
+            if not detected:
+                print("Botón no detectado tras 5 intentos.")
+                current_index = self.pending_buttons_index.pop(0)
+                button = f"lblButton{current_index}"
+                button_input = f"lblButtonInput{current_index}"
+                self.update_button_signal.emit(button, button_input, False)
+                self.button_results_dict[current_index] = 0
+
+            self.pending_buttons_list.pop(0)
+
+        if not self.pending_buttons_list:
+            print("Todos los botones han sido procesados.")
+            self.test_finished_signal.emit(False, self.button_results_dict)
+
     def stop(self):
         self.running = False
 
