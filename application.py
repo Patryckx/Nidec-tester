@@ -203,7 +203,7 @@ class MonitorButtonsThread(QThread):
     # Definir señales para la comunicación con el hilo principal
     button_detected_signal = pyqtSignal(str)
     update_button_signal = pyqtSignal(str, str,bool)
-    test_finished_signal = pyqtSignal(bool,dict)
+    test_finished_signal = pyqtSignal(bool,dict,bool,bool)
 
     def __init__(self, buttons_order, button_actuators_order, rs485, gateway, parent=None):
         super(MonitorButtonsThread, self).__init__(parent)
@@ -393,27 +393,40 @@ class MonitorButtonsThread(QThread):
     def run(self):
         config = configparser.ConfigParser()
         config.read('settings/settings.ini')
-        actuator_sensor = config.get('Instruments', 'actuator_sensor', fallback='False').replace('"', '').lower() == 'true'
+        actuator_sensor_value = config.get('Instruments', 'actuator_sensor', fallback='False').replace('"', '').lower() 
+
+        if actuator_sensor_value=='true':
+            actuator_sensor=True
+        else:
+            actuator_sensor=False
+
 
         fail_on_button_test = False
         attempts = 0
         max_attempts = 4
 
         if actuator_sensor:
+            actuator_sensor_required=True
+
             while attempts < max_attempts:
-                actuator_in_position = self.gateway.read_coil(14)
+                actuator_in_position = self.gateway.read_coil(18)
                 attempts += 1
+                self.msleep(1000)  # Evita bloquear la GUI
                 if actuator_in_position:
-                    self.process_buttons()
+                    self.process_buttons(actuator_sensor_required,actuator_sensor)
                     return
+
             fail_on_button_test = True
             print("Actuador no detectado")
+
+            self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict,actuator_sensor_required,actuator_sensor)
         else:
-            self.process_buttons()
+            actuator_sensor_required=False
+            self.process_buttons(actuator_sensor_required,actuator_sensor)
 
-        self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict)
+        
 
-    def process_buttons(self):
+    def process_buttons(self,actuator_sensor_required,actuator_sensor):
         while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
             current_coil = self.pending_button_actuator_list.pop(0)
             print(f"Activando bobina {current_coil}")
@@ -426,6 +439,8 @@ class MonitorButtonsThread(QThread):
             attempts = 0
             max_attempts = 4
             detected = False
+
+            fail_on_button_test=False
 
             while attempts < max_attempts and self.running:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
@@ -459,11 +474,17 @@ class MonitorButtonsThread(QThread):
                 self.update_button_signal.emit(button, button_input, False)
                 self.button_results_dict[current_index] = 0
 
+                fail_on_button_test=True
+
             self.pending_buttons_list.pop(0)
 
         if not self.pending_buttons_list:
             print("Todos los botones han sido procesados.")
-            self.test_finished_signal.emit(False, self.button_results_dict)
+
+            self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict,actuator_sensor_required,actuator_sensor)
+            #self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict)
+            #self.test_finished_signal.emit(False, self.button_results_dict)
+
 
     def stop(self):
         self.running = False
@@ -1839,7 +1860,7 @@ class MainWindow(QMainWindow, mainApplication):
             getattr(self, button_input).setEnabled(True)
 
 
-    def on_test_finished(self,test_failed,buttons_results):
+    def on_test_finished(self,test_failed,buttons_results,actuator_sensor_required,actuator_sensor_result):
         # Lógica que se ejecuta cuando la prueba ha finalizado
         print("La prueba de botones ha finalizado.")
 
@@ -1850,6 +1871,12 @@ class MainWindow(QMainWindow, mainApplication):
         except Exception as e:
             print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
 
+        if actuator_sensor_required:
+            if actuator_sensor_result:
+                self.lblButtonTestMsg.setText("Actuador NO detectado...")
+                self.lblButtonTestMsg.setStyleSheet("color: red;")
+        
+
         button_result_dict=buttons_results
 
         if test_failed==False:
@@ -1859,6 +1886,10 @@ class MainWindow(QMainWindow, mainApplication):
         else:
             button_result="FAIL"
             self.btnPrueba5.setStyleSheet("background-color: red;")
+
+
+
+        
 
 
         self.test.result_T5(button_result,button_result_dict)
@@ -2078,6 +2109,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblRequestHMI.setText("")
 
         self.lblRequestHMI.setStyleSheet("")
+
+        self.lblButtonTestMsg.setText("Verificando funcionalidad botones...")
+        self.lblButtonTestMsg.setStyleSheet("color: ;")
 
         #Test 2
         self.txtFirmware.setText("")
