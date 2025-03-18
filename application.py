@@ -413,13 +413,13 @@ class MonitorButtonsThread(QThread):
                 attempts += 1
                 self.msleep(1000)  # Evita bloquear la GUI
                 if actuator_in_position:
-                    self.process_buttons(actuator_sensor_required,actuator_sensor)
+                    self.process_buttons(actuator_sensor_required,actuator_in_position)
                     return
 
             fail_on_button_test = True
             print("Actuador no detectado")
 
-            self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict,actuator_sensor_required,actuator_sensor)
+            self.test_finished_signal.emit(fail_on_button_test, self.button_results_dict,actuator_sensor_required,actuator_in_position)
         else:
             actuator_sensor_required=False
             self.process_buttons(actuator_sensor_required,actuator_sensor)
@@ -427,6 +427,9 @@ class MonitorButtonsThread(QThread):
         
 
     def process_buttons(self,actuator_sensor_required,actuator_sensor):
+        #Test flag
+        fail_on_button_test=False
+        
         while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
             current_coil = self.pending_button_actuator_list.pop(0)
             print(f"Activando bobina {current_coil}")
@@ -440,7 +443,6 @@ class MonitorButtonsThread(QThread):
             max_attempts = 4
             detected = False
 
-            fail_on_button_test=False
 
             while attempts < max_attempts and self.running:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
@@ -516,6 +518,8 @@ class MonitorDigitalEntrances(QThread):
         self.digital_entrances_results_dict.clear()
 
     def run(self):
+        #Flag to check if the test failed
+        fail_on_digital_test=False
         while self.pending_digital_list and self.pending_actuator_list and self.digital_entrances_thread_isrunning:
             current_coil = self.pending_actuator_list[0]  # Obtener la bobina actual
             print(f"Activando bobina {current_coil}")
@@ -528,8 +532,6 @@ class MonitorDigitalEntrances(QThread):
             max_attempts = 5
 
             detected = False
-            #Flag to check if the test failed
-            fail_on_digital_test=False
             
             while attempts < max_attempts and self.digital_entrances_thread_isrunning:
                 response = self.rs485.send_command("FF00FFA50060100D04D05101000248")  # Obtener respuesta
@@ -565,7 +567,7 @@ class MonitorDigitalEntrances(QThread):
             #     print(f"Entrada no detectada después de {max_attempts} intentos.")
             
             if not detected:
-                print("Botón no detectado tras 5 intentos.")
+                print(" Entrada NO detectada tras 5 intentos.")
                 current_index = self.pending_digital_index.pop(0)
                 button = f"lblButton{current_index}"
                 button_input = f"lblButtonInput{current_index}"
@@ -1872,7 +1874,7 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
 
         if actuator_sensor_required:
-            if actuator_sensor_result:
+            if not actuator_sensor_result:
                 self.lblButtonTestMsg.setText("Actuador NO detectado...")
                 self.lblButtonTestMsg.setStyleSheet("color: red;")
         
