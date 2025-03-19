@@ -403,7 +403,10 @@ class MonitorButtonsThread(QThread):
 
         fail_on_button_test = False
         attempts = 0
-        max_attempts = 4
+
+        #max_attempts = int(config.get('Instruments', 'actuator_sensor', fallback=6) )
+
+        max_attempts = 6
 
         if actuator_sensor:
             actuator_sensor_required=True
@@ -1420,6 +1423,9 @@ class MainWindow(QMainWindow, mainApplication):
             self.start_timer( self.timer_value)
 
             self.test.result_T1(str(self.serial_code),str(self.qrcode))
+
+            #HOUSEKEEPING
+            self.housekeeping_gateway()
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
 
