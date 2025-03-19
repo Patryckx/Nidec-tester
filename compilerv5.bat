@@ -1,0 +1,1 @@
+pyinstaller --distpath "C:\Nidec-tester-release\deploy" --debug=all --hidden-import=sysconfig --hidden-import=pyvisa --hidden-import=pyvisa_py --onedir --noconfirm  --icon="C:\Nidec-tester\resources\nidec-icon.ico" application.py --name Nidec-tester

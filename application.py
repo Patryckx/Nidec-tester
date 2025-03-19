@@ -1202,7 +1202,10 @@ class MainWindow(QMainWindow, mainApplication):
             return
 
         #Housekeeping registers gateway
-        self.housekeeping_gateway()
+        try:
+            self.housekeeping_gateway()
+        except Exception as e :
+            print(f"Error: {e}" )
 
         # self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
 
@@ -1424,8 +1427,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.test.result_T1(str(self.serial_code),str(self.qrcode))
 
-            #HOUSEKEEPING
-            self.housekeeping_gateway()
+            
+
 
             self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
 
