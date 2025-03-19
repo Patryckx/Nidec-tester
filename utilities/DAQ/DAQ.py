@@ -100,47 +100,47 @@ if __name__ == '__main__':
     plc.open(address)
     plc.is_connected()
 
-    # # Estado Actual de las Salidas Y0 y Y1
-    value = plc.read_coil(address=0)
-    print(value)
-    value = plc.read_coil(address=1)
-    print(value)
-    value = plc.read_coil(address=2)
-    print(value)
-    value = plc.read_coil(address=3)
-    print(value)
-    value = plc.read_coil(address=4)
-    print(value)
-    value = plc.read_coil(address=5)
-    print(value)
-    value = plc.read_coil(address=6)
-    print(value)
-    value = plc.read_coil(address=7)
-    print(value)
-    value = plc.read_coil(address=8)
-    print(value)
-    value = plc.read_coil(address=9)
-    print(value)
-    value = plc.read_coil(address=10)
-    print(value)
-    value = plc.read_coil(address=11)
-    print(value)
-    value = plc.read_coil(address=12)
-    print(value)
-    value = plc.read_coil(address=13)
-    print(value)
-    value = plc.read_coil(address=14)
-    print(value)
-    value = plc.read_coil(address=15)
-    print(value)
-    value = plc.read_coil(address=16)
-    print(value)
-    value = plc.read_coil(address=17)
-    print(value)
-    value = plc.read_coil(address=18)
-    print(value)
-    value = plc.read_coil(address=19)
-    print(value)
+    # # # Estado Actual de las Salidas Y0 y Y1
+    # value = plc.read_coil(address=0)
+    # print(value)
+    # value = plc.read_coil(address=1)
+    # print(value)
+    # value = plc.read_coil(address=2)
+    # print(value)
+    # value = plc.read_coil(address=3)
+    # print(value)
+    # value = plc.read_coil(address=4)
+    # print(value)
+    # value = plc.read_coil(address=5)
+    # print(value)
+    # value = plc.read_coil(address=6)
+    # print(value)
+    # value = plc.read_coil(address=7)
+    # print(value)
+    # value = plc.read_coil(address=8)
+    # print(value)
+    # value = plc.read_coil(address=9)
+    # print(value)
+    # value = plc.read_coil(address=10)
+    # print(value)
+    # value = plc.read_coil(address=11)
+    # print(value)
+    # value = plc.read_coil(address=12)
+    # print(value)
+    # value = plc.read_coil(address=13)
+    # print(value)
+    # value = plc.read_coil(address=14)
+    # print(value)
+    # value = plc.read_coil(address=15)
+    # print(value)
+    # value = plc.read_coil(address=16)
+    # print(value)
+    # value = plc.read_coil(address=17)
+    # print(value)
+    # value = plc.read_coil(address=18)
+    # print(value)
+    # value = plc.read_coil(address=19)
+    # print(value)
 
     # Activa Salida Y0, espera y la apaga
     #plc.write_coil(address=0, value=True)
@@ -148,24 +148,59 @@ if __name__ == '__main__':
     time.sleep(2)
     time.sleep(2)'''
 
-    # Activa Salida Y1, espera y la apaga
-    #plc.write_coil(address=0, value=True)
-    # plc.write_coil(address=11, value=False)
-    # plc.write_coil(address=12, value=False)
-    # plc.write_coil(address=13, value=False)
-    # plc.write_coil(address=14, value=False)
-    # plc.write_coil(address=15, value=False)
-    # plc.write_coil(address=16, value=False)
-    # plc.write_coil(address=17, value=False)
-    # plc.write_coil(address=18, value=False)
-    #plc.write_coil(address=15, value=False)
-    # time.sleep(2)
-    # plc.write_coil(address=3, value=False)
-    # time.sleep(2)
-    # plc.write_coil(address=4, value=False)
-    # time.sleep(2)
-    # plc.write_coil(address=5, value=False)
-    # time.sleep(2)
+
+
+
+    while True:
+
+        #Activa Salida Y1, espera y la apaga
+        plc.write_coil(address=2, value=True)
+        time.sleep(5)
+        plc.write_coil(address=2, value=False)
+
+        plc.write_coil(address=3, value=True)
+        time.sleep(5)
+        plc.write_coil(address=3, value=False)
+
+
+        plc.write_coil(address=4, value=True)
+        time.sleep(5)
+        plc.write_coil(address=4, value=False)
+
+        plc.write_coil(address=5, value=True)
+        time.sleep(5)
+        plc.write_coil(address=5, value=False)
+
+
+        
+        plc.write_coil(address=6, value=True)
+        time.sleep(5)
+        plc.write_coil(address=6, value=False)
+
+
+        plc.write_coil(address=7, value=True)
+        time.sleep(5)
+        plc.write_coil(address=7, value=False)
+
+        
+
+        plc.write_coil(address=8, value=True)
+        time.sleep(5)
+        plc.write_coil(address=8, value=False)
+
+        plc.write_coil(address=9, value=True)
+        time.sleep(5)
+        plc.write_coil(address=9, value=False)
+
+
+        
+        # time.sleep(2)
+        # plc.write_coil(address=3, value=False)
+        # time.sleep(2)
+        # plc.write_coil(address=4, value=False)
+        # time.sleep(2)
+        # plc.write_coil(address=5, value=False)
+        # time.sleep(2)
 
     # plc.write_coil(address=6, value=False)
     # time.sleep(2)
