@@ -34,10 +34,6 @@ class TelnetClient:
         if not self.connection:
             raise ConnectionError("No hay una conexión activa.")
         try:
-
-            #Added function
-            self.connection.read_very_eager()
-            
             self.connection.write(data.encode('ascii') + b'\r')
             print(f"Datos enviados: {data}")
         except Exception as e:
