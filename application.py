@@ -105,7 +105,7 @@ class Test3Thread(QThread):
         print(resultados_herramientas)'''
 
         # Limpiar el buffer antes de realizar el disparo
-        self.Camera.read_and_clear_buffer()
+        #self.Camera.read_and_clear_buffer()
 
         # Realizar el disparo y leer la respuesta
         self.Camera.send_data('T2')
@@ -164,7 +164,7 @@ class Test4Thread(QThread):
         self.Camera.send_data(change_program)
 
         # Limpiar el buffer antes de realizar el disparo
-        self.Camera.read_and_clear_buffer()
+        #self.Camera.read_and_clear_buffer()
 
         # Realizar el disparo y leer la respuesta
         self.Camera.send_data('T2')
