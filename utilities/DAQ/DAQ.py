@@ -151,46 +151,46 @@ if __name__ == '__main__':
 
 
 
-    while True:
+    #while True:
 
-        #Activa Salida Y1, espera y la apaga
-        plc.write_coil(address=2, value=True)
-        time.sleep(5)
-        plc.write_coil(address=2, value=False)
+    #Activa Salida Y1, espera y la apaga
+    plc.write_coil(address=1, value=False)
+    time.sleep(5)
+    # plc.write_coil(address=2, value=False)
 
-        plc.write_coil(address=3, value=True)
-        time.sleep(5)
-        plc.write_coil(address=3, value=False)
+        # plc.write_coil(address=3, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=3, value=False)
 
 
-        plc.write_coil(address=4, value=True)
-        time.sleep(5)
-        plc.write_coil(address=4, value=False)
+        # plc.write_coil(address=4, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=4, value=False)
 
-        plc.write_coil(address=5, value=True)
-        time.sleep(5)
-        plc.write_coil(address=5, value=False)
+        # plc.write_coil(address=5, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=5, value=False)
 
 
         
-        plc.write_coil(address=6, value=True)
-        time.sleep(5)
-        plc.write_coil(address=6, value=False)
+        # plc.write_coil(address=6, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=6, value=False)
 
 
-        plc.write_coil(address=7, value=True)
-        time.sleep(5)
-        plc.write_coil(address=7, value=False)
+        # plc.write_coil(address=7, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=7, value=False)
 
         
 
-        plc.write_coil(address=8, value=True)
-        time.sleep(5)
-        plc.write_coil(address=8, value=False)
+        # plc.write_coil(address=8, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=8, value=False)
 
-        plc.write_coil(address=9, value=True)
-        time.sleep(5)
-        plc.write_coil(address=9, value=False)
+        # plc.write_coil(address=9, value=True)
+        # time.sleep(5)
+        # plc.write_coil(address=9, value=False)
 
 
         

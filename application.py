@@ -416,6 +416,7 @@ class MonitorButtonsThread(QThread):
                 attempts += 1
                 self.msleep(1000)  # Evita bloquear la GUI
                 if actuator_in_position:
+                    self.msleep(3000)
                     self.process_buttons(actuator_sensor_required,actuator_in_position)
                     return
 
