@@ -610,7 +610,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     Test_5_signal=pyqtSignal()
 
-    Test_finished_signal=pyqtSignal()
+    Test_6_signal=pyqtSignal()
 
     Test_resume_signal=pyqtSignal()
 
@@ -763,7 +763,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.btnPrueba6.setStyleSheet("background-color: red;")
 
         self.btnResultados.setStyleSheet("background-color: red;")
-        self.Test_finished_signal.emit()
+        self.Test_6_signal.emit()
         
 
         self.stop_all_threads()
@@ -918,7 +918,7 @@ class MainWindow(QMainWindow, mainApplication):
         #self.lblCancelTestButtons.mousePressEvent=self.cancel_remaining_test_and_functions
 
         #Test 6
-        self.Test_finished_signal.connect(self.Test_6_GUI_changes)
+        self.Test_6_signal.connect(self.Test_6_GUI_changes)
 
         #Resume test
 
@@ -1477,7 +1477,7 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############# HMI IN POSITION VERIFICATION ######################################
 
-    def cancel_remaining_test_and_functions(self,TestFailed:int):
+    def cancel_remaining_test_and_functions(self,TestFailed):
 
         #Stop monitor buttons thread 
 
@@ -1512,16 +1512,22 @@ class MainWindow(QMainWindow, mainApplication):
         self.Rs485.send_command("FF00FFA50060100D04D05101000248")
 
         #Flag to not add register if test are not performed
-        '''self.dont_add_register=True'''
+        self.dont_add_register=True
 
-        # self.btnPrueba3.setStyleSheet("background-color: red;")
-        # self.btnPrueba4.setStyleSheet("background-color: red;")
-        # self.btnPrueba5.setStyleSheet("background-color: red;")
-        # self.btnPrueba6.setStyleSheet("background-color: red;")
+        self.btnPrueba3.setStyleSheet("background-color: red;")
+        self.btnPrueba4.setStyleSheet("background-color: red;")
+        self.btnPrueba5.setStyleSheet("background-color: red;")
+        self.btnPrueba6.setStyleSheet("background-color: red;")
 
         self.btnResultados.setStyleSheet("background-color: red;")
 
-        self.Test_finished_signal.emit()
+
+
+
+
+
+
+        self.Test_6_signal.emit()
 
 ############## TEST2   #####################################
 
@@ -1727,6 +1733,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         #self.lblVerify232communication.setText("")
 
+
         
 
     def Test_2_GUI_changes(self):
@@ -1765,16 +1772,11 @@ class MainWindow(QMainWindow, mainApplication):
         self.test3_thread.quit()
         self.test3_thread.wait()
 
-        if result=="FAIL":
-
-            self.cancel_remaining_test_and_functions()
-
-            self.Test_finished_signal.emit()
-        else:
+        
          
-            # Esperar 5 segundos antes de continuar con la siguiente prueba
-            QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
-            self.test_4()
+        # Esperar 5 segundos antes de continuar con la siguiente prueba
+        QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
+        self.test_4()
 
     def Test_3_GUI_changes(self):
 
@@ -1816,14 +1818,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.test4_thread.quit()
         self.test4_thread.wait()
 
-        if result=="FAIL":
+        QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
 
-            self.cancel_remaining_test_and_functions()
-        else:
-
-            QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
-
-            self.test_5()
+        self.test_5()
 
 
 
@@ -1897,30 +1894,76 @@ class MainWindow(QMainWindow, mainApplication):
 
         button_result_dict=buttons_results
 
-        self.test.result_T5(button_result,button_result_dict)
-        
-        
         if test_failed==False:
 
             button_result="PASS"
             self.btnPrueba5.setStyleSheet("background-color: green;")
-
-            QTimer.singleShot(4000,self.Test_5_signal.emit)
-            self.test_6()  # Llamar a la siguiente prueba
-
         else:
             button_result="FAIL"
             self.btnPrueba5.setStyleSheet("background-color: red;")
 
-            self.cancel_remaining_test_and_functions()
 
-       
+
+        
+
+
+        self.test.result_T5(button_result,button_result_dict)
+
+        # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(4000,self.Test_5_signal.emit)
+        #QTimer.singleShot(6000,self.Test_5_signal.emit())
+        #self.Test_5_signal.emit()
+        self.test_6()  # Llamar a la siguiente prueba
 
     def Test_5_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(10) 
 
-     ################ TEST 6   #######################
+    def cancel_test_button(self):            
+
+        print("Cancelando prueba 5")
+
+        reply = QMessageBox.question(
+            self,
+            'Cancelar prueba',
+            '¿Estás seguro de que quieres cancelar la prueba',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            
+            #Erase current session info
+            #self.config.erase_user_and_shop_info()
+
+            #Show again first screen app
+            self.stackedWidget.setCurrentIndex(0)
+
+            self.btnLogout.setEnabled(False)
+
+            self.btnPrueba1.setEnabled(False)
+            self.btnPrueba1.setStyleSheet("background-color: ;")
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(True)
+            self.btnConfiguracion.setEnabled(True)
+
+            #Clear txtfields
+            self.txtNumeroEmpleado.setText("")
+            self.txtNumeroOrden.setText("")
+
+
+            self.disconnect_all_devices()
+
+            self.lblCurrentUser.setText("")
+            self.lblCurrentOrder.setText("")
+
+
+        else:
+            pass
+
+
+    ################ TEST 6   #######################
         
 
     def test_6(self):
@@ -1973,23 +2016,23 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.btnPrueba6.setStyleSheet("background-color: green;")
 
-            self.test.result_T6(digital_result,digital_results_dict)
-
-            QTimer.singleShot(4000,self.Test_finished_signal.emit)
-
-            #Stop timer
-            self.timer.stop()
-
         else:
             digital_result="FAIL"
-            
+
             self.btnPrueba6.setStyleSheet("background-color: red;")
 
-            self.test.result_T6(digital_result,digital_results_dict)
+        self.test.result_T6(digital_result,digital_results_dict)
 
-            
-            self.cancel_remaining_test_and_functions()
+         # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(4000,self.Test_6_signal.emit)
+        #QTimer.singleShot(6000,self.Test_6_signal.emit())
 
+        #Stop timer
+        self.timer.stop()
+
+        
+ 
+    # Método para actualizar la interfaz de usuario de manera segura desde el hilo
     def update_digital_state(self, digital,digital_input):
         
         getattr(self, digital).setEnabled(True)
