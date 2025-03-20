@@ -24,5 +24,7 @@ voltaje_dc = ser.readline().decode('utf-8').strip()
 # Muestra el voltaje leído
 print(f'Voltaje DC: {voltaje_dc} V')
 
+
+
 # Cerrar el puerto
 ser.close()
