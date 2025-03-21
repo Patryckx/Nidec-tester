@@ -7820,7 +7820,7 @@ QPushButton &gt; * {
                    </font>
                   </property>
                   <property name="text">
-                   <string>7.-Flecha arriba</string>
+                   <string>7.-Flecha abajo</string>
                   </property>
                  </widget>
                 </item>
@@ -7909,7 +7909,7 @@ QPushButton &gt; * {
                    </font>
                   </property>
                   <property name="text">
-                   <string>8.-Flecha abajo</string>
+                   <string>8.-Flecha arriba</string>
                   </property>
                  </widget>
                 </item>
