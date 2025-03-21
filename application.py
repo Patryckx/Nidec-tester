@@ -27,9 +27,6 @@ import csv
 import re
 import sys
 
-
-
-
 class Palmswitch_inicialize_Thread(QThread):
     # Señales para comunicar con el hilo principal
     inicialize_signal = pyqtSignal()  # Señal cuando el monitoreo detecta un False y detiene el hilo
