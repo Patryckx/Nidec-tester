@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="resources">
+    <file>checked.png</file>
+    <file>good.png</file>
+    <file>oscillograph.png</file>
+    <file>oscilloscope.png</file>
+    <file>tick.png</file>
+    <file>unchecked.png</file>
     <file>verified.png</file>
     <file>check.png</file>
     <file>right.png</file>

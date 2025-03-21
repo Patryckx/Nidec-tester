@@ -2,41 +2,33 @@ from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer
 from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui.Application import Ui_MainWindow as mainApplication
-import sys
+from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+
+from ui.Application import Ui_MainWindow as mainApplication
+
 #Instruments
 from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
 from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
-
-from PyQt5.QtCore import Qt
 #from utilities.Config.Configuration import Config_Screen
-
 # Custom imports
 #import qdarktheme
 from datetime import datetime
-
 from datetime import datetime, timedelta
 import configparser
 import time
 import os
 import csv
-import threading
-import json 
-
-import subprocess
 import re
+import sys
 
-import socket
-import telnetlib
 
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
 
-from PyQt5.QtCore import QThread, pyqtSignal
-import time
 
 class Palmswitch_inicialize_Thread(QThread):
     # Señales para comunicar con el hilo principal
@@ -223,173 +215,6 @@ class MonitorButtonsThread(QThread):
         #Clear results dictionary button
         self.button_results_dict.clear()
 
-    '''def run(self):
-
-        config = configparser.ConfigParser()
-        config.read('settings/settings.ini')
-        actuator_sensor_value = config.get('Instruments', 'actuator_sensor', fallback='False').replace('"', '').lower()
-
-        if actuator_sensor_value=='true':
-            actuator_sensor=True
-        else:
-            actuator_sensor=False
-
-        #Flag to check if the test failed
-        fail_on_button_test=False
-
-        attempts=0
-        max_attempts=4
-
-        if actuator_sensor:
-
-
-            while attempts < max_attempts :
-
-                actuator_in_position=self.gateway.read_coil(14)
-
-                attempts=+1
-
-                if actuator_in_position:
-            
-                    while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
-                        current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
-                        print(f"Activando bobina {current_coil}")
-                        
-                        try:
-                            self.gateway.write_coil(current_coil, True)  # Encender bobina
-                        except Exception as e:
-                            print(f"Ocurrió un error al encender la bobina: {e}")
-                            
-                        attempts = 0  # Contador de intentos
-                        max_attempts = 4
-                        detected = False
-
-
-                        while attempts < max_attempts and self.running:
-                            response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
-                            print(response)
-                            
-                            hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-                            
-                            if hex_value == self.pending_buttons_list[0]:
-                                print(f"Botón detectado: {hex_value}")
-                                current_index = self.pending_buttons_index.pop(0)
-                                button = f"lblButton{current_index}"
-                                button_input = f"lblButtonInput{current_index}"
-
-                                #Guardar resultado en el diccionario
-                                self.button_results_dict[current_index] = 1
-                                
-                                # Emitir señal para actualizar la GUI
-                                self.update_button_signal.emit(button, button_input,True)
-                                detected = True
-                                break  # Salir del bucle de intentos
-                            
-                            attempts += 1
-                            print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
-
-                        # Apagar la bobina y procesar el resultado
-                        print(f"Desactivando bobina {current_coil}")
-                        try:
-                            self.gateway.write_coil(current_coil, False)  # Apagar bobina
-                        except Exception as e:
-                            print(f"Ocurrió un error al desactivar la bobina: {e}")
-
-                        if not detected:
-                            print("Botón no detectado tras 5 intentos.")
-                            current_index = self.pending_buttons_index.pop(0)
-                            button = f"lblButton{current_index}"
-                            button_input = f"lblButtonInput{current_index}"
-                            self.update_button_signal.emit(button, button_input,False)
-
-                            #Guardar resultado en el diccionario
-                            self.button_results_dict[current_index] = 0
-
-                            fail_on_button_test=True
-
-                        
-                        # Eliminar el botón de la lista
-                        self.pending_buttons_list.pop(0)
-                        self.pending_button_actuator_list.pop(0)
-                        
-                        if not self.pending_buttons_list:
-                            print("Todos los botones han sido procesados.")
-                            self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)               
-                            break
-
-                    
-                else:
-                    fail_on_button_test=True
-                    self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)
-                    print("Actuador no detectado")
-                    break
-        else:
-
-            while self.pending_buttons_list and self.pending_button_actuator_list and self.running:
-                current_coil = self.pending_button_actuator_list[0]  # Obtener la bobina actual
-                print(f"Activando bobina {current_coil}")
-                
-                try:
-                    self.gateway.write_coil(current_coil, True)  # Encender bobina
-                except Exception as e:
-                    print(f"Ocurrió un error al encender la bobina: {e}")
-                    
-                attempts = 0  # Contador de intentos
-                max_attempts = 4
-                detected = False
-
-
-                while attempts < max_attempts and self.running:
-                    response = self.rs485.send_command("FF00FFA50060100D04D05101000248")
-                    print(response)
-                    
-                    hex_value = response[24:26]  # Extrae el valor hexadecimal relevante
-                    
-                    if hex_value == self.pending_buttons_list[0]:
-                        print(f"Botón detectado: {hex_value}")
-                        current_index = self.pending_buttons_index.pop(0)
-                        button = f"lblButton{current_index}"
-                        button_input = f"lblButtonInput{current_index}"
-
-                        #Guardar resultado en el diccionario
-                        self.button_results_dict[current_index] = 1
-                        
-                        # Emitir señal para actualizar la GUI
-                        self.update_button_signal.emit(button, button_input,True)
-                        detected = True
-                        break  # Salir del bucle de intentos
-                    
-                    attempts += 1
-                    print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
-
-                # Apagar la bobina y procesar el resultado
-                print(f"Desactivando bobina {current_coil}")
-                try:
-                    self.gateway.write_coil(current_coil, False)  # Apagar bobina
-                except Exception as e:
-                    print(f"Ocurrió un error al desactivar la bobina: {e}")
-
-                if not detected:
-                    print("Botón no detectado tras 5 intentos.")
-                    current_index = self.pending_buttons_index.pop(0)
-                    button = f"lblButton{current_index}"
-                    button_input = f"lblButtonInput{current_index}"
-                    self.update_button_signal.emit(button, button_input,False)
-
-                    #Guardar resultado en el diccionario
-                    self.button_results_dict[current_index] = 0
-
-                    fail_on_button_test=True
-
-                
-                # Eliminar el botón de la lista
-                self.pending_buttons_list.pop(0)
-                self.pending_button_actuator_list.pop(0)
-                
-                if not self.pending_buttons_list:
-                    print("Todos los botones han sido procesados.")
-                    self.test_finished_signal.emit(fail_on_button_test,self.button_results_dict)               
-                    break'''
     def run(self):
         config = configparser.ConfigParser()
         config.read('settings/settings.ini')
@@ -1477,7 +1302,7 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############# HMI IN POSITION VERIFICATION ######################################
 
-    def cancel_remaining_test_and_functions(self,TestFailed:int):
+    def cancel_remaining_test_and_functions(self):
 
         #Stop monitor buttons thread 
 
@@ -1781,9 +1606,6 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(8) 
     
 
-  
-
-
 ############## TEST4   #####################################
 
     def test_4(self):
@@ -1914,8 +1736,6 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.cancel_remaining_test_and_functions()
 
-       
-
     def Test_5_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(10) 
@@ -2014,8 +1834,6 @@ class MainWindow(QMainWindow, mainApplication):
     ################ RESUME ########################################
 
     def show_resume(self):
-
-        
 
         print("Resumen de prueba")
 
