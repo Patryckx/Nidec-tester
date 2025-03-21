@@ -1660,11 +1660,17 @@ class MainWindow(QMainWindow, mainApplication):
         self.buttons_order = {
             "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
             "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
-            "Up Arrow": '20', "Down Arrow": '40'
+             "Down Arrow": '40',"Up Arrow": '20'
+            
+            # "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
+            # "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
+            # "Up Arrow": '20', "Down Arrow": '40'
+            
         }
 
         self.button_actuators_order={
-            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
+            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":9,"8":8
+            #"1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
         }
 
         #activating actuator box 
