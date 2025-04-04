@@ -1545,7 +1545,10 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
 
         #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
-        time.sleep(3)
+        #time.sleep(3)
+
+        #MORE DELAY TIME DUE BOOT DELAY PROBLEM IN HMIS
+        time.sleep(5)
 
         '''
         daemon=True: Esto indica que el hilo será un "hilo daemon", 
@@ -1558,9 +1561,30 @@ class MainWindow(QMainWindow, mainApplication):
         # Iniciar el hilo
         hilo_bobina.start()'''
 
-        print("Enabling command mode in HMI ")
 
-        self.Rs485.send_command('FF00FFA50060100D04D05101010249')
+        #########################################################
+        # print("Enabling command mode in HMI ")
+
+        # self.Rs485.send_command('FF00FFA50060100D04D05101010249')
+
+        command = 'FF00FFA50060100D04D05101010249'
+        max_retries = 3
+        delay = 1  # Tiempo de espera en segundos entre intentos
+
+        for attempt in range(1, max_retries + 1):
+            response = self.Rs485.send_command(command)
+
+            if response:  # Si recibimos una respuesta válida, salir del bucle
+                print(f"Response received: {response}")
+                break
+
+            print(f"Attempt {attempt}: No response received, retrying...")
+            time.sleep(delay)  # Esperar antes de reintentar
+
+        if not response:
+            print("No response after maximum retries, continuing execution...")
+        ############################################################
+        
 
         print("Turning off LCD screen")
 
