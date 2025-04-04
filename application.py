@@ -444,7 +444,7 @@ class MonitorButtonsThread(QThread):
                 print(f"Ocurrió un error al encender la bobina: {e}")
 
             attempts = 0
-            max_attempts = 4
+            max_attempts = 6
             detected = False
 
 
@@ -462,6 +462,7 @@ class MonitorButtonsThread(QThread):
                     self.update_button_signal.emit(button, button_input, True)
                     detected = True
                     break
+                
 
                 attempts += 1
                 print(f"Intento {attempts} de {max_attempts} para detectar el botón.")
@@ -1829,14 +1830,23 @@ class MainWindow(QMainWindow, mainApplication):
 ##############  TEST 5   ##########################
     def test_5(self):
         # Diccionario con el orden específico de los botones
+        # self.buttons_order = {
+        #     "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
+        #     "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
+        #     "Up Arrow": '20', "Down Arrow": '40'
+        # }
+
+        # self.button_actuators_order={
+        #     "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
+        # }
         self.buttons_order = {
             "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
             "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
-            "Up Arrow": '20', "Down Arrow": '40'
+             "Down Arrow": '40',"Up Arrow": '20'
         }
 
         self.button_actuators_order={
-            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
+            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":9,"8":8
         }
 
         #activating actuator box 
