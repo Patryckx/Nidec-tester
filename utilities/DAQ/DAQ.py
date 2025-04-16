@@ -37,7 +37,7 @@ class FX3U(DAQ):
     
     def open(self, address: str):
         self.address = address
-        self.client = ModbusSerialClient(method='rtu', port=address, baudrate=19200, timeout=1)
+        self.client = ModbusSerialClient(method='rtu', port=address, baudrate=9600, timeout=1)
 
 
         self.handle = self.client.connect()
@@ -94,7 +94,7 @@ class FX3U(DAQ):
 
 if __name__ == '__main__':
     # Puerto COM del RS-485
-    address = 'COM8'
+    address = 'COM3'
     
     plc = FX3U()
     plc.open(address)
@@ -139,8 +139,8 @@ if __name__ == '__main__':
     # print(value)
     # value = plc.read_coil(address=18)
     # print(value)
-    # value = plc.read_coil(address=19)
-    # print(value)
+    value = plc.read_coil(address=0)
+    print(value)
 
     # Activa Salida Y0, espera y la apaga
     #plc.write_coil(address=0, value=True)
@@ -154,8 +154,8 @@ if __name__ == '__main__':
     #while True:
 
     #Activa Salida Y1, espera y la apaga
-    plc.write_coil(address=1, value=False)
-    time.sleep(5)
+    # plc.write_coil(address=1, value=False)
+    # time.sleep(5)
     # plc.write_coil(address=2, value=False)
 
         # plc.write_coil(address=3, value=True)

@@ -12,8 +12,14 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 
+from utilities.DMM_OWON.XDM1041 import XDM1041
+
 from PyQt5.QtCore import Qt
 #from utilities.Config.Configuration import Config_Screen
+
+
+from PyQt5.QtWidgets import QButtonGroup
+
 
 # Custom imports
 #import qdarktheme
@@ -680,7 +686,16 @@ class MainWindow(QMainWindow, mainApplication):
         # Asegurar que la ventana pueda recibir eventos de teclado
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFocus()
-    
+
+
+
+        #####BUTTON TEST DMMM ##############
+        group = QButtonGroup()
+        group.setExclusive(True)
+        group.addButton(self.btnVoltaje)
+        group.addButton(self.btnAmper )
+        group.addButton(self.btnResistance)
+            
     ############# TIMER #####################
 
     def start_timer_clicked(self):
@@ -891,7 +906,7 @@ class MainWindow(QMainWindow, mainApplication):
         
         # Conectar señales
         
-        self.btnHMIRemoved.clicked.connect(self.cancel_remaining_test_and_functions)
+        #self.btnHMIRemoved.clicked.connect(self.cancel_remaining_test_and_functions)
 
         #Test 1 timer 
 
@@ -926,6 +941,14 @@ class MainWindow(QMainWindow, mainApplication):
         self.Test_resume_signal.connect(self.Test_resume_GUI_changes)
 
 
+        ### Button test   ######################
+        self.lblDMMTest.mousePressEvent=self.show_dmm_screen
+
+        self.btnDMMError.clicked.connect(self.back_to_inicialize_app)
+
+
+        self.btnDMMTest.clicked.connect(self.perform_dmm_test)
+
 
     
 ################## CONFIGURATION #############################################
@@ -939,10 +962,14 @@ class MainWindow(QMainWindow, mainApplication):
         camera_address=str(current_config[3])
         #camera_port=current_config[4]
         timer=str(current_config[4])
+
+        dmm_port=str(current_config[8])
         self.txtGatewayPort.setText(str(gateway_port))
         self.txt232Port.setText(str(RS232_port))
         self.txt485Port.setText(str(RS485_port))
         self.txtCameraAddress.setText(str(camera_address))
+
+        self.txtDMMPort.setText(str(dmm_port))
         #self.lblTimer.setText(timer)
     
 
@@ -957,15 +984,19 @@ class MainWindow(QMainWindow, mainApplication):
         camera_address=str(current_config[3])
         #camera_port=current_config[4]
         timer=str(current_config[5])
+
+        dmm_port=str(current_config[8])
         self.lblGatewayPort.setText(str(gateway_port))
         self.lbl232Port.setText(str(RS232_port))
         self.lbl485Port.setText(str(RS485_port))
         self.lblCameraAddress.setText(str(camera_address))
         self.lblTimer.setText(timer)
+
+        self.lblDMMPort.setText(dmm_port)
         
     def save_configuration(self, event):
         if (self.txtGatewayPort.text() and self.txt232Port.text() and 
-            self.txt485Port.text() and self.txtCameraAddress.text()):
+            self.txt485Port.text() and self.txtCameraAddress.text() and self.txtDMMPort.text()):
             
             # Gateway port
             self.new_gateway_port = self.txtGatewayPort.text()
@@ -985,6 +1016,11 @@ class MainWindow(QMainWindow, mainApplication):
             self.new_485_port = search_result.group() if search_result else "1"
             self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
 
+             # DMM Port
+            self.new_DMM_port = self.txtDMMPort.text()
+            search_result = re.search(r'\d+', self.new_DMM_port)
+            self.new_DMM_port = search_result.group() if search_result else "1"
+            self.new_DMM_port_string = f'"COM{str(self.new_DMM_port)}"'
            
             # Camera Address
             self.new_camera_address = str(self.txtCameraAddress.text())
@@ -1002,7 +1038,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
                                                self.new_485_port_string,self.new_camera_address,
-                                               self.new_timer_value)
+                                               self.new_timer_value,self.new_DMM_port_string)
 
             self.show_configuration(event)
         else:
@@ -1014,6 +1050,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.set_placeholder_with_style(self.txt232Port, "Texto faltante")
             self.set_placeholder_with_style(self.txt485Port, "Texto faltante")
             self.set_placeholder_with_style(self.txtCameraAddress, "Texto faltante")
+            self.set_placeholder_with_style(self.txtDMMPort, "Texto faltante")
+
     
     def set_placeholder_with_style(self, widget, placeholder_text):
         if not widget.text():
@@ -1184,6 +1222,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.led_program=current_config[6]
         self.ocr_program=current_config[7]
 
+        dmm_port=current_config[8]
+
 
         # Convertir segundos a minutos y segundos
         minutes, seconds = divmod(  self.timer_value, 60)
@@ -1237,6 +1277,13 @@ class MainWindow(QMainWindow, mainApplication):
             print("Camera connection Telnet not established")
             self.stackedWidget.setCurrentIndex(3)
             return
+        
+        # try:
+        #     self.dmm=XDM1041(dmm_port)
+        # except Exception as e:
+        #     print("Error al conectar con multimetro digital..")
+        #     self.stackedWidget.setCurrentIndex(16)
+        #     return
 
         print("All devices sucessfully conected")  
 
@@ -2376,6 +2423,80 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Error inesperado al obtener la ruta del archivo: {e}")
             return None
 
+
+########################### DMM FUNCTIONS #####################################################
+
+    def show_dmm_screen(self,event):
+
+        self.stackedWidget.setCurrentIndex(15)
+
+
+        print("Obtaining instruments configuration") 
+        current_config=self.config.get_current_config()
+
+        dmm_port=current_config[8]
+
+
+        try:
+            self.dmm=XDM1041(dmm_port)
+            self.dmm.connect()
+        except Exception as e:
+            print("Error al conectar con multimetro digital..")
+            self.stackedWidget.setCurrentIndex(16)
+            return
+
+
+    def perform_dmm_test(self):
+
+
+        if self.btnVoltaje.isChecked():
+
+            dc_voltaje=b'MEASURE:VDC?\n'
+            try:
+
+                dc_voltaje_result=self.dmm.send_command(dc_voltaje)
+        
+                #estado = self.dmm.readline()
+                print('Estado de medición: Voltaje', dc_voltaje_result)
+
+                self.lblResultado.setText(str(dc_voltaje_result))
+            except Exception as e:
+                print("Ocurrio un error")
+
+
+
+        elif self.btnAmper.isChecked():
+
+            dc_current=b'MEASURE:IDC?\n'
+            # try:
+
+            #     self.dmm.send_command(dc_current)
+        
+            #     estado = self.dmm.readline()
+            #     print('Estado de medición Amperes:', estado)
+
+            #     self.lblResultado.setText(str(estado))
+            # except Exception as e:
+            #     print("Ocurrio un error")
+
+        elif self.btnResistance.isChecked():
+
+            resistance=b'MEASURE:RES?\n'
+            # try:
+
+            #     self.dmm.send_command(resistance)
+        
+            #     estado = self.dmm.readline()
+            #     print('Estado de medición Resistencia:', estado)
+
+            #     self.lblResultado.setText(str(estado))
+            # except Exception as e:
+            #     print("Ocurrio un error")
+        else:
+            self.lblResultado.setText("Favor de seleccionar una opcion")
+
+
+        
 
 
 

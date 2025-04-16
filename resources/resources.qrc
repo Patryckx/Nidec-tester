@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="resources">
+    <file>DMM.png</file>
+    <file>DMM.png</file>
+    <file>DMM.png</file>
     <file>verified.png</file>
     <file>check.png</file>
     <file>right.png</file>

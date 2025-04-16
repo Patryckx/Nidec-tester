@@ -1509,7 +1509,7 @@ QStackedWidget &gt; * {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>13</number>
       </property>
       <widget class="QWidget" name="Inicialize">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -9218,23 +9218,20 @@ QPushButton &gt; * {
        </layout>
       </widget>
       <widget class="QWidget" name="ConfigurationShow">
-       <layout class="QGridLayout" name="gridLayout_18">
+       <layout class="QVBoxLayout" name="verticalLayout_13">
         <property name="leftMargin">
-         <number>10</number>
+         <number>30</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>30</number>
         </property>
         <property name="rightMargin">
          <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>15</number>
+         <number>30</number>
         </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_60">
           <property name="spacing">
            <number>30</number>
@@ -9352,7 +9349,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_63">
           <property name="spacing">
            <number>15</number>
@@ -9426,7 +9423,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_132">
           <property name="spacing">
            <number>12</number>
@@ -9538,7 +9535,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="3" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_64">
           <property name="spacing">
            <number>12</number>
@@ -9650,7 +9647,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="4" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_65">
           <property name="spacing">
            <number>12</number>
@@ -9762,119 +9759,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="5" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_159">
-          <property name="spacing">
-           <number>12</number>
-          </property>
-          <property name="leftMargin">
-           <number>150</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lblserial485_8">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/DMM.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_55">
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>300</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>26</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Puerto DMM</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_150">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>88</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblDMMPort">
-            <property name="minimumSize">
-             <size>
-              <width>250</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>250</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>24</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_151">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>518</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item row="6" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_66">
           <property name="spacing">
            <number>15</number>
@@ -9948,7 +9833,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="7" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_67">
           <property name="spacing">
            <number>15</number>
@@ -10066,7 +9951,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="8" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_68">
           <property name="spacing">
            <number>15</number>
@@ -10146,7 +10031,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="9" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_69">
           <property name="spacing">
            <number>15</number>
@@ -10261,23 +10146,20 @@ QPushButton &gt; * {
        </layout>
       </widget>
       <widget class="QWidget" name="ConfigurationEditSave">
-       <layout class="QGridLayout" name="gridLayout_17">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="leftMargin">
-         <number>10</number>
+         <number>30</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>30</number>
         </property>
         <property name="rightMargin">
          <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>15</number>
+         <number>30</number>
         </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_76">
           <property name="spacing">
            <number>30</number>
@@ -10432,7 +10314,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_77">
           <property name="spacing">
            <number>15</number>
@@ -10506,7 +10388,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_133">
           <property name="spacing">
            <number>12</number>
@@ -10584,13 +10466,13 @@ QPushButton &gt; * {
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>250</horstretch>
-              <verstretch>55</verstretch>
+              <verstretch>60</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
               <width>250</width>
-              <height>55</height>
+              <height>60</height>
              </size>
             </property>
             <property name="font">
@@ -10617,7 +10499,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="3" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_78">
           <property name="spacing">
            <number>12</number>
@@ -10701,13 +10583,7 @@ QPushButton &gt; * {
             <property name="minimumSize">
              <size>
               <width>250</width>
-              <height>55</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>250</width>
-              <height>55</height>
+              <height>60</height>
              </size>
             </property>
             <property name="font">
@@ -10734,124 +10610,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="4" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_158">
-          <property name="spacing">
-           <number>12</number>
-          </property>
-          <property name="leftMargin">
-           <number>150</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lblserial485_7">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/port.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_53">
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>300</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>26</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Puerto serial 485</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_148">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>88</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt485Port">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>250</horstretch>
-              <verstretch>50</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>250</width>
-              <height>55</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>250</width>
-              <height>55</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>24</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_149">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>518</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item row="5" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_79">
           <property name="spacing">
            <number>12</number>
@@ -10877,7 +10636,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/DMM.png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/port.png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -10904,7 +10663,7 @@ QPushButton &gt; * {
              </font>
             </property>
             <property name="text">
-             <string>Puerto DMM</string>
+             <string>Puerto serial 485</string>
             </property>
            </widget>
           </item>
@@ -10925,23 +10684,17 @@ QPushButton &gt; * {
            </spacer>
           </item>
           <item>
-           <widget class="QLineEdit" name="txtDMMPort">
+           <widget class="QLineEdit" name="txt485Port">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>250</horstretch>
-              <verstretch>50</verstretch>
+              <verstretch>60</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
               <width>250</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>250</width>
-              <height>55</height>
+              <height>60</height>
              </size>
             </property>
             <property name="font">
@@ -10968,7 +10721,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="6" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_80">
           <property name="spacing">
            <number>15</number>
@@ -11042,7 +10795,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="7" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_81">
           <property name="spacing">
            <number>15</number>
@@ -11126,13 +10879,13 @@ QPushButton &gt; * {
             <property name="minimumSize">
              <size>
               <width>250</width>
-              <height>55</height>
+              <height>60</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>250</width>
-              <height>55</height>
+              <height>60</height>
              </size>
             </property>
             <property name="font">
@@ -11159,7 +10912,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="8" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_82">
           <property name="spacing">
            <number>15</number>
@@ -11239,7 +10992,7 @@ QPushButton &gt; * {
           </item>
          </layout>
         </item>
-        <item row="9" column="0">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_112">
           <property name="spacing">
            <number>15</number>

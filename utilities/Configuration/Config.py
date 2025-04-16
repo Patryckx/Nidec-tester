@@ -25,10 +25,12 @@ class Configuration():
             led_program=config.get('Programs', 'led', fallback='None').replace('"', '')
 
             ocr_program=config.get('Programs', 'ocr', fallback='None').replace('"', '')
-            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer,led_program,ocr_program
+
+            dmm_port=config.get('DMM', 'address', fallback='None').replace('"', '')
+            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer,led_program,ocr_program,dmm_port
         except Exception as e:
             print(f"Error reading settings.ini: {e}")
-            return None,None,None,None,None,None
+            return None,None,None,None,None,None,None
 
     def get_current_user(self):
         config = configparser.ConfigParser()
@@ -43,7 +45,7 @@ class Configuration():
             return None,None
 
     
-    def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value):
+    def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value,dmm_port):
         try:
             
             # Crear un objeto ConfigParser
@@ -63,6 +65,8 @@ class Configuration():
 
             # Timer
             config.set('Timer', 'cycle_time', timer_value)
+
+            config.set('DMM','address',dmm_port)
 
             # Guardar los cambios en el archivo .ini
             with open('settings/settings.ini', 'w') as configfile:
