@@ -2457,9 +2457,11 @@ class MainWindow(QMainWindow, mainApplication):
                 dc_voltaje_result=self.dmm.send_command(dc_voltaje)
         
                 #estado = self.dmm.readline()
-                print('Estado de medición: Voltaje', dc_voltaje_result)
+                print(f"Estado de medición: Voltaje', {dc_voltaje_result} Volts")
 
-                self.lblResultado.setText(str(dc_voltaje_result))
+                resultado=f"{str(dc_voltaje_result)} Voltios"
+
+                self.lblResultado.setText(resultado)
             except Exception as e:
                 print("Ocurrio un error")
 
