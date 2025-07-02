@@ -94,7 +94,7 @@ class FX3U(DAQ):
 
 if __name__ == '__main__':
     # Puerto COM del RS-485
-    address = 'COM8'
+    address = 'COM9'
     
     plc = FX3U()
     plc.open(address)
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     #while True:
 
     #Activa Salida Y1, espera y la apaga
-    plc.write_coil(address=1, value=False)
+    plc.write_coil(address=0, value=False )
     time.sleep(5)
     # plc.write_coil(address=2, value=False)
 
