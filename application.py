@@ -1753,6 +1753,7 @@ class MainWindow(QMainWindow, mainApplication):
         #activating actuator box 
 
         try: 
+            #self.msleep(1500) 
             self.gateway.write_coil(1,False)
         except Exception as e:
             print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
