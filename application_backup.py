@@ -1746,43 +1746,12 @@ class MainWindow(QMainWindow, mainApplication):
             getattr(self, button_input).setEnabled(True)
 
 
-    def housekeeping_button_actuators(self):
-
-        # 1. Apagar todos los actuadores pequeños primero
-        print("Desactivando actuadores pequeños...")
-        for coil in self.button_actuators_order.values():
-            try:
-                self.gateway.write_coil(coil, False)
-            except Exception as e:
-                print(f"Error al desactivar actuador {coil}: {e}")
-
-        #activating actuator box 
-        # Verificar que todos los actuadores pequeños realmente se apagaron
-        for coil in self.button_actuators_order.values():
-            try:
-                state = self.gateway.read_coil(coil)
-                if state:  # sigue en True
-                    print(f"Actuador {coil} aún extendido, intentando forzar retracción...")
-                    self.gateway.write_coil(coil, False)
-                    time.sleep(0.3)  # pequeño retardo de seguridad
-            except Exception as e:
-                print(f"Error al verificar estado de actuador {coil}: {e}")
-
-        
-        print("Esperando 2 segundos para garantizar retracción...")
-        time.sleep(2)
-
-
-        #QTimer.singleShot(2000, self.on_test_finished)
-
-
-        
-
     def on_test_finished(self,test_failed,buttons_results,actuator_sensor_required,actuator_sensor_result):
         # Lógica que se ejecuta cuando la prueba ha finalizado
         print("La prueba de botones ha finalizado.")
 
-        self.housekeeping_button_actuators()
+        #activating actuator box 
+
         try: 
             #self.msleep(1500) 
             self.gateway.write_coil(1,False)
@@ -1805,6 +1774,11 @@ class MainWindow(QMainWindow, mainApplication):
             button_result="FAIL"
             self.btnPrueba5.setStyleSheet("background-color: red;")
 
+
+
+        
+
+
         self.test.result_T5(button_result,button_result_dict)
 
         # En lugar de time.sleep(6), usamos QTimer
@@ -1812,8 +1786,6 @@ class MainWindow(QMainWindow, mainApplication):
         #QTimer.singleShot(6000,self.Test_5_signal.emit())
         #self.Test_5_signal.emit()
         self.test_6()  # Llamar a la siguiente prueba
-
-    
 
     def Test_5_GUI_changes(self):
 
