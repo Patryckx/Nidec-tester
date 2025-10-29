@@ -1,5 +1,5 @@
 ('C:\\Nidec-tester\\build\\Nidec-tester\\Nidec-tester.exe',
- False,
+ True,
  True,
  True,
  ['C:\\Nidec-tester\\resources\\nidec-icon.ico'],
@@ -67,8 +67,9 @@
  [],
  False,
  False,
- 1742660212,
- [('runw_d.exe',
-   'C:\\Nidec-tester\\virtualenv\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw_d.exe',
+ 1760371388,
+ [('run_d.exe',
+   'C:\\Nidec-tester\\virtualenv\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run_d.exe',
    'EXECUTABLE')],
- 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll')
+ 'C:\\Users\\EDWIN '
+ 'CASTILLO\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll')

@@ -113,7 +113,18 @@ class Test3Thread(QThread):
         raw_change_program = 'PW,'
         change_program = raw_change_program + self.led_program
         self.Camera.send_data(change_program)
-        
+        #time.sleep(1)
+        '''#elf.Camera.send_data('T2')
+        self.Camera.send_data('T2')
+
+        # Leer la respuesta de la cámara
+        results = self.Camera.read_data()
+        resultados_herramientas = self.procesar_respuesta(results)
+        print(resultados_herramientas)'''
+
+        # Limpiar el buffer antes de realizar el disparo
+        #self.Camera.read_and_clear_buffer()
+
         # Realizar el disparo y leer la respuesta
         self.Camera.send_data('T2')
         time.sleep(0.5)  # Esperar un breve momento
@@ -170,6 +181,9 @@ class Test4Thread(QThread):
         change_program = raw_change_program + self.ocr_program
         self.Camera.send_data(change_program)
 
+        # Limpiar el buffer antes de realizar el disparo
+        #self.Camera.read_and_clear_buffer()
+
         # Realizar el disparo y leer la respuesta
         self.Camera.send_data('T2')
         time.sleep(0.5)  # Esperar un breve momento
@@ -179,6 +193,7 @@ class Test4Thread(QThread):
         print(resultados_herramientas)
         
         test_4_results = "FAIL" if "NG"  in results or "ER" in results else "PASS"
+        #ER,T2,03
         # Emitir señales para actualizar la interfaz
         self.update_lcd_signal.emit(resultados_herramientas)
         self.test_finished_signal.emit(test_4_results,resultados_herramientas)
@@ -739,9 +754,14 @@ class MainWindow(QMainWindow, mainApplication):
 
 
         #LEDs test 3
+        #self.lblConfirmLeds.mousePressEvent = self.manual_test_3_verification
+        #self.lblDenyLeds.mousePressEvent=self.deny_test_3_verification
         self.Test_3_signal.connect(self.Test_3_GUI_changes)
 
         #LCD Test 4
+
+        #self.lblConfirmLCDS.mousePressEvent=self.manual_test_4_verification
+        #self.lblDenyLCDS.mousePressEvent=self.deny_test_4_verification
         self.Test_4_signal.connect(self.Test_4_GUI_changes)
 
         #Test 5 
@@ -857,6 +877,9 @@ class MainWindow(QMainWindow, mainApplication):
         super(type(widget), widget).focusInEvent(event)
     
 ###################  lOGIN USER AND SHOP ORDER    ############################################
+
+    
+
     def verify_user_and_ShopOrder(self):
         currentUserId=self.txtNumeroEmpleado.text()
         currentShopOrder=self.txtNumeroOrden.text()
@@ -985,13 +1008,10 @@ class MainWindow(QMainWindow, mainApplication):
             pass
 
     def disconnect_all_devices(self):
-        try:
-            self.gateway.close()
-            #self.Rs232.disconnect()
-            self.Rs485.disconnect()
-            self.Camera.close_connection()
-        except Exception as e:
-            print("Error disconnecting all devices...",e)
+        self.gateway.close()
+        #self.Rs232.disconnect()
+        self.Rs485.disconnect()
+        self.Camera.close_connection()
 
 
 
@@ -1001,135 +1021,138 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(0)
 
     def inicialize(self,event):
+        print("App inicialized")
+
+        print("Obtaining instruments configuration")
+        current_config=self.config.get_current_config()
+
+        gateway_port=current_config[0]
+        RS232_port=current_config[1]
+        RS485_port=current_config[2]
+        camera_address=current_config[3]
+        camera_port=current_config[4]
+        self.timer_value = int(current_config[5])  
+        self.led_program=current_config[6]
+        self.ocr_program=current_config[7]
+
+
+        # Convertir segundos a minutos y segundos
+        minutes, seconds = divmod(  self.timer_value, 60)
+        self.formatted_timer_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
+
+        self.lbltimer.setText(self.formatted_timer_time)
+
+        print("Verifiying instruments...")
+
+        print("Verifiying Serial port ")
+        try:
+            self.gateway.open(gateway_port)
+        except Exception as e:
+            print(f"Error de conexion 485: {e}")
+
+        if not self.gateway.is_connected():
+            self.stackedWidget.setCurrentIndex(2)
+            return
+
+        #Housekeeping registers gateway
+        try:
+            self.housekeeping_gateway()
+        except Exception as e :
+            print(f"Error: {e}" )
+
+        # self.Rs232 = SerialDevice(port=RS232_port, baudrate=9600, timeout=1)
+
+        # if not self.Rs232.connect():
+        #     print("Serial 232 Device NOT connected connected")
+        #     self.stackedWidget.setCurrentIndex(1)
+        #     #return
 
         try:
-            print("App inicialized")
-
-            print("Obtaining instruments configuration")
-            current_config=self.config.get_current_config()
-
-            gateway_port=current_config[0]
-            RS232_port=current_config[1]
-            RS485_port=current_config[2]
-            camera_address=current_config[3]
-            camera_port=current_config[4]
-            self.timer_value = int(current_config[5])  
-            self.led_program=current_config[6]
-            self.ocr_program=current_config[7]
-
-
-            # Convertir segundos a minutos y segundos
-            minutes, seconds = divmod(  self.timer_value, 60)
-            self.formatted_timer_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
-
-            self.lbltimer.setText(self.formatted_timer_time)
-
-            print("Verifiying instruments...")
-
-            print("Verifiying Serial port ")
-            try:
-                self.gateway.open(gateway_port)
-            except Exception as e:
-                print(f"Error de conexion 485: {e}")
-
-            if not self.gateway.is_connected():
-                self.stackedWidget.setCurrentIndex(2)
-                return
-
-            #Housekeeping registers gateway
-            try:
-                self.housekeeping_gateway()
-            except Exception as e :
-                print(f"Error: {e}" )
-
-            try:
-                self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
-            except Exception as e:
-                print(f"Error de conexion 485: {e}")
-            if not self.Rs485.connect():
-                print("Serial 485 Device NOT connected connected")
-                self.stackedWidget.setCurrentIndex(1)
-                return
-
-            #Camera Connection through telnet protocol
-
-            try:
-            
-                self.Camera=TelnetClient(camera_address,camera_port)
-            except Exception as e:
-                print(f"Error al conectar con la camara{e}")
-
-            if not self.Camera.connect():
-                print("Camera connection Telnet not established")
-                self.stackedWidget.setCurrentIndex(3)
-                return
-
-            print("All devices sucessfully conected")  
-
-            #Instrument verification finished
-
-            data = self.config.get_current_user()
-
-            # Verificar si ambos valores son números y cumplen con la longitud requerida
-            if re.fullmatch(r'\d{4}', data[0]) and re.fullmatch(r'\d{6}', data[1]):
-                print("Datos válidos obtenidos")
-                # Aquí puedes continuar con la lógica si los datos son válidos
-                currentUserId=str(data[0])
-                self.lblCurrentUser.setText(currentUserId)
-
-                currentShopOrder=str(data[1])
-                self.lblCurrentOrder.setText(currentShopOrder)
-
-                #Disable inicialize button
-                self.btnInicializar.setEnabled(False)
-                
-                self.btnConfiguracion.setEnabled(False)
-
-
-                #Show first test index screen
-                self.stackedWidget.setCurrentIndex(6)
-
-
-
-                #Enable log out button 
-                self.btnLogout.setEnabled(True)
-                
-                self.btnPrueba1.setEnabled(True)
-                
-                self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-
-                self.txtSerialCode.setFocus()
-
-                try:
-
-                # Obtain file path
-                    filepath=self.obtain_filepath()
-
-                    if filepath:
-                        #Obtain id and id test
-                        self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
-                        print(f"Piece Id{self.piece_id}")
-                        print(f"Test Id{self.test_id}")
-                        self.lblCounter.setText(str( self.piece_id))
-                    else:
-                        self.piece_id=0
-                        self.test_id=0
-                        self.lblCounter.setText(str( self.piece_id))
-
-
-                except Exception as e:
-                    print(f"Error obtaining most recent path file to csv: {e}")
-                
-
-                
-            else:
-                print("Datos no válidos o no cumplen con los requisitos")
-
-                #Show User and Shop order input 
-                self.stackedWidget.setCurrentIndex(4)
-                self.txtNumeroEmpleado.setFocus()
+            self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
         except Exception as e:
-            print("Error incializing application:",e)
+            print(f"Error de conexion 485: {e}")
+        if not self.Rs485.connect():
+            print("Serial 485 Device NOT connected connected")
+            self.stackedWidget.setCurrentIndex(1)
+            return
+
+        #Camera Connection through telnet protocol
+
+        try:
+        
+            self.Camera=TelnetClient(camera_address,camera_port)
+        except Exception as e:
+            print(f"Error al conectar con la camara{e}")
+
+        if not self.Camera.connect():
+            print("Camera connection Telnet not established")
+            self.stackedWidget.setCurrentIndex(3)
+            return
+
+        print("All devices sucessfully conected")  
+
+        #Instrument verification finished
+
+        data = self.config.get_current_user()
+
+        # Verificar si ambos valores son números y cumplen con la longitud requerida
+        if re.fullmatch(r'\d{4}', data[0]) and re.fullmatch(r'\d{6}', data[1]):
+            print("Datos válidos obtenidos")
+            # Aquí puedes continuar con la lógica si los datos son válidos
+            currentUserId=str(data[0])
+            self.lblCurrentUser.setText(currentUserId)
+
+            currentShopOrder=str(data[1])
+            self.lblCurrentOrder.setText(currentShopOrder)
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(False)
+            
+            self.btnConfiguracion.setEnabled(False)
+
+
+            #Show first test index screen
+            self.stackedWidget.setCurrentIndex(6)
+
+
+
+            #Enable log out button 
+            self.btnLogout.setEnabled(True)
+            
+            self.btnPrueba1.setEnabled(True)
+            
+            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
+            self.txtSerialCode.setFocus()
+
+            try:
+
+            # Obtain file path
+                filepath=self.obtain_filepath()
+
+                if filepath:
+                    #Obtain id and id test
+                    self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
+                    print(f"Piece Id{self.piece_id}")
+                    print(f"Test Id{self.test_id}")
+                    self.lblCounter.setText(str( self.piece_id))
+                else:
+                    self.piece_id=0
+                    self.test_id=0
+                    self.lblCounter.setText(str( self.piece_id))
+
+
+            except Exception as e:
+                print(f"Error obtaining most recent path file to csv: {e}")
+            
+
+            
+        else:
+            print("Datos no válidos o no cumplen con los requisitos")
+
+            #Show User and Shop order input 
+            self.stackedWidget.setCurrentIndex(4)
+            self.txtNumeroEmpleado.setFocus()
 
     def housekeeping_gateway(self):
         '''Function to turn off importar register coils every time the app inicializes'''
@@ -1184,119 +1207,125 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(6)
 
     def test1_verify_serial_code(self):
+        print("Primera prueba verificando codigo serial")
 
-        try:
-            print("Primera prueba verificando codigo serial")
+        #Ejemplo formato codigo serial
+        #BQ244423100510013
 
-            #Ejemplo formato codigo serial
-            #BQ244423100510013
+        self.serial_code=self.txtSerialCode.text()
 
-            self.serial_code=self.txtSerialCode.text()
+        print(f"Codigo introducido: {self.serial_code}")
 
-            print(f"Codigo introducido: {self.serial_code}")
+         # Evaluar el formato del código serial
+        #if len(serial_code) == 17 and serial_code[:2].isalpha():
+        if  self.serial_code[:2].isalpha():
+            print("Código serial válido:", self.serial_code)
+            # Aquí puedes añadir más lógica para manejar un código válido
+            self.serial_code_captured=True
 
-            # Evaluar el formato del código serial
-            #if len(serial_code) == 17 and serial_code[:2].isalpha():
-            if  self.serial_code[:2].isalpha():
-                print("Código serial válido:", self.serial_code)
-                # Aquí puedes añadir más lógica para manejar un código válido
-                self.serial_code_captured=True
+            self.lblVerifySerialCode.setStyleSheet("color: blue;")
 
-                self.lblVerifySerialCode.setStyleSheet("color: blue;")
+            self.lblVerifySerialCode.setText("Por favor introduzca el codigo QR")
 
-                self.lblVerifySerialCode.setText("Por favor introduzca el codigo QR")
+            self.txtSerialCode.setEnabled(False)
+            
+            self.txtQrcode.setFocus()
 
-                self.txtSerialCode.setEnabled(False)
-                
-                self.txtQrcode.setFocus()
-
-            else:
-                print("Código serial no válido")
-                # Aquí puedes añadir lógica para manejar un código no válido
-                self.lblVerifySerialCode.setText("Codigo invalido")
-                self.lblVerifySerialCode.setStyleSheet("color: red;")
-                #Test Button 
-                self.btnPrueba1.setStyleSheet("background-color: red;")
-                self.serial_code_captured=False
+        else:
+            print("Código serial no válido")
+            # Aquí puedes añadir lógica para manejar un código no válido
+            self.lblVerifySerialCode.setText("Codigo invalido")
+            self.lblVerifySerialCode.setStyleSheet("color: red;")
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: red;")
+            self.serial_code_captured=False
 
 
-                # Opcional: limpiar el campo de texto después de la evaluación
-                self.txtSerialCode.clear()
-                self.txtSerialCode.setFocus()
+            # Opcional: limpiar el campo de texto después de la evaluación
+            self.txtSerialCode.clear()
+            self.txtSerialCode.setFocus()
 
 
-        except Exception as e:
-            print("Error verifying serial codes:",e)    
+        
 
     
     def test_1(self,event=None):
-
-        try:
         
-            print("Primera prueba codigo QR")
+        print("Primera prueba codigo QR")
 
-            #Ejemplo formato codigo serial
-            #BQ244423100510013
+        #Ejemplo formato codigo serial
+        #BQ244423100510013
 
-            self.qrcode=self.txtQrcode.text()
+        self.qrcode=self.txtQrcode.text()
 
-            #if self.qrcode[:2].isalpha() and self.serial_code_captured:
-            if self.qrcode  and self.serial_code_captured:
-                #Test Button 
-                self.btnPrueba1.setStyleSheet("background-color: green;")
+        #if self.qrcode[:2].isalpha() and self.serial_code_captured:
+        if self.qrcode  and self.serial_code_captured:
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: green;")
 
-                #Disable app function once the test is inicalized
-                self.lblVerifySerialCode.setStyleSheet("color: green;")
+            #Disable app function once the test is inicalized
+            self.lblVerifySerialCode.setStyleSheet("color: green;")
 
-                self.lblVerifySerialCode.setText("Codigos capturados")
+            self.lblVerifySerialCode.setText("Codigos capturados")
 
-                self.txtQrcode.setEnabled(False)
-
-
-                self.btnLogout.setEnabled(False)
-                self.btnTrazabilidad.setEnabled(False)
-
-                self.btnPrueba1.setEnabled(False)
-
-                self.start_timer( self.timer_value)
-
-                self.test.result_T1(str(self.serial_code),str(self.qrcode))
-
-                
+            self.txtQrcode.setEnabled(False)
 
 
-                self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
+            self.btnLogout.setEnabled(False)
+            self.btnTrazabilidad.setEnabled(False)
 
-                #Palmswitch_inicialize_Thread
-                self.lblRequestHMI.setStyleSheet("color: #00aaff;")
+            self.btnPrueba1.setEnabled(False)
 
-                # Crear el objeto del hilo
-                self.inicialize_thread = Palmswitch_inicialize_Thread(self.gateway)
-                self.inicialize_thread.inicialize_signal.connect(self.detected_palm_button)
-                self.inicialize_thread.failed_inicialize_signal.connect(self.failed_palm_button_signal)
-                self.inicialize_thread.stop_monitoring_palm_button_signal.connect(self.inicialize_thread.stop_monithoring_palm_button_thread)
+            self.start_timer( self.timer_value)
 
-                # Iniciar el hilo
-                self.inicialize_thread.start()
-                
-            else:
-                print("Código serial no válido")
-                # Aquí puedes añadir lógica para manejar un código no válido
-                self.lblVerifySerialCode.setText("Codigo(s) invalido o faltante")
-                self.lblVerifySerialCode.setStyleSheet("color: red;")
-                #Test Button 
-                self.btnPrueba1.setStyleSheet("background-color: red;")
+            self.test.result_T1(str(self.serial_code),str(self.qrcode))
 
-                # Opcional: limpiar el campo de texto después de la evaluación
-                self.txtSerialCode.clear()
-                self.txtQrcode.clear()
+            
 
-                self.txtSerialCode.setFocus()
 
-                self.txtSerialCode.setEnabled(True)
-                self.txtQrcode.setEnabled(True)
-        except Exception as e:
-            print("Error on test 1:",e)
+            self.lblRequestHMI.setText("Favor de posicionar el HMI en el nido y pulsar las botoneras")
+
+            #Palmswitch_inicialize_Thread
+            self.lblRequestHMI.setStyleSheet("color: #00aaff;")
+
+            # Crear el objeto del hilo
+            self.inicialize_thread = Palmswitch_inicialize_Thread(self.gateway)
+            self.inicialize_thread.inicialize_signal.connect(self.detected_palm_button)
+            self.inicialize_thread.failed_inicialize_signal.connect(self.failed_palm_button_signal)
+            self.inicialize_thread.stop_monitoring_palm_button_signal.connect(self.inicialize_thread.stop_monithoring_palm_button_thread)
+
+            # Iniciar el hilo
+            self.inicialize_thread.start()
+            
+
+
+            #time.sleep(1)
+            #Continue with Test2
+            #self.hmi_in_position_verification()
+            #Proceed with test 2
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            #QTimer.singleShot(15000, lambda: self.Test_1_signal.emit())
+            #QTimer.singleShot(3000, lambda: self.Test_1_signal.emit())
+            #self.test_2()
+
+        else:
+            print("Código serial no válido")
+            # Aquí puedes añadir lógica para manejar un código no válido
+            self.lblVerifySerialCode.setText("Codigo(s) invalido o faltante")
+            self.lblVerifySerialCode.setStyleSheet("color: red;")
+            #Test Button 
+            self.btnPrueba1.setStyleSheet("background-color: red;")
+
+            # Opcional: limpiar el campo de texto después de la evaluación
+            self.txtSerialCode.clear()
+            self.txtQrcode.clear()
+
+            self.txtSerialCode.setFocus()
+
+            self.txtSerialCode.setEnabled(True)
+            self.txtQrcode.setEnabled(True)
+
 
 
 
@@ -1355,256 +1384,238 @@ class MainWindow(QMainWindow, mainApplication):
 ############## TEST2   #####################################
 
     def test_2(self):
-        try:
-            print("Segunda prueba")
+        print("Segunda prueba")
 
-            #Read register to verify HMI presence in Fixture
+        #Read register to verify HMI presence in Fixture
 
-            print("Encendiendo bobina para alimentar 5V a hmi")
+        print("Encendiendo bobina para alimentar 5V a hmi")
 
-            try: 
-                self.gateway.write_coil(0,True)
-            except Exception as e:
-                print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
-
-            #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
-            #time.sleep(3)
-
-            #MORE DELAY TIME DUE BOOT DELAY PROBLEM IN HMIS
-            time.sleep(5)
-
-            '''
-            daemon=True: Esto indica que el hilo será un "hilo daemon", 
-            lo que significa que el hilo se cerrará automáticamente 
-            cuando el programa principal termine. 
-            Si no utilizas daemon=True, 
-            deberías manejar el cierre del hilo manualmente.'''
-            '''# Crear un hilo para leer la bobina sin bloquear el hilo principal
-            hilo_bobina = threading.Thread(target=self.check_handheld_status,daemon=True)
-            # Iniciar el hilo
-            hilo_bobina.start()'''
-
-
-            #########################################################
-            # print("Enabling command mode in HMI ")
-
-            # self.Rs485.send_command('FF00FFA50060100D04D05101010249')
-
-            command = 'FF00FFA50060100D04D05101010249'
-            max_retries = 3
-            delay = 1  # Tiempo de espera en segundos entre intentos
-
-            for attempt in range(1, max_retries + 1):
-                response = self.Rs485.send_command(command)
-
-                if response:  # Si recibimos una respuesta válida, salir del bucle
-                    print(f"Response received: {response}")
-                    break
-
-                print(f"Attempt {attempt}: No response received, retrying...")
-                time.sleep(delay)  # Esperar antes de reintentar
-
-            if not response:
-                print("No response after maximum retries, continuing execution...")
-            ############################################################
-            
-
-            print("Turning off LCD screen")
-
-            self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
-            
-            
-            print("Obtaining firmware version ")
-            firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
-
-            #Verify driver comunication though 232 
-            driver_firmware_232_verification=self.verify_driver_comunication_232(firmware_version)
-
-            print(f"Firmware response:{firmware_version}")
-
-            if firmware_version == '' or firmware_version=='None':
-                self.lblVerifyFirmware.setText("Firmware NO capturado")
-                self.lblVerifyFirmware.setStyleSheet("color: red;")
-
-                #Test Button 
-                self.btnPrueba2.setStyleSheet("background-color: red;")
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                #QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
-
-                # def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
-
-                Result1=self.test.test1_result
-                self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
-
-                
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                QTimer.singleShot(5000, lambda: self.failed_firmware_version_signal.emit())
-
-            elif not driver_firmware_232_verification:
-
-                self.txtFirmware.setText(firmware_version)
-
-                self.lblVerifyFirmware.setText("Firmware capturado & comunicación 232 verificada")
-                self.lblVerifyFirmware.setStyleSheet("color: green;")
-                #Test Button 
-                self.btnPrueba2.setStyleSheet("background-color: green;")
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
-
-                self.test.result_T2(firmware_version)
-
-                #Store 232 comunication verification result
-                verificacion_232="PASS"
-
-                self.test.result_232(verificacion_232)
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
-
-                
-
-                #Proceed with test 3
-                self.test_3()
-
-
-            else:
-                self.txtFirmware.setText(firmware_version)
-
-                self.lblVerifyFirmware.setText("Firmware capturado, comunicación 232 NO verificada")
-                self.lblVerifyFirmware.setStyleSheet("color: orange;")
-                #Test Button 
-                self.btnPrueba2.setStyleSheet("background-color: orange;")
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
-
-                self.test.result_T2(firmware_version)
-
-                #Store 232 comunication verification result
-                verificacion_232="FAIL"
-
-                self.test.result_232(verificacion_232)
-
-                #Proceed with test 3
-                #self.test_3()
-                #Test Button 
-                self.btnPrueba2.setStyleSheet("background-color: orange;")
-
-                # Crear un QTimer para emitir la señal después de 3 segundos
-                QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
-
-                #Proceed with test 3
-                self.test_3()
+        try: 
+            self.gateway.write_coil(0,True)
         except Exception as e:
-            print("Error on test 2:",e)
+            print(f"Ha ocurrido un error al encender la bobina 5v : {e}")
+
+        #IMPORTANT DELAY TO LET THE HMI TURN ON AND INICIALIZE
+        #time.sleep(3)
+
+        #MORE DELAY TIME DUE BOOT DELAY PROBLEM IN HMIS
+        time.sleep(5)
+
+        '''
+        daemon=True: Esto indica que el hilo será un "hilo daemon", 
+        lo que significa que el hilo se cerrará automáticamente 
+        cuando el programa principal termine. 
+        Si no utilizas daemon=True, 
+        deberías manejar el cierre del hilo manualmente.'''
+        '''# Crear un hilo para leer la bobina sin bloquear el hilo principal
+        hilo_bobina = threading.Thread(target=self.check_handheld_status,daemon=True)
+        # Iniciar el hilo
+        hilo_bobina.start()'''
+
+
+        #########################################################
+        # print("Enabling command mode in HMI ")
+
+        # self.Rs485.send_command('FF00FFA50060100D04D05101010249')
+
+        command = 'FF00FFA50060100D04D05101010249'
+        max_retries = 3
+        delay = 1  # Tiempo de espera en segundos entre intentos
+
+        for attempt in range(1, max_retries + 1):
+            response = self.Rs485.send_command(command)
+
+            if response:  # Si recibimos una respuesta válida, salir del bucle
+                print(f"Response received: {response}")
+                break
+
+            print(f"Attempt {attempt}: No response received, retrying...")
+            time.sleep(delay)  # Esperar antes de reintentar
+
+        if not response:
+            print("No response after maximum retries, continuing execution...")
+        ############################################################
+        
+
+        print("Turning off LCD screen")
+
+        self.Rs485.send_command("FF00FFA50060100D04D05C01000253")
+         
+        
+        print("Obtaining firmware version ")
+        firmware_version=str(self.Rs485.send_command("FF00FFA50060100D03D05600024B"))
+
+        #Verify driver comunication though 232 
+        driver_firmware_232_verification=self.verify_driver_comunication_232(firmware_version)
+
+        print(f"Firmware response:{firmware_version}")
+
+        if firmware_version == '' or firmware_version=='None':
+            self.lblVerifyFirmware.setText("Firmware NO capturado")
+            self.lblVerifyFirmware.setStyleSheet("color: red;")
+
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: red;")
+
+             # Crear un QTimer para emitir la señal después de 3 segundos
+            #QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
+
+            # def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
+
+            Result1=self.test.test1_result
+            self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
+
+            
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(5000, lambda: self.failed_firmware_version_signal.emit())
+
+        elif not driver_firmware_232_verification:
+
+            self.txtFirmware.setText(firmware_version)
+
+            self.lblVerifyFirmware.setText("Firmware capturado & comunicación 232 verificada")
+            self.lblVerifyFirmware.setStyleSheet("color: green;")
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: green;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
+
+            self.test.result_T2(firmware_version)
+
+            #Store 232 comunication verification result
+            verificacion_232="PASS"
+
+            self.test.result_232(verificacion_232)
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+
+            
+
+            #Proceed with test 3
+            self.test_3()
+
+
+        else:
+            self.txtFirmware.setText(firmware_version)
+
+            self.lblVerifyFirmware.setText("Firmware capturado, comunicación 232 NO verificada")
+            self.lblVerifyFirmware.setStyleSheet("color: orange;")
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: orange;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            #QTimer.singleShot(5000, lambda: self.Test_2_signal.emit())
+
+            self.test.result_T2(firmware_version)
+
+            #Store 232 comunication verification result
+            verificacion_232="FAIL"
+
+            self.test.result_232(verificacion_232)
+
+            #Proceed with test 3
+            #self.test_3()
+            #Test Button 
+            self.btnPrueba2.setStyleSheet("background-color: orange;")
+
+            # Crear un QTimer para emitir la señal después de 3 segundos
+            QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
+
+            #Proceed with test 3
+            self.test_3()
 
     def verify_driver_comunication_232(self,cadena):
+        """
+        Verifica si todos los valores hexadecimales en el rango dado son '0'.
+        
+        :param cadena: La cadena hexadecimal completa.
+        :param inicio: Índice de inicio de la parte relevante.
+        :param fin: Índice de fin de la parte relevante.
+        :return: True si todos los valores son '0', False en caso contrario.
+        """
+        inicio=44
 
-        try:
-            """
-            Verifica si todos los valores hexadecimales en el rango dado son '0'.
-            
-            :param cadena: La cadena hexadecimal completa.
-            :param inicio: Índice de inicio de la parte relevante.
-            :param fin: Índice de fin de la parte relevante.
-            :return: True si todos los valores son '0', False en caso contrario.
-            """
-            inicio=44
+        fin=80
 
-            fin=80
-
-            if inicio < 0 or fin > len(cadena):
-                return False  # Evitar errores si los índices están fuera de rango
-            
-            parte_relevante = cadena[inicio:fin]  # Extraemos la parte a analizar
-            
-            # Verificamos si todos los caracteres en la parte relevante son '0'
-            return all(c == '0' for c in parte_relevante)
-
-        except Exception as e:
-            print("Error on rs232 driver verification")
+        if inicio < 0 or fin > len(cadena):
+            return False  # Evitar errores si los índices están fuera de rango
+        
+        parte_relevante = cadena[inicio:fin]  # Extraemos la parte a analizar
+        
+        # Verificamos si todos los caracteres en la parte relevante son '0'
+        return all(c == '0' for c in parte_relevante)
 
     def failed_palm_button_signal(self):
-        try:
 
-            self.lblRequestHMI.setText("Botones NO detectados, prueba NO iniciada")
-            self.lblRequestHMI.setStyleSheet("color: red;")
+        self.lblRequestHMI.setText("Botones NO detectados, prueba NO iniciada")
+        self.lblRequestHMI.setStyleSheet("color: red;")
 
-            QTimer.singleShot(3000, lambda: self.test_2_failed_firmware_version_response())
-
-        except Exception as e:
-            print("Error performing failed palm button function :",e)
+        QTimer.singleShot(3000, lambda: self.test_2_failed_firmware_version_response())
 
     def detected_palm_button(self):
 
-        try:
+        self.lblRequestHMI.setText("Botones detectados, iniciando prueba...")
+        self.lblRequestHMI.setStyleSheet("color: Green;")
 
-            self.lblRequestHMI.setText("Botones detectados, iniciando prueba...")
-            self.lblRequestHMI.setStyleSheet("color: Green;")
+        self.inicialize_thread.stop_monithoring_palm_button_thread()
+        self.inicialize_thread.quit()
+        self.inicialize_thread.wait()
 
-            self.inicialize_thread.stop_monithoring_palm_button_thread()
-            self.inicialize_thread.quit()
-            self.inicialize_thread.wait()
+        QTimer.singleShot(2000, lambda: self.Test_1_signal.emit())
 
-            QTimer.singleShot(2000, lambda: self.Test_1_signal.emit())
-
-        except Exception as e:
-            print("Error executing detected palm buttons function:",e)
+        
 
 
         
   
     def test_2_failed_firmware_version_response(self):
 
-        try:
+        print("Apagando bobina para alimentar 5V a hmi")
 
-            print("Apagando bobina para alimentar 5V a hmi")
-
-            try: 
-                self.gateway.write_coil(0,False)
-            except Exception as e:
-                print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
-
-
-            self.btnPrueba1.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-
-            self.btnPrueba2.setStyleSheet("")
-
-            #STOP timer
-            self.timer.stop()
-            self.lbltimer.setText(self.formatted_timer_time)
-
-            #STOP monitoring HMI position thread
-            #self.monitor_thread.stop_monithoring_HMI_thread()
-
-            self.txtSerialCode.setText("")
-            self.txtSerialCode.setEnabled(True)
-            self.txtSerialCode.setFocus()
-
-            self.txtQrcode.setText("")
-            self.txtQrcode.setEnabled(True)
-
-            self.lblVerifySerialCode.setText("")
-
-            self.lblRequestHMI.setText("")
-
-            self.txtFirmware.setText("")
-
-            self.lblVerifyFirmware.setText("")
-
-            #Restore log out button 
-            self.btnLogout.setEnabled(True)
-            self.btnTrazabilidad.setEnabled(True)
-
-            #self.txtComunicacion232.setText("")
-
-            #self.lblVerify232communication.setText("")
+        try: 
+            self.gateway.write_coil(0,False)
         except Exception as e:
-            print("Error executing test 2 failed firmware function: ",e)
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
+
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
+        self.btnPrueba2.setStyleSheet("")
+
+        #STOP timer
+        self.timer.stop()
+        self.lbltimer.setText(self.formatted_timer_time)
+
+        #STOP monitoring HMI position thread
+        #self.monitor_thread.stop_monithoring_HMI_thread()
+
+        self.txtSerialCode.setText("")
+        self.txtSerialCode.setEnabled(True)
+        self.txtSerialCode.setFocus()
+
+        self.txtQrcode.setText("")
+        self.txtQrcode.setEnabled(True)
+
+        self.lblVerifySerialCode.setText("")
+
+        self.lblRequestHMI.setText("")
+
+        self.txtFirmware.setText("")
+
+        self.lblVerifyFirmware.setText("")
+
+        #Restore log out button 
+        self.btnLogout.setEnabled(True)
+        self.btnTrazabilidad.setEnabled(True)
+
+        #self.txtComunicacion232.setText("")
+
+        #self.lblVerify232communication.setText("")
+
         
 
     def Test_2_GUI_changes(self):
@@ -1615,100 +1626,81 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############## TEST3   #####################################
     def test_3(self):
+        # Crear el hilo de prueba
+        self.test3_thread = Test3Thread(self.Rs485, self.Camera, self.led_program)
 
-        try:
-            # Crear el hilo de prueba
-            self.test3_thread = Test3Thread(self.Rs485, self.Camera, self.led_program)
+        # Conectar señales para actualizar la interfaz
+        self.test3_thread.update_led_signal.connect(self.update_leds)
+        self.test3_thread.test_finished_signal.connect(self.process_test_3_verification)
 
-            # Conectar señales para actualizar la interfaz
-            self.test3_thread.update_led_signal.connect(self.update_leds)
-            self.test3_thread.test_finished_signal.connect(self.process_test_3_verification)
-            # Iniciar el hilo
-            self.test3_thread.start()
-
-        except Exception as e:
-            print("Error executing test 3:",e)
+        # Iniciar el hilo
+        self.test3_thread.start()
 
     def update_leds(self, leds_results):
-        try:
-            led_names = [f"lblLED{i}" for i in range(1, 12)]
-            led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
+        led_names = [f"lblLED{i}" for i in range(1, 12)]
+        led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-            for i in range(1, 12):
-                if i in leds_results and leds_results[i] == 1:
-                    getattr(self, led_names[i - 1]).setEnabled(True)
-                    getattr(self, led_input_names[i - 1]).setEnabled(False)
-        except Exception as e:
-            print("Error updating leds function:",e)
+        for i in range(1, 12):
+            if i in leds_results and leds_results[i] == 1:
+                getattr(self, led_names[i - 1]).setEnabled(True)
+                getattr(self, led_input_names[i - 1]).setEnabled(False)
+
     def process_test_3_verification(self, result,leds_results):
-        try:
-            self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-            
-            Test_3_result=f"{result,leds_results}"
-            self.test.result_T3(Test_3_result)
+        self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
+        
+        Test_3_result=f"{result,leds_results}"
+        self.test.result_T3(Test_3_result)
 
-            self.test3_thread.quit()
-            self.test3_thread.wait()
-            
-            # Esperar 5 segundos antes de continuar con la siguiente prueba
-            QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
-            self.test_4()
-        except Exception as e:
-            print("Error processing test 3 verification function:",e)
+        self.test3_thread.quit()
+        self.test3_thread.wait()
+         
+        # Esperar 5 segundos antes de continuar con la siguiente prueba
+        QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
+        self.test_4()
 
     def Test_3_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(8) 
+    
+
+  
+
 
 ############## TEST4   #####################################
 
     def test_4(self):
+        # Crear el hilo de prueba
+        self.test4_thread = Test4Thread(self.Rs485, self.Camera, self.ocr_program)
 
-        try:
-            # Crear el hilo de prueba
-            self.test4_thread = Test4Thread(self.Rs485, self.Camera, self.ocr_program)
+        # Conectar señales para actualizar la interfaz
+        self.test4_thread.update_lcd_signal.connect(self.update_lcds)
+        self.test4_thread.test_finished_signal.connect(self.process_test_4_verification)
 
-            # Conectar señales para actualizar la interfaz
-            self.test4_thread.update_lcd_signal.connect(self.update_lcds)
-            self.test4_thread.test_finished_signal.connect(self.process_test_4_verification)
-
-            # Iniciar el hilo
-            self.test4_thread.start()
-
-        except Exception as e:
-            print("Error on test 4:",e)
+        # Iniciar el hilo
+        self.test4_thread.start()
 
     def update_lcds(self, lcds_results):
+        lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
 
-        try:
-            lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
-            lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
-
-            for i in range(1, 11):
-                if i in lcds_results and lcds_results[i] == 1:
-                    if hasattr(self, lcd_names[i - 1]):  # Verificar si el atributo existe
-                        getattr(self, lcd_names[i - 1]).setEnabled(True)
-                    if hasattr(self, lcd_input_names[i - 1]):  # Verificar si el atributo existe
-                        getattr(self, lcd_input_names[i - 1]).setEnabled(False)
-        except Exception as e:
-            print("Error updating lcds:",e)
-
+        for i in range(1, 11):
+            if i in lcds_results and lcds_results[i] == 1:
+                if hasattr(self, lcd_names[i - 1]):  # Verificar si el atributo existe
+                    getattr(self, lcd_names[i - 1]).setEnabled(True)
+                if hasattr(self, lcd_input_names[i - 1]):  # Verificar si el atributo existe
+                    getattr(self, lcd_input_names[i - 1]).setEnabled(False)
 
     def process_test_4_verification(self, result,lcds_results):
+        self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
+        Test_4_result=f"{result,lcds_results}"
+        self.test.result_T4(Test_4_result)
+        # Esperar 5 segundos antes de continuar con la siguiente prueba
+        self.test4_thread.quit()
+        self.test4_thread.wait()
 
-        try:
-            self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
-            Test_4_result=f"{result,lcds_results}"
-            self.test.result_T4(Test_4_result)
-            # Esperar 5 segundos antes de continuar con la siguiente prueba
-            self.test4_thread.quit()
-            self.test4_thread.wait()
+        QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
 
-            QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
-
-            self.test_5()
-        except Exception as e:
-            print("Error processing test 4 verification: ",e)
+        self.test_5()
 
 
 
@@ -1719,433 +1711,428 @@ class MainWindow(QMainWindow, mainApplication):
 
 ##############  TEST 5   ##########################
     def test_5(self):
+        # Diccionario con el orden específico de los botones
+        # self.buttons_order = {
+        #     "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
+        #     "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
+        #     "Up Arrow": '20', "Down Arrow": '40'
+        # }
 
-        try:
-            # Diccionario con el orden específico de los botones
-            # self.buttons_order = {
-            #     "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
-            #     "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
-            #     "Up Arrow": '20', "Down Arrow": '40'
-            # }
+        # self.button_actuators_order={
+        #     "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
+        # }
+        self.buttons_order = {
+            "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
+            "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
+             "Down Arrow": '40',"Up Arrow": '20'
+        }
 
-            # self.button_actuators_order={
-            #     "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9
-            # }
-            self.buttons_order = {
-                "Display": '80', "Schedule 1": '01', "Schedule 2": '02',
-                "Schedule 3": '04', "Quick Clean": '08', "Start/Stop": '10',
-                "Down Arrow": '40',"Up Arrow": '20'
-            }
+        self.button_actuators_order={
+            "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":9,"8":8
+        }
 
-            self.button_actuators_order={
-                "1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":9,"8":8
-            }
+        #activating actuator box 
 
-            #activating actuator box 
-
-            try: 
-                self.gateway.write_coil(1,True)
-            except Exception as e:
-                print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
-
-            time.sleep(2)
-
-            print(self.buttons_order)
-
-            
-            # Crear un hilo para monitorear los botones
-            self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order,self.button_actuators_order,self.Rs485,self.gateway)
-            
-            # Conectar las señales del hilo con los métodos de la clase principal
-            self.monitor_buttons_thread.update_button_signal.connect(self.update_button_state)
-            self.monitor_buttons_thread.test_finished_signal.connect(self.on_test_finished)
-
-            # Iniciar el hilo
-            self.monitor_buttons_thread.start()
-
+        try: 
+            self.gateway.write_coil(1,True)
         except Exception as e:
-            print("Error on test 5: ",e)
+            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+
+        time.sleep(2)
+
+        print(self.buttons_order)
+
+        
+        # Crear un hilo para monitorear los botones
+        self.monitor_buttons_thread = MonitorButtonsThread(self.buttons_order,self.button_actuators_order,self.Rs485,self.gateway)
+        
+        # Conectar las señales del hilo con los métodos de la clase principal
+        self.monitor_buttons_thread.update_button_signal.connect(self.update_button_state)
+        self.monitor_buttons_thread.test_finished_signal.connect(self.on_test_finished)
+
+        # Iniciar el hilo
+        self.monitor_buttons_thread.start()
 
     def update_button_state(self, button, button_input,status):
-
-        try:
-            # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
-            print(f"Actualizando estado de los botones: {button}, {button_input}")
-            if status==True:
-                getattr(self, button).setEnabled(True)
-                getattr(self, button_input).setEnabled(False)
-            else:
-                getattr(self, button).setEnabled(False)
-                getattr(self, button_input).setEnabled(True)
-
-        except Exception as e:
-            print("Error updating buttons state :",e)
+        # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
+        print(f"Actualizando estado de los botones: {button}, {button_input}")
+        if status==True:
+            getattr(self, button).setEnabled(True)
+            getattr(self, button_input).setEnabled(False)
+        else:
+            getattr(self, button).setEnabled(False)
+            getattr(self, button_input).setEnabled(True)
 
 
     def housekeeping_button_actuators(self):
 
-        try:
+        # 1. Apagar todos los actuadores pequeños primero
+        print("Desactivando actuadores pequeños...")
+        for coil in self.button_actuators_order.values():
+            try:
+                self.gateway.write_coil(coil, False)
+            except Exception as e:
+                print(f"Error al desactivar actuador {coil}: {e}")
 
-            # 1. Apagar todos los actuadores pequeños primero
-            print("Desactivando actuadores pequeños...")
-            for coil in self.button_actuators_order.values():
-                try:
+        #activating actuator box 
+        # Verificar que todos los actuadores pequeños realmente se apagaron
+        for coil in self.button_actuators_order.values():
+            try:
+                state = self.gateway.read_coil(coil)
+                if state:  # sigue en True
+                    print(f"Actuador {coil} aún extendido, intentando forzar retracción...")
                     self.gateway.write_coil(coil, False)
-                except Exception as e:
-                    print(f"Error al desactivar actuador {coil}: {e}")
+                    time.sleep(0.3)  # pequeño retardo de seguridad
+            except Exception as e:
+                print(f"Error al verificar estado de actuador {coil}: {e}")
 
-            #activating actuator box 
-            # Verificar que todos los actuadores pequeños realmente se apagaron
-            for coil in self.button_actuators_order.values():
-                try:
-                    state = self.gateway.read_coil(coil)
-                    if state:  # sigue en True
-                        print(f"Actuador {coil} aún extendido, intentando forzar retracción...")
-                        self.gateway.write_coil(coil, False)
-                        time.sleep(0.3)  # pequeño retardo de seguridad
-                except Exception as e:
-                    print(f"Error al verificar estado de actuador {coil}: {e}")
-
-            
-            print("Esperando 2 segundos para garantizar retracción...")
-            time.sleep(2)
+        
+        print("Esperando 2 segundos para garantizar retracción...")
+        time.sleep(2)
 
 
-            #QTimer.singleShot(2000, self.on_test_finished)
-        except Exception as e:
-            print("Error executing housekeeping buttons actuators function:",e)
+        #QTimer.singleShot(2000, self.on_test_finished)
+
 
         
 
     def on_test_finished(self,test_failed,buttons_results,actuator_sensor_required,actuator_sensor_result):
+        # Lógica que se ejecuta cuando la prueba ha finalizado
+        print("La prueba de botones ha finalizado.")
 
-        try:
-            # Lógica que se ejecuta cuando la prueba ha finalizado
-            print("La prueba de botones ha finalizado.")
-
-            self.housekeeping_button_actuators()
-            try: 
-                #self.msleep(1500) 
-                self.gateway.write_coil(1,False)
-            except Exception as e:
-                print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
-
-            if actuator_sensor_required:
-                if not actuator_sensor_result:
-                    self.lblButtonTestMsg.setText("Actuador NO detectado...")
-                    self.lblButtonTestMsg.setStyleSheet("color: red;")
-            
-
-            button_result_dict=buttons_results
-
-            if test_failed==False:
-
-                button_result="PASS"
-                self.btnPrueba5.setStyleSheet("background-color: green;")
-            else:
-                button_result="FAIL"
-                self.btnPrueba5.setStyleSheet("background-color: red;")
-
-            self.test.result_T5(button_result,button_result_dict)
-
-            # En lugar de time.sleep(6), usamos QTimer
-            QTimer.singleShot(4000,self.Test_5_signal.emit)
-            #QTimer.singleShot(6000,self.Test_5_signal.emit())
-            #self.Test_5_signal.emit()
-            self.test_6()  # Llamar a la siguiente prueba
+        self.housekeeping_button_actuators()
+        try: 
+            #self.msleep(1500) 
+            self.gateway.write_coil(1,False)
         except Exception as e:
-            print("Error on test 5 finished function:",e)
+            print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
+
+        if actuator_sensor_required:
+            if not actuator_sensor_result:
+                self.lblButtonTestMsg.setText("Actuador NO detectado...")
+                self.lblButtonTestMsg.setStyleSheet("color: red;")
+        
+
+        button_result_dict=buttons_results
+
+        if test_failed==False:
+
+            button_result="PASS"
+            self.btnPrueba5.setStyleSheet("background-color: green;")
+        else:
+            button_result="FAIL"
+            self.btnPrueba5.setStyleSheet("background-color: red;")
+
+        self.test.result_T5(button_result,button_result_dict)
+
+        # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(4000,self.Test_5_signal.emit)
+        #QTimer.singleShot(6000,self.Test_5_signal.emit())
+        #self.Test_5_signal.emit()
+        self.test_6()  # Llamar a la siguiente prueba
+
     
 
     def Test_5_GUI_changes(self):
 
         self.stackedWidget.setCurrentIndex(10) 
 
+    def cancel_test_button(self):            
+
+        print("Cancelando prueba 5")
+
+        reply = QMessageBox.question(
+            self,
+            'Cancelar prueba',
+            '¿Estás seguro de que quieres cancelar la prueba',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            
+            #Erase current session info
+            #self.config.erase_user_and_shop_info()
+
+            #Show again first screen app
+            self.stackedWidget.setCurrentIndex(0)
+
+            self.btnLogout.setEnabled(False)
+
+            self.btnPrueba1.setEnabled(False)
+            self.btnPrueba1.setStyleSheet("background-color: ;")
+
+            #Disable inicialize button
+            self.btnInicializar.setEnabled(True)
+            self.btnConfiguracion.setEnabled(True)
+
+            #Clear txtfields
+            self.txtNumeroEmpleado.setText("")
+            self.txtNumeroOrden.setText("")
+
+
+            self.disconnect_all_devices()
+
+            self.lblCurrentUser.setText("")
+            self.lblCurrentOrder.setText("")
+
+
+        else:
+            pass
+
 
     ################ TEST 6   #######################
         
 
     def test_6(self):
+        self.digital_order = {
+             "Schedule 1": '01', "Schedule 2": '02',
+            "Schedule 3": '04', "Quick Clean": '08'
+        }
 
-        try:
-            self.digital_order = {
-                "Schedule 1": '01', "Schedule 2": '02',
-                "Schedule 3": '04', "Quick Clean": '08'
-            }
+        self.digital_actuators_order={
+            "1":10,"2":11,"3":12,"4":13
+        }
 
-            self.digital_actuators_order={
-                "1":10,"2":11,"3":12,"4":13
-            }
+        print(self.digital_order)
+        
+        # Crear un hilo para monitorear los botones
+        self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.digital_actuators_order,self.Rs485,self.gateway)
+        
+        # Conectar las señales del hilo con los métodos de la clase principal
+        self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
+        self.monitor_digital_inputs_thread.test_6_finished_signal.connect(self.on_test_6_finished)
 
-            print(self.digital_order)
-            
-            # Crear un hilo para monitorear los botones
-            self.monitor_digital_inputs_thread = MonitorDigitalEntrances(self.digital_order, self.digital_actuators_order,self.Rs485,self.gateway)
-            
-            # Conectar las señales del hilo con los métodos de la clase principal
-            self.monitor_digital_inputs_thread.update_digital_input_signal.connect(self.update_button_state_digital)
-            self.monitor_digital_inputs_thread.test_6_finished_signal.connect(self.on_test_6_finished)
-
-            # Iniciar el hilo
-            self.monitor_digital_inputs_thread.start()
-        except Exception as e:
-            print("Error on test 6:",e)
+        # Iniciar el hilo
+        self.monitor_digital_inputs_thread.start()
 
     def update_button_state_digital(self, digital, digital_input,status):
+        # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
+        print(f"Actualizando estado de las entradas digitales: {digital}, {digital_input}")
 
-        try:
-            # Actualizar la interfaz gráfica (esto debe ejecutarse en el hilo principal)
-            print(f"Actualizando estado de las entradas digitales: {digital}, {digital_input}")
-
-            if status==True:
-                getattr(self, digital).setEnabled(True)
-                getattr(self, digital_input).setEnabled(False)
-            else:
-                getattr(self, digital).setEnabled(False)
-                getattr(self, digital_input).setEnabled(True)
-
-        except Exception as e:
-            print(" Error updating buttons digital inputs signals:",e)
+        if status==True:
+            getattr(self, digital).setEnabled(True)
+            getattr(self, digital_input).setEnabled(False)
+        else:
+            getattr(self, digital).setEnabled(False)
+            getattr(self, digital_input).setEnabled(True)
 
     def on_test_6_finished(self,test_failed,digital_entrances_results):
+        # Lógica que se ejecuta cuando la prueba ha finalizado
+        #End digital entrances thread
+        self.monitor_digital_inputs_thread.stop()
 
-        try:
-            # Lógica que se ejecuta cuando la prueba ha finalizado
-            #End digital entrances thread
-            self.monitor_digital_inputs_thread.stop()
+        self.monitor_digital_inputs_thread.quit()
+        self.monitor_digital_inputs_thread.wait()
 
-            self.monitor_digital_inputs_thread.quit()
-            self.monitor_digital_inputs_thread.wait()
+        print("La prueba de entradas digitales ha finalizado.")
 
-            print("La prueba de entradas digitales ha finalizado.")
+        digital_results_dict=digital_entrances_results
 
-            digital_results_dict=digital_entrances_results
+        if test_failed==False:
+            digital_result="PASS"
 
-            if test_failed==False:
-                digital_result="PASS"
+            self.btnPrueba6.setStyleSheet("background-color: green;")
 
-                self.btnPrueba6.setStyleSheet("background-color: green;")
+        else:
+            digital_result="FAIL"
 
-            else:
-                digital_result="FAIL"
+            self.btnPrueba6.setStyleSheet("background-color: red;")
 
-                self.btnPrueba6.setStyleSheet("background-color: red;")
+        self.test.result_T6(digital_result,digital_results_dict)
 
-            self.test.result_T6(digital_result,digital_results_dict)
+         # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(4000,self.Test_6_signal.emit)
+        #QTimer.singleShot(6000,self.Test_6_signal.emit())
 
-            # En lugar de time.sleep(6), usamos QTimer
-            QTimer.singleShot(4000,self.Test_6_signal.emit)
-            #QTimer.singleShot(6000,self.Test_6_signal.emit())
-
-            #Stop timer
-            self.timer.stop()
-
-        except Exception as e:
-            print("Error on test 6 finished function: ",e)
+        #Stop timer
+        self.timer.stop()
 
         
  
     # Método para actualizar la interfaz de usuario de manera segura desde el hilo
     def update_digital_state(self, digital,digital_input):
-        try:
-            
-            getattr(self, digital).setEnabled(True)
-            getattr(self, digital_input).setEnabled(False)
-
-        except Exception as e:
-            print("Error updating digital state test 6 function: ",e)
+        
+        getattr(self, digital).setEnabled(True)
+        getattr(self, digital_input).setEnabled(False)
 
     
     def Test_6_GUI_changes(self):
 
-        try:
+        self.stackedWidget.setCurrentIndex(11) 
 
-            self.stackedWidget.setCurrentIndex(11) 
+        #Stop monitoring Hmi position thread
+        #self.monitor_thread.stop()
 
-            #Stop monitoring Hmi position thread
-            #self.monitor_thread.stop()
+        print("Apagando bobina para alimentar 5V a hmi")
 
-            print("Apagando bobina para alimentar 5V a hmi")
-
-            try: 
-                self.gateway.write_coil(0,False)
-            except Exception as e:
-                print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
-    
-            self.show_resume()
-
+        try: 
+            self.gateway.write_coil(0,False)
         except Exception as e:
-            print("Error on test 6 GUI Changes funtion:",e)
+            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+   
+        self.show_resume()
     ################ RESUME ########################################
 
     def show_resume(self):
 
-        try:
-
         
 
-            print("Resumen de prueba")
+        print("Resumen de prueba")
 
-            self.btnResultados.setStyleSheet("background-color: green;")
+        self.btnResultados.setStyleSheet("background-color: green;")
 
-            Result1=self.test.test1_result
-            self.lblResumenCodigoSerial.setText(Result1)
+        Result1=self.test.test1_result
+        self.lblResumenCodigoSerial.setText(Result1)
 
-            Result2=self.test.test2_result
-            self.lblResumenFirmware.setText(Result2)
+        Result2=self.test.test2_result
+        self.lblResumenFirmware.setText(Result2)
 
-            Result232=self.test.test232_result
+        Result232=self.test.test232_result
 
-            Result3=self.test.test3_result
-            self.lblResumenLEDS.setText(Result3)
+        Result3=self.test.test3_result
+        self.lblResumenLEDS.setText(Result3)
 
-            Result4=self.test.test4_result
-            self.lblResumenLCD.setText(Result4)
+        Result4=self.test.test4_result
+        self.lblResumenLCD.setText(Result4)
 
-            Result5=self.test.test5_result
-            self.lblResumenBotones.setText(Result5)
+        Result5=self.test.test5_result
+        self.lblResumenBotones.setText(Result5)
 
-            Result6=self.test.test6_result
-            self.lblResumeDigitalInputs.setText(Result6)
+        Result6=self.test.test6_result
+        self.lblResumeDigitalInputs.setText(Result6)
 
-            #Add test counter 
-            self.test_id+=1
+        #Add test counter 
+        self.test_id+=1
 
-            #Verify if is a good piece
+        #Verify if is a good piece
 
-            if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
-                self.piece_id+=1
+        if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
+            self.piece_id+=1
 
-                self.lblCounter.setText(str( self.piece_id))
+            self.lblCounter.setText(str( self.piece_id))
 
-            if not self.dont_add_register:
+        if not self.dont_add_register:
 
-                #Add register to GUI table and csv file
-                self.add_register(Result1,Result2,Result232,Result3,Result4,Result5,Result6)
+            #Add register to GUI table and csv file
+            self.add_register(Result1,Result2,Result232,Result3,Result4,Result5,Result6)
 
-            # En lugar de time.sleep(6), usamos QTimer
-            QTimer.singleShot(8000,self.Test_resume_signal.emit)
-            #QTimer.singleShot(6000,self.Test_resume_signal.emit())
+        # En lugar de time.sleep(6), usamos QTimer
+        QTimer.singleShot(8000,self.Test_resume_signal.emit)
+        #QTimer.singleShot(6000,self.Test_resume_signal.emit())
 
-            #self.Test_resume_signal.emit()
-
-        except Exception as e:
-            print(" Error on show resume function: ",e)
+        #self.Test_resume_signal.emit()
 
     def Test_resume_GUI_changes(self):
 
-        try:
+        print("Reiniciar parametros de prueba")
 
-            print("Reiniciar parametros de prueba")
+        #Reset register
+        self.test.clear_record()
 
-            #Reset register
-            self.test.clear_record()
+        #Test_1
+        self.txtSerialCode.setText("")
+        self.txtSerialCode.setFocus()
+        self.lblVerifySerialCode.setText("")
+        self.txtSerialCode.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: ;")
+        self.txtQrcode.setText("")
+        self.txtQrcode.setEnabled(True)
 
-            #Test_1
-            self.txtSerialCode.setText("")
-            self.txtSerialCode.setFocus()
-            self.lblVerifySerialCode.setText("")
-            self.txtSerialCode.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: ;")
-            self.txtQrcode.setText("")
-            self.txtQrcode.setEnabled(True)
+        self.lblRequestHMI.setText("")
 
-            self.lblRequestHMI.setText("")
+        self.lblRequestHMI.setStyleSheet("")
 
-            self.lblRequestHMI.setStyleSheet("")
+        self.lblButtonTestMsg.setText("Verificando funcionalidad botones...")
+        self.lblButtonTestMsg.setStyleSheet("color: ;")
 
-            self.lblButtonTestMsg.setText("Verificando funcionalidad botones...")
-            self.lblButtonTestMsg.setStyleSheet("color: ;")
+        #Test 2
+        self.txtFirmware.setText("")
+        self.lblVerifyFirmware.setText("")
+        #self.txtComunicacion232.setText("")
+        #self.lblVerify232communication.setText("")
+        self.btnPrueba2.setStyleSheet("background-color: ;")
 
-            #Test 2
-            self.txtFirmware.setText("")
-            self.lblVerifyFirmware.setText("")
-            #self.txtComunicacion232.setText("")
-            #self.lblVerify232communication.setText("")
-            self.btnPrueba2.setStyleSheet("background-color: ;")
-
-            
-            #Test 3
-            led_names = [f"lblLED{i}" for i in range(1, 12)]
-            led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
-
-            for i in range (0, 11):
-                getattr(self, led_names[i]).setEnabled(False)
-                getattr(self, led_input_names[i]).setEnabled(True)
-            
-            self.btnPrueba3.setStyleSheet("background-color: ;")
-            
-            #Test 4
-
-            lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
-            lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
-            #print(lcd_names)
-            #print(lcd_input_names)
-
-            for i in range(0,10):
-            
-                getattr(self, lcd_names[i]).setEnabled(False)
-                getattr(self, lcd_input_names[i]).setEnabled(True)
-
-            self.btnPrueba4.setStyleSheet("background-color: ;")
-
-            #Test 5
-            button_names = [f"lblButton{i}" for i in range(1, 9)]
-            button_input_names = [f"lblButtonInput{i}" for i in range(1,9)]
-
-            for i in range(0,8):
-                
-                getattr(self, button_names[i]).setEnabled(False)
-                getattr(self, button_input_names[i]).setEnabled(True)
-            
-            self.btnPrueba5.setStyleSheet("background-color: ;")
-
-            #Test 6
-            digital_names = [f"lblDigital{i}" for i in range(1, 5)]
-            digital_input_names = [f"lblDigitalInput{i}" for i in range(1,5)]
-
-            for i in range(0,3):
-                
-                getattr(self, digital_names[i]).setEnabled(False)
-                getattr(self, digital_input_names[i]).setEnabled(True)
-
-            self.btnPrueba6.setStyleSheet("background-color: ;")
-
-            #Resume
-
-            self.lblResumenCodigoSerial.setText("")
-
-            self.lblResumenFirmware.setText("")
-
-            self.lblResumenLEDS.setText("")
-
-            self.lblResumenLCD.setText("")
-
-            self.lblResumenBotones.setText("")
-
-            self.lblResumeDigitalInputs.setText("")
-
-            self.btnResultados.setStyleSheet("background-color: ;")
         
-            #Go back to main Screen test
-            self.stackedWidget.setCurrentIndex(6) 
+        #Test 3
+        led_names = [f"lblLED{i}" for i in range(1, 12)]
+        led_input_names = [f"lblLEDInput{i}" for i in range(1, 12)]
 
-            self.btnPrueba1.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+        for i in range (0, 11):
+            getattr(self, led_names[i]).setEnabled(False)
+            getattr(self, led_input_names[i]).setEnabled(True)
+        
+        self.btnPrueba3.setStyleSheet("background-color: ;")
+        
+        #Test 4
 
-            #Enable app functionality
-            self.btnLogout.setEnabled(True)
-            self.btnTrazabilidad.setEnabled(True)
+        lcd_names = [f"lblLCD{i}" for i in range(1, 11)]
+        lcd_input_names = [f"lblLCDInput{i}" for i in range(1, 11)]
+        #print(lcd_names)
+        #print(lcd_input_names)
 
-            self.txtSerialCode.setFocus()
+        for i in range(0,10):
+           
+            getattr(self, lcd_names[i]).setEnabled(False)
+            getattr(self, lcd_input_names[i]).setEnabled(True)
 
-            #Rest Timer
-            self.lbltimer.setText(self.formatted_timer_time)
+        self.btnPrueba4.setStyleSheet("background-color: ;")
 
-            #Retrieve add register flag
-            self.dont_add_register=False
-        except Exception as e:
-            print("Error on show test resume Gui changes :",e)
+        #Test 5
+        button_names = [f"lblButton{i}" for i in range(1, 9)]
+        button_input_names = [f"lblButtonInput{i}" for i in range(1,9)]
+
+        for i in range(0,8):
+            
+            getattr(self, button_names[i]).setEnabled(False)
+            getattr(self, button_input_names[i]).setEnabled(True)
+        
+        self.btnPrueba5.setStyleSheet("background-color: ;")
+
+        #Test 6
+        digital_names = [f"lblDigital{i}" for i in range(1, 5)]
+        digital_input_names = [f"lblDigitalInput{i}" for i in range(1,5)]
+
+        for i in range(0,3):
+            
+            getattr(self, digital_names[i]).setEnabled(False)
+            getattr(self, digital_input_names[i]).setEnabled(True)
+
+        self.btnPrueba6.setStyleSheet("background-color: ;")
+
+        #Resume
+
+        self.lblResumenCodigoSerial.setText("")
+
+        self.lblResumenFirmware.setText("")
+
+        self.lblResumenLEDS.setText("")
+
+        self.lblResumenLCD.setText("")
+
+        self.lblResumenBotones.setText("")
+
+        self.lblResumeDigitalInputs.setText("")
+
+        self.btnResultados.setStyleSheet("background-color: ;")
+    
+        #Go back to main Screen test
+        self.stackedWidget.setCurrentIndex(6) 
+
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
+        #Enable app functionality
+        self.btnLogout.setEnabled(True)
+        self.btnTrazabilidad.setEnabled(True)
+
+        self.txtSerialCode.setFocus()
+
+        #Rest Timer
+        self.lbltimer.setText(self.formatted_timer_time)
+
+        #Retrieve add register flag
+        self.dont_add_register=False
 
       
     ###############   Traceability ########################################○
@@ -2156,52 +2143,49 @@ class MainWindow(QMainWindow, mainApplication):
 
     def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
 
-        try:
+        #Get current user and shop order
+        session_info = self.config.get_current_user()
 
-            #Get current user and shop order
-            session_info = self.config.get_current_user()
+        user=session_info[0]
+        shop_order=session_info[1]
 
-            user=session_info[0]
-            shop_order=session_info[1]
-
-                
-            current_datetime = datetime.now()
-            formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
-            Current_date = str(formatted_datetime)
+               
+        current_datetime = datetime.now()
+        formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
+        Current_date = str(formatted_datetime)
 
 
 
-            formatted_time = current_datetime.strftime("%H:%M:%S")
-            Current_time=str(formatted_time)
+        formatted_time = current_datetime.strftime("%H:%M:%S")
+        Current_time=str(formatted_time)
+       
+        # Assembling the register
+        # Table register
+        register = {"Codigos":Codigo,"Firmware": Firmware,"Comunicación232":Comunicacion232,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
+      
+        # Logic to verify number of table registers and only show 9 registers 
+        table_registers = self.ResultsTable.rowCount()
+        if table_registers > 17:
+            self.ResultsTable.removeRow(17)
+  
+        # Register insertion at top of table
+        row = 0  # Insert the new register at the top of the table
+        row_count = self.ResultsTable.rowCount()  # Obtener el número de filas actual en la tabla
+        self.ResultsTable.insertRow(row)  # Insertar una nueva fila en la tabla
+
+        col = 0  # Columna inicial para insertar valores
+
+        for key, value in register.items():
+            item = QtWidgets.QTableWidgetItem(str(value))  # Crear un QTableWidgetItem con el valor del diccionario
+            item.setTextAlignment(Qt.AlignCenter)  # Centrar el texto en la celda
+            self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
+            col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
+       
+        csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
         
-            # Assembling the register
-            # Table register
-            register = {"Codigos":Codigo,"Firmware": Firmware,"Comunicación232":Comunicacion232,"LEDS": LEDS_result,"LCDS": LCDS_result,"Botones":Buttons_result, "Entradas": Entradas_result, "Fecha": Current_date}
-        
-            # Logic to verify number of table registers and only show 9 registers 
-            table_registers = self.ResultsTable.rowCount()
-            if table_registers > 17:
-                self.ResultsTable.removeRow(17)
-    
-            # Register insertion at top of table
-            row = 0  # Insert the new register at the top of the table
-            row_count = self.ResultsTable.rowCount()  # Obtener el número de filas actual en la tabla
-            self.ResultsTable.insertRow(row)  # Insertar una nueva fila en la tabla
+        # Call csv register add function 
+        self.test.add_csv_register(csv_register,user,shop_order)
 
-            col = 0  # Columna inicial para insertar valores
-
-            for key, value in register.items():
-                item = QtWidgets.QTableWidgetItem(str(value))  # Crear un QTableWidgetItem con el valor del diccionario
-                item.setTextAlignment(Qt.AlignCenter)  # Centrar el texto en la celda
-                self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
-                col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
-        
-            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
-            
-            # Call csv register add function 
-            self.test.add_csv_register(csv_register,user,shop_order)
-        except Exception as e:
-            print("Error on add register function: ",e)
 
 ############  PIECE COUNTER ##########################################
     def obtain_piece_register_id_and_test(self, filepath):
