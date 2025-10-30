@@ -4367,7 +4367,7 @@ class Ui_MainWindow(object):
         self.label_31.setText(_translate("MainWindow", "-No mover el HMI durante la prueba"))
         self.label_36.setText(_translate("MainWindow", "-Verificar conexiones físicas"))
         self.label_37.setText(_translate("MainWindow", "-Verificar conexión con Gateway"))
-import resources_rc
+import resources.resources
 
 
 if __name__ == "__main__":
