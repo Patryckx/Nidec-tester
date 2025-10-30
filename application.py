@@ -7,7 +7,8 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QLabel,
     QPushButton,
-    QMessageBox
+    QMessageBox,
+    QTableWidgetItem
 )
 
 # UI Import
@@ -20,6 +21,7 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 from utilities.Postgress_SQL.postgress_lib import PostgresDatabase
+from utilities.Traceability.manage_info_csv import Manage_data
 from utilities.Logs.logger import setup_logger
 
 setup_logger()
@@ -457,26 +459,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.setMouseTracking(True)  # Seguimiento del mouse
         self._startPos = None  # Para guardar la posición inicial del mouse
         #Preparar tabla ajustar tabla a columnas
-        #self.ResultsTable.horizontalHeader().setSectionResizeMode(1)
-        # Formato a tabla
-        headers = ['Codigo','Firmware','Comunicación232','LED', 'LCDS','Botones','Entradas','Fecha' ]
-        # Configuración de la tabla
-        self.ResultsTable.setColumnCount(len(headers))
-        self.ResultsTable.setHorizontalHeaderLabels(headers)
-
-        # Ajustar el ancho de las columnas
-        self.ResultsTable.setColumnWidth(headers.index('Codigo'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Firmware'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Comunicación232'), 150)
-        self.ResultsTable.setColumnWidth(headers.index('LED'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('LCDS'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Botones'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Entradas'), 120)
-        self.ResultsTable.setColumnWidth(headers.index('Fecha'), 200)
-
-        # Actualizar la vista
-        self.ResultsTable.update()
-
+        
         #Instance config class
         self.config=Configuration()
 
@@ -485,6 +468,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.test=Manage_tests()
 
         self.postgress_database=PostgresDatabase() 
+
+        self.traceability_csv=Manage_data()
 
         # Space bar function initialized flag 
         self.initialized_flag = False
@@ -502,6 +487,9 @@ class MainWindow(QMainWindow, mainApplication):
         self.timer.timeout.connect(self.update_timer)  # Conectar la señal timeout a la función
         self.remaining_time = 0  # Variable para almacenar el tiempo restante
 
+        #Traceability table
+        self.setup_table()
+
         # Lista para almacenar los hilos activos
         self.threads = []
         
@@ -512,6 +500,80 @@ class MainWindow(QMainWindow, mainApplication):
         # Asegurar que la ventana pueda recibir eventos de teclado
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFocus()
+
+
+
+    ############# TABLE FUNCTIONS   ########################## 
+
+
+    def setup_table(self):
+
+        try:
+            # Formato a tabla
+            headers = ['Codigo','Firmware','Comunicación232','LED', 'LCDS','Botones','Entradas','Fecha' ]
+            # Configuración de la tabla
+            self.ResultsTable.setColumnCount(len(headers))
+            self.ResultsTable.setHorizontalHeaderLabels(headers)
+
+            # Ajustar el ancho de las columnas
+            self.ResultsTable.setColumnWidth(headers.index('Codigo'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('Firmware'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('Comunicación232'), 150)
+            self.ResultsTable.setColumnWidth(headers.index('LED'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('LCDS'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('Botones'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('Entradas'), 120)
+            self.ResultsTable.setColumnWidth(headers.index('Fecha'), 200)
+
+            # Actualizar la vista
+            self.ResultsTable.update()
+
+            #load table info
+            self.load_traceability_from_csv_to_table()
+
+        except Exception as e:
+            print("Error seting up tracaebility table: ",e)
+ 
+    
+    def load_traceability_from_csv_to_table(self):
+        """Carga los registros existentes del CSV y los muestra en la tabla."""
+        try:
+            # Obtener ruta del archivo CSV actual
+            filepath = self.traceability_csv.obtain_filepath()
+            if not filepath or not os.path.exists(filepath):
+                print("No se encontró archivo CSV existente.")
+                return
+
+            with open(filepath, mode='r', newline='', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                rows = list(reader)
+
+            if not rows:
+                print("No hay registros en el archivo CSV.")
+                return
+
+            # Configurar columnas con base en encabezados del CSV
+            fieldnames = reader.fieldnames
+            self.ResultsTable.setColumnCount(len(fieldnames))
+            self.ResultsTable.setHorizontalHeaderLabels(fieldnames)
+
+            # Limpiar tabla antes de cargar
+            self.ResultsTable.setRowCount(0)
+
+            # Insertar registros desde el CSV (más reciente primero)
+            #for row_data in reversed(rows[-22:]):  # Mostrar solo los últimos 22 si hay muchos
+            for row_data in reversed(rows):  # para mostrar todos
+                row_index = self.ResultsTable.rowCount()
+                self.ResultsTable.insertRow(row_index)
+                for col, key in enumerate(fieldnames):
+                    item = QTableWidgetItem(str(row_data.get(key, "")))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.ResultsTable.setItem(row_index, col, item)
+
+            print(f"Se cargaron {len(rows)} registros desde {filepath}")
+
+        except Exception as e:
+            print(f"Error al cargar registros desde CSV: {e}")  
     
     ############# TIMER #####################
 
@@ -542,74 +604,82 @@ class MainWindow(QMainWindow, mainApplication):
         self.lbltimer.setText(formatted_time)
 
     def timer_finished(self):
-        """Función que se ejecuta cuando el temporizador llega a cero."""
-        print("Timer finished!")
-
-        #Stop buttons thread
 
         try:
+            """Función que se ejecuta cuando el temporizador llega a cero."""
+            print("Timer finished!")
 
-            self.monitor_buttons_thread.stop()
+            #Stop buttons thread
 
-            self.monitor_buttons_thread.quit()
-            self.monitor_buttons_thread.wait()
-        except Exception as e :
-            print("Error al detener el hilo de monitoreo de botones")
+            try:
 
-        try:
-            self.monitor_digital_inputs_thread.stop()
-            self.monitor_digital_inputs_thread.quit()
-            self.monitor_digital_inputs_thread.wait()
+                self.monitor_buttons_thread.stop()
+
+                self.monitor_buttons_thread.quit()
+                self.monitor_buttons_thread.wait()
+            except Exception as e :
+                print("Error al detener el hilo de monitoreo de botones")
+
+            try:
+                self.monitor_digital_inputs_thread.stop()
+                self.monitor_digital_inputs_thread.quit()
+                self.monitor_digital_inputs_thread.wait()
+            except Exception as e:
+                print("Error al detener el hilo de monitoreo de entradas digitales")
+
+
+            
+
+            print("Apagando bobina para alimentar 5V a hmi")
+
+            try: 
+                self.gateway.write_coil(0,False)
+            except Exception as e:
+                print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
+
+            self.housekeeping_gateway()
+            #Stoping monithoring thread HMI 
+
+            #self.monitor_thread.stop_monitoring_signal.emit()
+
+            print("Enciendiendo pantalla LCD 100%")
+
+            self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
+
+            #putting back HMI in monitor mode
+            self.Rs485.send_command("FF00FFA50060100D04D05101000248")
+
+            #Flag to not add register if test are not performed
+            self.dont_add_register=True
+
+            self.btnPrueba3.setStyleSheet("background-color: red;")
+            self.btnPrueba4.setStyleSheet("background-color: red;")
+            self.btnPrueba5.setStyleSheet("background-color: red;")
+            self.btnPrueba6.setStyleSheet("background-color: red;")
+
+            self.btnResultados.setStyleSheet("background-color: red;")
+            self.Test_6_signal.emit()
+            
+
+            self.stop_all_threads()
+
         except Exception as e:
-            print("Error al detener el hilo de monitoreo de entradas digitales")
-
-
-        
-
-        print("Apagando bobina para alimentar 5V a hmi")
-
-        try: 
-            self.gateway.write_coil(0,False)
-        except Exception as e:
-            print(f"Ha ocurrido un error al apagar la bobina 5v : {e}")
-
-        self.housekeeping_gateway()
-
-
-        #Stoping monithoring thread HMI 
-
-        #self.monitor_thread.stop_monitoring_signal.emit()
-
-        print("Enciendiendo pantalla LCD 100%")
-
-        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-
-        #putting back HMI in monitor mode
-        self.Rs485.send_command("FF00FFA50060100D04D05101000248")
-
-        #Flag to not add register if test are not performed
-        self.dont_add_register=True
-
-        self.btnPrueba3.setStyleSheet("background-color: red;")
-        self.btnPrueba4.setStyleSheet("background-color: red;")
-        self.btnPrueba5.setStyleSheet("background-color: red;")
-        self.btnPrueba6.setStyleSheet("background-color: red;")
-
-        self.btnResultados.setStyleSheet("background-color: red;")
-        self.Test_6_signal.emit()
-        
-
-        self.stop_all_threads()
+            print("Error executing timer out function: ",e)
         
 
     def stop_all_threads(self):
-        """Detiene todos los hilos activos."""
-        print("Stopping all threads...")
-        for thread in self.threads:
-            if thread.is_alive():
-                # Aquí podrías implementar una señal o flag para detener hilos seguros
-                print(f"Stopping thread {thread.name}")
-        self.threads.clear()  # Limpia la lista de hilos
+        try:
+            """Detiene todos los hilos activos."""
+            print("Stopping all threads...")
+            for thread in self.threads:
+                if thread.is_alive():
+                    # Aquí podrías implementar una señal o flag para detener hilos seguros
+                    print(f"Stopping thread {thread.name}")
+            self.threads.clear()  # Limpia la lista de hilos
+
+        except Exception as e:
+            print("Error exeuting stop all thread function:",e)
+            raise
 
     ################# APP FUNCTIONS ########################################
         
@@ -660,7 +730,6 @@ class MainWindow(QMainWindow, mainApplication):
         #Minimize window app
         self.showMinimized()
        
-  
 
     def connect_signals(self):
 
@@ -719,11 +788,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.btnPrueba1.clicked.connect(self.test_inicialize)
 
-        #HMI verification 
         
-        # Conectar señales
-        
-        self.btnHMIRemoved.clicked.connect(self.cancel_remaining_test_and_functions)
 
         #Test 1 timer 
 
@@ -743,7 +808,6 @@ class MainWindow(QMainWindow, mainApplication):
         #Test 5 
         self.Test_5_signal.connect(self.Test_5_GUI_changes)
 
-        self.lblCancelTestButtons.mousePressEvent=self.cancel_remaining_test_and_functions
 
         #Test 6
         self.Test_6_signal.connect(self.Test_6_GUI_changes)
@@ -757,90 +821,103 @@ class MainWindow(QMainWindow, mainApplication):
     
 ################## CONFIGURATION #############################################
     def show_edit_screen_configuration(self,event):
-        self.stackedWidget.setCurrentIndex(13)
-        current_config=self.config.get_current_config()
+        try:
+            self.stackedWidget.setCurrentIndex(13)
+            current_config=self.config.get_current_config()
 
-        gateway_port=str(current_config[0])
-        RS232_port=str(current_config[1])
-        RS485_port=str(current_config[2])
-        camera_address=str(current_config[3])
-        #camera_port=current_config[4]
-        timer=str(current_config[4])
-        self.txtGatewayPort.setText(str(gateway_port))
-        self.txt232Port.setText(str(RS232_port))
-        self.txt485Port.setText(str(RS485_port))
-        self.txtCameraAddress.setText(str(camera_address))
-        #self.lblTimer.setText(timer)
+            gateway_port=str(current_config[0])
+            RS232_port=str(current_config[1])
+            RS485_port=str(current_config[2])
+            camera_address=str(current_config[3])
+            #camera_port=current_config[4]
+            timer=str(current_config[4])
+            self.txtGatewayPort.setText(str(gateway_port))
+            self.txt232Port.setText(str(RS232_port))
+            self.txt485Port.setText(str(RS485_port))
+            self.txtCameraAddress.setText(str(camera_address))
+            #self.lblTimer.setText(timer)
+
+        except Exception as e:
+            print("Error showing edit screen config:",e)
     
 
     def show_configuration(self,event):
-        self.stackedWidget.setCurrentIndex(12)
+        try:
+            self.stackedWidget.setCurrentIndex(12)
 
-        current_config=self.config.get_current_config()
+            current_config=self.config.get_current_config()
 
-        gateway_port=str(current_config[0])
-        RS232_port=str(current_config[1])
-        RS485_port=str(current_config[2])
-        camera_address=str(current_config[3])
-        #camera_port=current_config[4]
-        timer=str(current_config[5])
-        self.lblGatewayPort.setText(str(gateway_port))
-        self.lbl232Port.setText(str(RS232_port))
-        self.lbl485Port.setText(str(RS485_port))
-        self.lblCameraAddress.setText(str(camera_address))
-        self.lblTimer.setText(timer)
+            gateway_port=str(current_config[0])
+            RS232_port=str(current_config[1])
+            RS485_port=str(current_config[2])
+            camera_address=str(current_config[3])
+            #camera_port=current_config[4]
+            timer=str(current_config[5])
+            self.lblGatewayPort.setText(str(gateway_port))
+            self.lbl232Port.setText(str(RS232_port))
+            self.lbl485Port.setText(str(RS485_port))
+            self.lblCameraAddress.setText(str(camera_address))
+            self.lblTimer.setText(timer)
+        except Exception as e:
+            print("Error showing configuration:",e)
         
     def save_configuration(self, event):
-        if (self.txtGatewayPort.text() and self.txt232Port.text() and 
-            self.txt485Port.text() and self.txtCameraAddress.text()):
+
+        try:
+            if (self.txtGatewayPort.text() and self.txt232Port.text() and 
+                self.txt485Port.text() and self.txtCameraAddress.text()):
+                
+                # Gateway port
+                self.new_gateway_port = self.txtGatewayPort.text()
+                search_result = re.search(r'\d+', self.new_gateway_port)
+                self.new_gateway_port = search_result.group() if search_result else "1"
+                self.gateway_new_port_string = f'"COM{str(self.new_gateway_port)}"'
+
+                # RS232 Port
+                self.new_232_port = self.txt232Port.text()
+                search_result = re.search(r'\d+', self.new_232_port)
+                self.new_232_port = search_result.group() if search_result else "1"
+                self.new_232_port_string = f'"COM{str(self.new_232_port)}"'
+
+                # RS485 Port
+                self.new_485_port = self.txt485Port.text()
+                search_result = re.search(r'\d+', self.new_485_port)
+                self.new_485_port = search_result.group() if search_result else "1"
+                self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
+
             
-            # Gateway port
-            self.new_gateway_port = self.txtGatewayPort.text()
-            search_result = re.search(r'\d+', self.new_gateway_port)
-            self.new_gateway_port = search_result.group() if search_result else "1"
-            self.gateway_new_port_string = f'"COM{str(self.new_gateway_port)}"'
+                # Camera Address
+                self.new_camera_address = str(self.txtCameraAddress.text())
+                # Regular expression to match an IPv4 address
+                ip_pattern = r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+                search_result = re.search(ip_pattern, self.new_camera_address)
 
-            # RS232 Port
-            self.new_232_port = self.txt232Port.text()
-            search_result = re.search(r'\d+', self.new_232_port)
-            self.new_232_port = search_result.group() if search_result else "1"
-            self.new_232_port_string = f'"COM{str(self.new_232_port)}"'
+                # Fallback to a default IP if no valid IP is found
+                if search_result:
+                    self.new_camera_address = search_result.group()
+                else:
+                    self.new_camera_address = "192.168.1.1"  # Default fallback IP address
 
-            # RS485 Port
-            self.new_485_port = self.txt485Port.text()
-            search_result = re.search(r'\d+', self.new_485_port)
-            self.new_485_port = search_result.group() if search_result else "1"
-            self.new_485_port_string = f'"COM{str(self.new_485_port)}"'
+                self.new_timer_value = str(self.spinBoxTimer.value())
 
-           
-            # Camera Address
-            self.new_camera_address = str(self.txtCameraAddress.text())
-            # Regular expression to match an IPv4 address
-            ip_pattern = r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-            search_result = re.search(ip_pattern, self.new_camera_address)
+                self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
+                                                self.new_485_port_string,self.new_camera_address,
+                                                self.new_timer_value)
 
-            # Fallback to a default IP if no valid IP is found
-            if search_result:
-                self.new_camera_address = search_result.group()
+                self.show_configuration(event)
             else:
-                self.new_camera_address = "192.168.1.1"  # Default fallback IP address
+                
+                print("Por favor, completa todos los campos antes de guardar la configuración.")
 
-            self.new_timer_value = str(self.spinBoxTimer.value())
+                # Set placeholders for empty or invalid fields
+                self.set_placeholder_with_style(self.txtGatewayPort, "Texto faltante")
+                self.set_placeholder_with_style(self.txt232Port, "Texto faltante")
+                self.set_placeholder_with_style(self.txt485Port, "Texto faltante")
+                self.set_placeholder_with_style(self.txtCameraAddress, "Texto faltante")
 
-            self.config.save_new_configuration(self.gateway_new_port_string,self.new_232_port_string,
-                                               self.new_485_port_string,self.new_camera_address,
-                                               self.new_timer_value)
-
-            self.show_configuration(event)
-        else:
-            
-            print("Por favor, completa todos los campos antes de guardar la configuración.")
-
-            # Set placeholders for empty or invalid fields
-            self.set_placeholder_with_style(self.txtGatewayPort, "Texto faltante")
-            self.set_placeholder_with_style(self.txt232Port, "Texto faltante")
-            self.set_placeholder_with_style(self.txt485Port, "Texto faltante")
-            self.set_placeholder_with_style(self.txtCameraAddress, "Texto faltante")
+        except Exception as e:
+            print("Error saving current configuration:",e)
+            raise
     
     def set_placeholder_with_style(self, widget, placeholder_text):
         if not widget.text():
@@ -854,131 +931,152 @@ class MainWindow(QMainWindow, mainApplication):
     
 ###################  lOGIN USER AND SHOP ORDER    ############################################
     def verify_user_and_ShopOrder(self):
-        currentUserId=self.txtNumeroEmpleado.text()
-        currentShopOrder=self.txtNumeroOrden.text()
+        try:
+            currentUserId=self.txtNumeroEmpleado.text()
+            currentShopOrder=self.txtNumeroOrden.text()
 
-        if currentUserId and currentShopOrder:
+            if currentUserId and currentShopOrder:
 
-            # Verificar si ambos valores son números y cumplen con la longitud requerida
-            if re.fullmatch(r'\d{4}', currentUserId) and re.fullmatch(r'\d{6}', currentShopOrder):
-                print("Datos válidos obtenidos")
+                # Verificar si ambos valores son números y cumplen con la longitud requerida
+                if re.fullmatch(r'\d{4}', currentUserId) and re.fullmatch(r'\d{6}', currentShopOrder):
+                    print("Datos válidos obtenidos")
 
-                currentUserId=str(currentUserId)
-                self.lblNumeroEmpleado.setText(currentUserId)
+                    currentUserId=str(currentUserId)
+                    self.lblNumeroEmpleado.setText(currentUserId)
 
-                currentShopOrder=str(currentShopOrder)
-                self.lblNumeroOrden.setText(currentShopOrder)
+                    currentShopOrder=str(currentShopOrder)
+                    self.lblNumeroOrden.setText(currentShopOrder)
 
+                    
+
+                    #Show User and Shop order input confirm Screen
+                    self.stackedWidget.setCurrentIndex(5)
                 
+                else:
+                    print("Datos no válidos o no cumplen con los requisitos")
 
-                #Show User and Shop order input confirm Screen
-                self.stackedWidget.setCurrentIndex(5)
-               
+                    #Erase textfield information
+                    self.txtNumeroEmpleado.setText("")
+                    self.txtNumeroOrden.setText("")
+
+                    self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
+                    self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
+
+                    self.txtNumeroEmpleado.setFocus()
+
+                    #Show User and Shop order input 
+                    #self.stackedWidget.setCurrentIndex(4)
             else:
-                print("Datos no válidos o no cumplen con los requisitos")
-
-                #Erase textfield information
-                self.txtNumeroEmpleado.setText("")
-                self.txtNumeroOrden.setText("")
-
-                self.set_placeholder_with_style(self.txtNumeroEmpleado, "Formato invalido")
-                self.set_placeholder_with_style(self.txtNumeroOrden, "Formato invalido")
+                print("Informacion de usuario u orden faltante ")           
+                self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
+                self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
 
                 self.txtNumeroEmpleado.setFocus()
-
-                #Show User and Shop order input 
-                #self.stackedWidget.setCurrentIndex(4)
-        else:
-            print("Informacion de usuario u orden faltante ")           
-            self.set_placeholder_with_style(self.txtNumeroEmpleado, "Texto faltante")
-            self.set_placeholder_with_style(self.txtNumeroOrden, "Texto faltante")
-
-            self.txtNumeroEmpleado.setFocus()
+        except Exception as e:
+            print("Error verifying user and order:",e)
+            raise
 
     
     def confirm_and_save_userId_and_ShopOrder(self,event):
+        try:
 
-        currentUserId=str(self.lblNumeroEmpleado.text())
-        currentShopOrder=str(self.lblNumeroOrden.text())
+            currentUserId=str(self.lblNumeroEmpleado.text())
+            currentShopOrder=str(self.lblNumeroOrden.text())
 
-        self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
+            self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
 
-        #Put information in GUI 
-        self.lblCurrentUser.setText(currentUserId)
-        self.lblCurrentOrder.setText(currentShopOrder)
-        
-        #Show first test index screen
-        self.stackedWidget.setCurrentIndex(6)
+            #Put information in GUI 
+            self.lblCurrentUser.setText(currentUserId)
+            self.lblCurrentOrder.setText(currentShopOrder)
+            
+            #Show first test index screen
+            self.stackedWidget.setCurrentIndex(6)
 
-        #Enable log out button 
-        self.btnLogout.setEnabled(True)
-        self.btnInicializar.setEnabled(False)
-        self.btnConfiguracion.setEnabled(False)
+            #Enable log out button 
+            self.btnLogout.setEnabled(True)
+            self.btnInicializar.setEnabled(False)
+            self.btnConfiguracion.setEnabled(False)
 
-        self.btnPrueba1.setEnabled(True)
-        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+            self.btnPrueba1.setEnabled(True)
+            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
-        self.txtSerialCode.setFocus()
+            self.txtSerialCode.setFocus()
+
+        except Exception as e:
+            print("Error saving and confirm user and order:",e)
+            raise
 
     
     def deny_userId_and_ShopOrder(self,event):
 
-        #Erase information in textfields
-        self.txtNumeroEmpleado.setText("")
-        self.txtNumeroOrden.setText("")
-        
-        #Show again user input information 
-        self.stackedWidget.setCurrentIndex(4)
+        try:
 
-    def log_out(self):            
-
-        print("Cerrando sesion actual")
-
-        reply = QMessageBox.question(
-            self,
-            'Cerrar sesion',
-            '¿Estás seguro de que quieres cerrar la sesion actual',
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No
-        )
-        
-        if reply == QMessageBox.Yes:
-            
-            #Erase current session info
-            self.config.erase_user_and_shop_info()
-
-            #Show again first screen app
-            self.stackedWidget.setCurrentIndex(0)
-
-            self.btnLogout.setEnabled(False)
-
-            self.btnPrueba1.setEnabled(False)
-            self.btnPrueba1.setStyleSheet("background-color: ;")
-
-            #Disable inicialize button
-            self.btnInicializar.setEnabled(True)
-            self.btnConfiguracion.setEnabled(True)
-
-            #Clear txtfields
+            #Erase information in textfields
             self.txtNumeroEmpleado.setText("")
             self.txtNumeroOrden.setText("")
+            
+            #Show again user input information 
+            self.stackedWidget.setCurrentIndex(4)
+
+        except Exception as e:
+            print("Error canceling user and order input:",e)
+            raise
+
+    def log_out(self):  
+
+        try:          
+
+            print("Cerrando sesion actual")
+
+            reply = QMessageBox.question(
+                self,
+                'Cerrar sesion',
+                '¿Estás seguro de que quieres cerrar la sesion actual',
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                
+                #Erase current session info
+                self.config.erase_user_and_shop_info()
+
+                #Show again first screen app
+                self.stackedWidget.setCurrentIndex(0)
+
+                self.btnLogout.setEnabled(False)
+
+                self.btnPrueba1.setEnabled(False)
+                self.btnPrueba1.setStyleSheet("background-color: ;")
+
+                #Disable inicialize button
+                self.btnInicializar.setEnabled(True)
+                self.btnConfiguracion.setEnabled(True)
+
+                #Clear txtfields
+                self.txtNumeroEmpleado.setText("")
+                self.txtNumeroOrden.setText("")
 
 
-            self.disconnect_all_devices()
+                self.disconnect_all_devices()
 
-            self.lblCurrentUser.setText("")
-            self.lblCurrentOrder.setText("")
+                self.lblCurrentUser.setText("")
+                self.lblCurrentOrder.setText("")
 
-            self.lblCounter.setText("")
-            #Restore inicialized app flag
-            self.initialized_flag=False
+                self.lblCounter.setText("")
+                #Restore inicialized app flag
+                self.initialized_flag=False
 
-            self.piece_id=0
-            self.test_id=0
+                self.piece_id=0
+                self.test_id=0
 
 
-        else:
-            pass
+            else:
+                pass
+
+        except Exception as e:
+            print("Error in log out function:",e)
+            raise
 
     def disconnect_all_devices(self):
         try:
@@ -988,6 +1086,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.Camera.close_connection()
         except Exception as e:
             print("Error disconnecting all devices...",e)
+
+            
 
 
 
@@ -1147,10 +1247,10 @@ class MainWindow(QMainWindow, mainApplication):
             self.postgress_database.create_connection(host,database)
 
             # Parámetros para tu búsqueda
-            table_name = 'Leak-tester-registers'
+            table_name = 'nidec-pentair-tester'
 
             # Columnas que deseas obtener del registro
-            desired_fields = ['id_prueba', 'id_pieza', 'piezas_malas', 'meta_piezas']
+            desired_fields = ['id-prueba', 'id-pieza']
 
             conditions = {
             "numero-usuario": user,
@@ -1165,8 +1265,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             if record:
                 # Extraer valores específicos del registro
-                self.test_id = record.get('id_prueba', 0)
-                self.piece_id = record.get('id_pieza', 0)
+                self.test_id = record.get('id-prueba', 0)
+                self.piece_id = record.get('id-pieza', 0)
 
                 # Mostrar resultados en la interfaz
                 print(f"Piece Id: {self.piece_id}")
@@ -1182,8 +1282,6 @@ class MainWindow(QMainWindow, mainApplication):
                 self.test_id=0
                 self.lblCounter.setText(str( self.piece_id))
                 return False
-            
-            
 
         except Exception as e:
             print(f"Error al obtener datos desde PostgreSQL: {e}")
@@ -1203,6 +1301,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.gateway.write_coil(1,False)
         except Exception as e:
             print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+            raise
 
         #Acuators buttons
         
@@ -1220,6 +1319,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+            raise
         
            
         try: 
@@ -1232,6 +1332,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+            raise
 
 
        
@@ -1285,6 +1386,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error verifying serial codes:",e)    
+            raise
 
     
     def test_1(self,event=None):
@@ -1355,60 +1457,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.txtQrcode.setEnabled(True)
         except Exception as e:
             print("Error on test 1:",e)
-
-
-
-            
-
-
-
-
-############# HMI IN POSITION VERIFICATION ######################################
-
-    def cancel_remaining_test_and_functions(self,event=None):
-
-        #Stop monitor buttons thread 
-
-        self.housekeeping_gateway()
-
-        try:
-
-            self.monitor_buttons_thread.stop()
-
-            self.monitor_buttons_thread.quit()
-            self.monitor_buttons_thread.wait()
-        except Exception as e :
-            print("Error al detener el hilo de monitoreo de botones")
-
-        try:
-            self.monitor_digital_inputs_thread.stop()
-            self.monitor_digital_inputs_thread.quit()
-            self.monitor_digital_inputs_thread.wait()
-        except Exception as e:
-            print("Error al detener el hilo de monitoreo de entradas digitales")
-
-   
-
-        #Stop timer
-        self.timer.stop()
-
-        print("Enciendiendo pantalla LCD 100%")
-
-        self.Rs485.send_command("FF00FFA50060100D04D05C016402B7")
-
-        #putting back HMI in monitor mode
-        self.Rs485.send_command("FF00FFA50060100D04D05101000248")
-
-        #Flag to not add register if test are not performed
-        self.dont_add_register=True
-
-        self.btnPrueba3.setStyleSheet("background-color: red;")
-        self.btnPrueba4.setStyleSheet("background-color: red;")
-        self.btnPrueba5.setStyleSheet("background-color: red;")
-        self.btnPrueba6.setStyleSheet("background-color: red;")
-
-        self.btnResultados.setStyleSheet("background-color: red;")
-        self.Test_6_signal.emit()
+            raise
 
 ############## TEST2   #####################################
 
@@ -1558,6 +1607,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.test_3()
         except Exception as e:
             print("Error on test 2:",e)
+            raise
 
     def verify_driver_comunication_232(self,cadena):
 
@@ -1584,6 +1634,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error on rs232 driver verification")
+            
 
     def failed_palm_button_signal(self):
         try:
@@ -1595,6 +1646,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error performing failed palm button function :",e)
+            raise
 
     def detected_palm_button(self):
 
@@ -1611,6 +1663,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error executing detected palm buttons function:",e)
+            raise
 
 
         
@@ -1663,6 +1716,7 @@ class MainWindow(QMainWindow, mainApplication):
             #self.lblVerify232communication.setText("")
         except Exception as e:
             print("Error executing test 2 failed firmware function: ",e)
+            raise
         
 
     def Test_2_GUI_changes(self):
@@ -1686,6 +1740,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error executing test 3:",e)
+            raise
 
     def update_leds(self, leds_results):
         try:
@@ -1698,6 +1753,7 @@ class MainWindow(QMainWindow, mainApplication):
                     getattr(self, led_input_names[i - 1]).setEnabled(False)
         except Exception as e:
             print("Error updating leds function:",e)
+            raise
     def process_test_3_verification(self, result,leds_results):
         try:
             self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
@@ -1713,6 +1769,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.test_4()
         except Exception as e:
             print("Error processing test 3 verification function:",e)
+            raise
 
     def Test_3_GUI_changes(self):
 
@@ -1735,6 +1792,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error on test 4:",e)
+            raise
 
     def update_lcds(self, lcds_results):
 
@@ -1750,6 +1808,7 @@ class MainWindow(QMainWindow, mainApplication):
                         getattr(self, lcd_input_names[i - 1]).setEnabled(False)
         except Exception as e:
             print("Error updating lcds:",e)
+            raise
 
 
     def process_test_4_verification(self, result,lcds_results):
@@ -1767,6 +1826,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.test_5()
         except Exception as e:
             print("Error processing test 4 verification: ",e)
+            raise
 
 
 
@@ -1806,6 +1866,7 @@ class MainWindow(QMainWindow, mainApplication):
             except Exception as e:
                 print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
 
+
             time.sleep(2)
 
             print(self.buttons_order)
@@ -1823,6 +1884,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error on test 5: ",e)
+            raise
 
     def update_button_state(self, button, button_input,status):
 
@@ -1838,6 +1900,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error updating buttons state :",e)
+            
 
 
     def housekeeping_button_actuators(self):
@@ -1872,6 +1935,7 @@ class MainWindow(QMainWindow, mainApplication):
             #QTimer.singleShot(2000, self.on_test_finished)
         except Exception as e:
             print("Error executing housekeeping buttons actuators function:",e)
+            raise
 
         
 
@@ -1913,6 +1977,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.test_6()  # Llamar a la siguiente prueba
         except Exception as e:
             print("Error on test 5 finished function:",e)
+            raise
     
 
     def Test_5_GUI_changes(self):
@@ -1948,6 +2013,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.monitor_digital_inputs_thread.start()
         except Exception as e:
             print("Error on test 6:",e)
+            raise
 
     def update_button_state_digital(self, digital, digital_input,status):
 
@@ -2000,6 +2066,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error on test 6 finished function: ",e)
+            raise
 
         
  
@@ -2089,6 +2156,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print(" Error on show resume function: ",e)
+            raise
 
     def Test_resume_GUI_changes(self):
 
@@ -2299,6 +2367,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         except Exception as e:
             print("Error on add register function: ",e)
+            raise
 
 ############  TRACEABILITY  ##########################################
     def obtain_piece_register_id_and_test(self, filepath):
@@ -2381,7 +2450,7 @@ class MainWindow(QMainWindow, mainApplication):
     def _read_database_activation_flag(self):
         config = configparser.ConfigParser()
         config.read('settings/settings.ini')
-        response_setting = config.get('Leak_tester', 'db_enabled', fallback="true").replace('"', '').strip().strip('"').lower()
+        response_setting = config.get('DATABASE', 'db_active', fallback="true").replace('"', '').strip().strip('"').lower()
         return response_setting == "true"
 
 
