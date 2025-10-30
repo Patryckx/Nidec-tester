@@ -159,10 +159,10 @@ imports:
  &#8226;   <a href="#genericpath">genericpath</a>
  &#8226;   <a href="#heapq">heapq</a>
  &#8226;   <a href="#io">io</a>
- &#8226;   <a href="#json">json</a>
  &#8226;   <a href="#keyword">keyword</a>
  &#8226;   <a href="#linecache">linecache</a>
  &#8226;   <a href="#locale">locale</a>
+ &#8226;   <a href="#logging">logging</a>
  &#8226;   <a href="#ntpath">ntpath</a>
  &#8226;   <a href="#operator">operator</a>
  &#8226;   <a href="#os">os</a>
@@ -173,22 +173,20 @@ imports:
  &#8226;   <a href="#pyi_rth_pyqt5.py">pyi_rth_pyqt5.py</a>
  &#8226;   <a href="#re">re</a>
  &#8226;   <a href="#reprlib">reprlib</a>
- &#8226;   <a href="#socket">socket</a>
  &#8226;   <a href="#sre_compile">sre_compile</a>
  &#8226;   <a href="#sre_constants">sre_constants</a>
  &#8226;   <a href="#sre_parse">sre_parse</a>
  &#8226;   <a href="#stat">stat</a>
- &#8226;   <a href="#subprocess">subprocess</a>
  &#8226;   <a href="#sys">sys</a>
  &#8226;   <a href="#sysconfig">sysconfig</a>
- &#8226;   <a href="#telnetlib">telnetlib</a>
- &#8226;   <a href="#threading">threading</a>
  &#8226;   <a href="#time">time</a>
  &#8226;   <a href="#traceback">traceback</a>
  &#8226;   <a href="#types">types</a>
  &#8226;   <a href="#ui.Application">ui.Application</a>
  &#8226;   <a href="#utilities.Configuration.Config">utilities.Configuration.Config</a>
  &#8226;   <a href="#utilities.DAQ.DAQ">utilities.DAQ.DAQ</a>
+ &#8226;   <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
+ &#8226;   <a href="#utilities.Postgress_SQL.postgress_lib">utilities.Postgress_SQL.postgress_lib</a>
  &#8226;   <a href="#utilities.PySerial.PySerial_lib">utilities.PySerial.PySerial_lib</a>
  &#8226;   <a href="#utilities.Telnet_lib.telnet">utilities.Telnet_lib.telnet</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
@@ -323,7 +321,10 @@ imported by:
   <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/PyQt5/__init__.py" type="text/plain"><tt>PyQt5</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
-    <a href="#PyQt5.sip">PyQt5.sip</a>
+    <a href="#PyQt5.QtCore">PyQt5.QtCore</a>
+ &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
+ &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
+ &#8226;   <a href="#PyQt5.sip">PyQt5.sip</a>
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#pkgutil">pkgutil</a>
  &#8226;   <a href="#sys">sys</a>
@@ -353,7 +354,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
+    <a href="#PyQt5">PyQt5</a>
+ &#8226;   <a href="#PyQt5.QtGui">PyQt5.QtGui</a>
  &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
  &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#resources.resources">resources.resources</a>
@@ -374,7 +376,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
+    <a href="#PyQt5">PyQt5</a>
+ &#8226;   <a href="#PyQt5.QtWidgets">PyQt5.QtWidgets</a>
  &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#ui.Application">ui.Application</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
@@ -394,7 +397,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#application.py">application.py</a>
+    <a href="#PyQt5">PyQt5</a>
+ &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#ui.Application">ui.Application</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
 
@@ -1361,6 +1365,16 @@ imported by:
   <tt>_tracemalloc</tt> <span class="moduletype"><i>(builtin module)</i></span>  <div class="import">
 imported by:
     <a href="#tracemalloc">tracemalloc</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="_uuid"></a>
+  <tt>_uuid</tt> <span class="moduletype"><tt>C:\Users\EDWIN CASTILLO\AppData\Local\Programs\Python\Python310\DLLs\_uuid.pyd</tt></span>  <div class="import">
+imported by:
+    <a href="#uuid">uuid</a>
 
   </div>
 
@@ -2802,6 +2816,7 @@ imported by:
  &#8226;   <a href="#pkgutil">pkgutil</a>
  &#8226;   <a href="#platform">platform</a>
  &#8226;   <a href="#pprint">pprint</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#pymodbus.device">pymodbus.device</a>
  &#8226;   <a href="#queue">queue</a>
  &#8226;   <a href="#selectors">selectors</a>
@@ -2980,6 +2995,7 @@ imports:
 imported by:
     <a href="#application.py">application.py</a>
  &#8226;   <a href="#utilities.Configuration.Config">utilities.Configuration.Config</a>
+ &#8226;   <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
 
   </div>
 
@@ -3223,6 +3239,7 @@ imported by:
  &#8226;   <a href="#calendar">calendar</a>
  &#8226;   <a href="#email.utils">email.utils</a>
  &#8226;   <a href="#http.cookiejar">http.cookiejar</a>
+ &#8226;   <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
  &#8226;   <a href="#xmlrpc.client">xmlrpc.client</a>
 
@@ -3242,6 +3259,7 @@ imports:
   <div class="import">
 imported by:
     <a href="#fractions">fractions</a>
+ &#8226;   <a href="#psycopg2">psycopg2</a>
  &#8226;   <a href="#statistics">statistics</a>
  &#8226;   <a href="#xmlrpc.client">xmlrpc.client</a>
 
@@ -6291,6 +6309,7 @@ imported by:
  &#8226;   <a href="#signal">signal</a>
  &#8226;   <a href="#socket">socket</a>
  &#8226;   <a href="#ssl">ssl</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -6449,6 +6468,7 @@ imported by:
  &#8226;   <a href="#infi.instruct.macros">infi.instruct.macros</a>
  &#8226;   <a href="#infi.pyutils.decorators">infi.pyutils.decorators</a>
  &#8226;   <a href="#inspect">inspect</a>
+ &#8226;   <a href="#ipaddress">ipaddress</a>
  &#8226;   <a href="#linecache">linecache</a>
  &#8226;   <a href="#locale">locale</a>
  &#8226;   <a href="#mock.backports">mock.backports</a>
@@ -6460,6 +6480,7 @@ imported by:
  &#8226;   <a href="#pickle">pickle</a>
  &#8226;   <a href="#pkgutil">pkgutil</a>
  &#8226;   <a href="#platform">platform</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#pymodbus.client.serial">pymodbus.client.serial</a>
  &#8226;   <a href="#pymodbus.transaction">pymodbus.transaction</a>
  &#8226;   <a href="#pymodbus.transport.transport">pymodbus.transport.transport</a>
@@ -6646,6 +6667,7 @@ imported by:
     <a href="#hmac">hmac</a>
  &#8226;   <a href="#random">random</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -6780,6 +6802,7 @@ imports:
  &#8226;   <a href="#importlib._bootstrap">importlib._bootstrap</a>
  &#8226;   <a href="#importlib._bootstrap_external">importlib._bootstrap_external</a>
  &#8226;   <a href="#importlib.abc">importlib.abc</a>
+ &#8226;   <a href="#importlib.machinery">importlib.machinery</a>
  &#8226;   <a href="#sys">sys</a>
  &#8226;   <a href="#warnings">warnings</a>
 
@@ -6913,7 +6936,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#importlib.abc">importlib.abc</a>
+    <a href="#importlib">importlib</a>
+ &#8226;   <a href="#importlib.abc">importlib.abc</a>
  &#8226;   <a href="#inspect">inspect</a>
  &#8226;   <a href="#pkgutil">pkgutil</a>
  &#8226;   <a href="#py_compile">py_compile</a>
@@ -8270,10 +8294,28 @@ imported by:
  &#8226;   <a href="#tokenize">tokenize</a>
  &#8226;   <a href="#unittest.result">unittest.result</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
+ &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#xml.sax">xml.sax</a>
  &#8226;   <a href="#xml.sax.saxutils">xml.sax.saxutils</a>
  &#8226;   <a href="#xmlrpc.client">xmlrpc.client</a>
  &#8226;   <a href="#zipfile">zipfile</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="ipaddress"></a>
+  <a target="code" href="///C:/Users/EDWIN%20CASTILLO/AppData/Local/Programs/Python/Python310/lib/ipaddress.py" type="text/plain"><tt>ipaddress</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#functools">functools</a>
+ &#8226;   <a href="#re">re</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2._ipaddress">psycopg2._ipaddress</a>
 
   </div>
 
@@ -8345,10 +8387,10 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#application.py">application.py</a>
- &#8226;   <a href="#json.decoder">json.decoder</a>
+    <a href="#json.decoder">json.decoder</a>
  &#8226;   <a href="#json.encoder">json.encoder</a>
  &#8226;   <a href="#json.scanner">json.scanner</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
 
   </div>
@@ -8500,7 +8542,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#asyncio.futures">asyncio.futures</a>
+    <a href="#application.py">application.py</a>
+ &#8226;   <a href="#asyncio.futures">asyncio.futures</a>
  &#8226;   <a href="#asyncio.log">asyncio.log</a>
  &#8226;   <a href="#concurrent.futures._base">concurrent.futures._base</a>
  &#8226;   <a href="#hashlib">hashlib</a>
@@ -8509,8 +8552,10 @@ imported by:
  &#8226;   <a href="#infi.devicemanager.setupapi.functions">infi.devicemanager.setupapi.functions</a>
  &#8226;   <a href="#infi.pyutils.lazy">infi.pyutils.lazy</a>
  &#8226;   <a href="#multiprocessing.util">multiprocessing.util</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#pymodbus.logging">pymodbus.logging</a>
  &#8226;   <a href="#unittest._log">unittest._log</a>
+ &#8226;   <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
 
   </div>
 
@@ -9742,6 +9787,7 @@ imported by:
  &#8226;   <a href="#pkgutil">pkgutil</a>
  &#8226;   <a href="#platform">platform</a>
  &#8226;   <a href="#posixpath">posixpath</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#py_compile">py_compile</a>
  &#8226;   <a href="#pyi_rth_inspect.py">pyi_rth_inspect.py</a>
  &#8226;   <a href="#pyi_rth_pyqt5.py">pyi_rth_pyqt5.py</a>
@@ -9762,8 +9808,10 @@ imported by:
  &#8226;   <a href="#unittest.loader">unittest.loader</a>
  &#8226;   <a href="#unittest.main">unittest.main</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
+ &#8226;   <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
  &#8226;   <a href="#utilities.Tests.Tests">utilities.Tests.Tests</a>
  &#8226;   <a href="#uu">uu</a>
+ &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#xml.sax">xml.sax</a>
  &#8226;   <a href="#xml.sax.saxutils">xml.sax.saxutils</a>
  &#8226;   <a href="#zipfile">zipfile</a>
@@ -9926,6 +9974,7 @@ imports:
 imported by:
     <a href="#infi.cwrap">infi.cwrap</a>
  &#8226;   <a href="#infi.pyutils.python_compat">infi.pyutils.python_compat</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -9997,6 +10046,188 @@ imported by:
  &#8226;   <a href="#pickle">pickle</a>
  &#8226;   <a href="#sysconfig">sysconfig</a>
  &#8226;   <a href="#unittest.case">unittest.case</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/__init__.py" type="text/plain"><tt>psycopg2</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#decimal">decimal</a>
+ &#8226;   <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._ipaddress">psycopg2._ipaddress</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+ &#8226;   <a href="#psycopg2.sql">psycopg2.sql</a>
+ &#8226;   <a href="#utilities.Postgress_SQL.postgress_lib">utilities.Postgress_SQL.postgress_lib</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2._ipaddress"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/_ipaddress.py" type="text/plain"><tt>psycopg2._ipaddress</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#ipaddress">ipaddress</a>
+ &#8226;   <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2._json"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/_json.py" type="text/plain"><tt>psycopg2._json</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#json">json</a>
+ &#8226;   <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2._psycopg"></a>
+  <tt>psycopg2._psycopg</tt> <span class="moduletype"><tt>C:\Nidec-tester\virtualenv\lib\site-packages\psycopg2\_psycopg.cp310-win_amd64.pyd</tt></span>  <div class="import">
+imports:
+    <a href="#psycopg2">psycopg2</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2._range"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/_range.py" type="text/plain"><tt>psycopg2._range</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+ &#8226;   <a href="#re">re</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2.extensions"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/extensions.py" type="text/plain"><tt>psycopg2.extensions</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#re">re</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._ipaddress">psycopg2._ipaddress</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+ &#8226;   <a href="#psycopg2.sql">psycopg2.sql</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2.extras"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/extras.py" type="text/plain"><tt>psycopg2.extras</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#collections">collections</a>
+ &#8226;   <a href="#functools">functools</a>
+ &#8226;   <a href="#logging">logging</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2._ipaddress">psycopg2._ipaddress</a>
+ &#8226;   <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._psycopg">psycopg2._psycopg</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.sql">psycopg2.sql</a>
+ &#8226;   <a href="#re">re</a>
+ &#8226;   <a href="#select">select</a>
+ &#8226;   <a href="#time">time</a>
+ &#8226;   <a href="#uuid">uuid</a>
+ &#8226;   <a href="#warnings">warnings</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2._json">psycopg2._json</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#utilities.Postgress_SQL.postgress_lib">utilities.Postgress_SQL.postgress_lib</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="psycopg2.sql"></a>
+  <a target="code" href="///C:/Nidec-tester/virtualenv/lib/site-packages/psycopg2/sql.py" type="text/plain"><tt>psycopg2.sql</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#string">string</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2.extras">psycopg2.extras</a>
 
   </div>
 
@@ -11215,6 +11446,7 @@ imported by:
  &#8226;   <a href="#secrets">secrets</a>
  &#8226;   <a href="#statistics">statistics</a>
  &#8226;   <a href="#tempfile">tempfile</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -11266,6 +11498,7 @@ imported by:
  &#8226;   <a href="#importlib.metadata._adapters">importlib.metadata._adapters</a>
  &#8226;   <a href="#importlib.metadata._text">importlib.metadata._text</a>
  &#8226;   <a href="#inspect">inspect</a>
+ &#8226;   <a href="#ipaddress">ipaddress</a>
  &#8226;   <a href="#json.decoder">json.decoder</a>
  &#8226;   <a href="#json.encoder">json.encoder</a>
  &#8226;   <a href="#json.scanner">json.scanner</a>
@@ -11278,6 +11511,9 @@ imported by:
  &#8226;   <a href="#platform">platform</a>
  &#8226;   <a href="#posixpath">posixpath</a>
  &#8226;   <a href="#pprint">pprint</a>
+ &#8226;   <a href="#psycopg2._range">psycopg2._range</a>
+ &#8226;   <a href="#psycopg2.extensions">psycopg2.extensions</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#shlex">shlex</a>
  &#8226;   <a href="#string">string</a>
  &#8226;   <a href="#sysconfig">sysconfig</a>
@@ -11404,7 +11640,8 @@ imported by:
   <a name="select"></a>
   <tt>select</tt> <span class="moduletype"><tt>C:\Users\EDWIN CASTILLO\AppData\Local\Programs\Python\Python310\DLLs\select.pyd</tt></span>  <div class="import">
 imported by:
-    <a href="#pymodbus.client.tcp">pymodbus.client.tcp</a>
+    <a href="#psycopg2.extras">psycopg2.extras</a>
+ &#8226;   <a href="#pymodbus.client.tcp">pymodbus.client.tcp</a>
  &#8226;   <a href="#selectors">selectors</a>
  &#8226;   <a href="#serial.serialposix">serial.serialposix</a>
  &#8226;   <a href="#subprocess">subprocess</a>
@@ -11653,6 +11890,7 @@ imported by:
  &#8226;   <a href="#multiprocessing.util">multiprocessing.util</a>
  &#8226;   <a href="#tarfile">tarfile</a>
  &#8226;   <a href="#tempfile">tempfile</a>
+ &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#zipfile">zipfile</a>
 
   </div>
@@ -11760,7 +11998,6 @@ imports:
   <div class="import">
 imported by:
     <a href="#_ssl">_ssl</a>
- &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#asyncio.base_events">asyncio.base_events</a>
  &#8226;   <a href="#asyncio.events">asyncio.events</a>
  &#8226;   <a href="#asyncio.proactor_events">asyncio.proactor_events</a>
@@ -11784,6 +12021,7 @@ imported by:
  &#8226;   <a href="#ssl">ssl</a>
  &#8226;   <a href="#telnetlib">telnetlib</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -11951,6 +12189,7 @@ imported by:
  &#8226;   <a href="#logging">logging</a>
  &#8226;   <a href="#ntpath">ntpath</a>
  &#8226;   <a href="#nturl2path">nturl2path</a>
+ &#8226;   <a href="#psycopg2.sql">psycopg2.sql</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
 
   </div>
@@ -12050,7 +12289,6 @@ imports:
   <div class="import">
 imported by:
     <a href="#_aix_support">_aix_support</a>
- &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#asyncio.base_events">asyncio.base_events</a>
  &#8226;   <a href="#asyncio.base_subprocess">asyncio.base_subprocess</a>
  &#8226;   <a href="#asyncio.events">asyncio.events</a>
@@ -12061,6 +12299,7 @@ imported by:
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#platform">platform</a>
  &#8226;   <a href="#pyi_rth_multiprocessing.py">pyi_rth_multiprocessing.py</a>
+ &#8226;   <a href="#uuid">uuid</a>
 
   </div>
 
@@ -12196,6 +12435,7 @@ imported by:
  &#8226;   <a href="#urllib.parse">urllib.parse</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
  &#8226;   <a href="#uu">uu</a>
+ &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#warnings">warnings</a>
  &#8226;   <a href="#weakref">weakref</a>
  &#8226;   <a href="#xml.parsers.expat">xml.parsers.expat</a>
@@ -12283,8 +12523,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#application.py">application.py</a>
- &#8226;   <a href="#utilities.Telnet_lib.telnet">utilities.Telnet_lib.telnet</a>
+    <a href="#utilities.Telnet_lib.telnet">utilities.Telnet_lib.telnet</a>
 
   </div>
 
@@ -12375,7 +12614,6 @@ imports:
   <div class="import">
 imported by:
     <a href="#_threading_local">_threading_local</a>
- &#8226;   <a href="#application.py">application.py</a>
  &#8226;   <a href="#asyncio.base_events">asyncio.base_events</a>
  &#8226;   <a href="#asyncio.events">asyncio.events</a>
  &#8226;   <a href="#asyncio.mixins">asyncio.mixins</a>
@@ -12438,6 +12676,7 @@ imported by:
  &#8226;   <a href="#multiprocessing.queues">multiprocessing.queues</a>
  &#8226;   <a href="#multiprocessing.synchronize">multiprocessing.synchronize</a>
  &#8226;   <a href="#pprint">pprint</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#pymodbus.client.serial">pymodbus.client.serial</a>
  &#8226;   <a href="#pymodbus.client.tcp">pymodbus.client.tcp</a>
  &#8226;   <a href="#pymodbus.framer.rtu_framer">pymodbus.framer.rtu_framer</a>
@@ -12455,6 +12694,7 @@ imported by:
  &#8226;   <a href="#urllib.request">urllib.request</a>
  &#8226;   <a href="#utilities.DAQ.DAQ">utilities.DAQ.DAQ</a>
  &#8226;   <a href="#utilities.Telnet_lib.telnet">utilities.Telnet_lib.telnet</a>
+ &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#xmlrpc.client">xmlrpc.client</a>
  &#8226;   <a href="#zipfile">zipfile</a>
  &#8226;   <a href="#zipimport">zipimport</a>
@@ -13108,6 +13348,8 @@ imported by:
 imported by:
     <a href="#utilities.Configuration">utilities.Configuration</a>
  &#8226;   <a href="#utilities.DAQ">utilities.DAQ</a>
+ &#8226;   <a href="#utilities.Logs">utilities.Logs</a>
+ &#8226;   <a href="#utilities.Postgress_SQL">utilities.Postgress_SQL</a>
  &#8226;   <a href="#utilities.PySerial">utilities.PySerial</a>
  &#8226;   <a href="#utilities.Telnet_lib">utilities.Telnet_lib</a>
  &#8226;   <a href="#utilities.Tests">utilities.Tests</a>
@@ -13199,6 +13441,76 @@ imports:
   <div class="import">
 imported by:
     <a href="#utilities.DAQ.DAQ">utilities.DAQ.DAQ</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="utilities.Logs"></a>
+  <a target="code" href="-" type="text/plain"><tt>utilities.Logs</tt></a>
+<span class="moduletype">NamespacePackage</span>  <div class="import">
+imports:
+    <a href="#utilities">utilities</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#utilities.Logs.logger">utilities.Logs.logger</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="utilities.Logs.logger"></a>
+  <a target="code" href="///C:/Nidec-tester/utilities/Logs/logger.py" type="text/plain"><tt>utilities.Logs.logger</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#configparser">configparser</a>
+ &#8226;   <a href="#datetime">datetime</a>
+ &#8226;   <a href="#logging">logging</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#utilities.Logs">utilities.Logs</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#application.py">application.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="utilities.Postgress_SQL"></a>
+  <a target="code" href="-" type="text/plain"><tt>utilities.Postgress_SQL</tt></a>
+<span class="moduletype">NamespacePackage</span>  <div class="import">
+imports:
+    <a href="#utilities">utilities</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#utilities.Postgress_SQL.postgress_lib">utilities.Postgress_SQL.postgress_lib</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="utilities.Postgress_SQL.postgress_lib"></a>
+  <a target="code" href="///C:/Nidec-tester/utilities/Postgress_SQL/postgress_lib.py" type="text/plain"><tt>utilities.Postgress_SQL.postgress_lib</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#psycopg2">psycopg2</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
+ &#8226;   <a href="#utilities.Postgress_SQL">utilities.Postgress_SQL</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#application.py">application.py</a>
 
   </div>
 
@@ -13332,6 +13644,33 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="uuid"></a>
+  <a target="code" href="///C:/Users/EDWIN%20CASTILLO/AppData/Local/Programs/Python/Python310/lib/uuid.py" type="text/plain"><tt>uuid</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#_uuid">_uuid</a>
+ &#8226;   <a href="#enum">enum</a>
+ &#8226;   <a href="#hashlib">hashlib</a>
+ &#8226;   <a href="#io">io</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#platform">platform</a>
+ &#8226;   <a href="#random">random</a>
+ &#8226;   <a href="#shutil">shutil</a>
+ &#8226;   <a href="#socket">socket</a>
+ &#8226;   <a href="#subprocess">subprocess</a>
+ &#8226;   <a href="#sys">sys</a>
+ &#8226;   <a href="#time">time</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#psycopg2.extras">psycopg2.extras</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="vms_lib"></a>
   <a target="code" href="" type="text/plain"><tt>vms_lib</tt></a>
 <span class="moduletype">MissingModule</span>  <div class="import">
@@ -13398,6 +13737,7 @@ imported by:
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#pkgutil">pkgutil</a>
+ &#8226;   <a href="#psycopg2.extras">psycopg2.extras</a>
  &#8226;   <a href="#random">random</a>
  &#8226;   <a href="#runpy">runpy</a>
  &#8226;   <a href="#serial.serialposix">serial.serialposix</a>
