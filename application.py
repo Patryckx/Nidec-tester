@@ -1,28 +1,28 @@
+# PyQt5 Imports
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer, QThread
 from PyQt5.QtGui import QIcon, QColor
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QPushButton,
+    QMessageBox
+)
+
+# UI Import
 from ui.Application import Ui_MainWindow as mainApplication
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
-from PyQt5.QtCore import QThread, pyqtSignal
-#Instruments
+
+# Custom Libraries
 from utilities.DAQ.DAQ import FX3U
 from utilities.Telnet_lib.telnet import TelnetClient
 from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
-
+from utilities.Postgress_SQL.postgress_lib import PostgresDatabase
 from utilities.Logs.logger import setup_logger
 
 setup_logger()
-
-#from utilities.Config.Configuration import Config_Screen
-
-# Custom imports
-#import qdarktheme
-from datetime import datetime
 
 from datetime import datetime, timedelta
 import configparser
@@ -30,16 +30,8 @@ import sys
 import time
 import os
 import csv
-import threading
-import json 
 import logging
-
-import subprocess
 import re
-
-import socket
-import telnetlib
-
 import time
 
 
@@ -492,6 +484,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.test=Manage_tests()
 
+        self.postgress_database=PostgresDatabase() 
+
         # Space bar function initialized flag 
         self.initialized_flag = False
         #Flag to not add register if timer goes up
@@ -499,6 +493,8 @@ class MainWindow(QMainWindow, mainApplication):
         
         #Serial Code scanned flag
         self.serial_code_captured=None
+
+        self.is_database_enabled=self._read_database_activation_flag()
 
 
         #Timer test 
@@ -1073,54 +1069,38 @@ class MainWindow(QMainWindow, mainApplication):
             # Verificar si ambos valores son números y cumplen con la longitud requerida
             if re.fullmatch(r'\d{4}', data[0]) and re.fullmatch(r'\d{6}', data[1]):
                 print("Datos válidos obtenidos")
-                # Aquí puedes continuar con la lógica si los datos son válidos
+
                 currentUserId=str(data[0])
                 self.lblCurrentUser.setText(currentUserId)
 
                 currentShopOrder=str(data[1])
                 self.lblCurrentOrder.setText(currentShopOrder)
 
-                #Disable inicialize button
-                self.btnInicializar.setEnabled(False)
-                
-                self.btnConfiguracion.setEnabled(False)
-
-
-                #Show first test index screen
-                self.stackedWidget.setCurrentIndex(6)
-
-
-
-                #Enable log out button 
-                self.btnLogout.setEnabled(True)
-                
-                self.btnPrueba1.setEnabled(True)
-                
-                self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-
-                self.txtSerialCode.setFocus()
-
-                try:
-
-                # Obtain file path
-                    filepath=self.obtain_filepath()
-
-                    if filepath:
-                        #Obtain id and id test
-                        self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
-                        print(f"Piece Id{self.piece_id}")
-                        print(f"Test Id{self.test_id}")
-                        self.lblCounter.setText(str( self.piece_id))
-                    else:
-                        self.piece_id=0
-                        self.test_id=0
-                        self.lblCounter.setText(str( self.piece_id))
-
-
-                except Exception as e:
-                    print(f"Error obtaining most recent path file to csv: {e}")
                 
 
+                if self.is_database_enabled:
+
+                    is_data_valid=self.verify_data_postgress(currentUserId,currentShopOrder)
+                else:    
+                    is_data_valid=self.verify_data_csv()
+
+                if is_data_valid:
+                    #Disable inicialize button
+                    self.btnInicializar.setEnabled(False)
+                    
+                    self.btnConfiguracion.setEnabled(False)
+
+                    #Show first test index screen
+                    self.stackedWidget.setCurrentIndex(6)
+
+                    #Enable log out button 
+                    self.btnLogout.setEnabled(True)
+                    
+                    self.btnPrueba1.setEnabled(True)
+                    
+                    self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+
+                    self.txtSerialCode.setFocus()
                 
             else:
                 print("Datos no válidos o no cumplen con los requisitos")
@@ -1130,6 +1110,84 @@ class MainWindow(QMainWindow, mainApplication):
                 self.txtNumeroEmpleado.setFocus()
         except Exception as e:
             print("Error incializing application:",e)
+
+
+    def verify_data_csv(self):
+        try:
+
+            # Obtain file path
+            filepath=self.obtain_filepath()
+
+            if filepath:
+                #Obtain id and id test
+                self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
+                print(f"Piece Id{self.piece_id}")
+                print(f"Test Id{self.test_id}")
+                self.lblCounter.setText(str( self.piece_id))
+            else:
+                self.piece_id=0
+                self.test_id=0
+                self.lblCounter.setText(str( self.piece_id))
+
+
+        except Exception as e:
+            print(f"Error obtaining most recent path file to csv: {e}")
+
+
+    def verify_data_postgress(self, user,order):
+
+        try:
+            database_config=self.config.get_pg_database_information()
+
+            host=database_config[0]
+            database=database_config[1]
+            #table_name=database_config[2]
+            #Database connection
+                
+            self.postgress_database.create_connection(host,database)
+
+            # Parámetros para tu búsqueda
+            table_name = 'Leak-tester-registers'
+
+            # Columnas que deseas obtener del registro
+            desired_fields = ['id_prueba', 'id_pieza', 'piezas_malas', 'meta_piezas']
+
+            conditions = {
+            "numero-usuario": user,
+            "numero-orden": order
+                }
+            # Obtener el registro más reciente desde PostgreSQL
+            record = self.postgress_database.get_last_record_fields_by_columns(
+                table_name=table_name,
+                conditions=conditions,
+                fields=desired_fields
+            )
+
+            if record:
+                # Extraer valores específicos del registro
+                self.test_id = record.get('id_prueba', 0)
+                self.piece_id = record.get('id_pieza', 0)
+
+                # Mostrar resultados en la interfaz
+                print(f"Piece Id: {self.piece_id}")
+                print(f"Test Id: {self.test_id}")
+
+                self.lblCounter.setText(str(self.piece_id))
+                return True
+            else:
+                # Si no hay registro, reiniciar valores
+                print("Orden no encontrada en base de datos")
+
+                self.piece_id=0
+                self.test_id=0
+                self.lblCounter.setText(str( self.piece_id))
+                return False
+            
+            
+
+        except Exception as e:
+            print(f"Error al obtener datos desde PostgreSQL: {e}")
+            return None
 
     def housekeeping_gateway(self):
         '''Function to turn off importar register coils every time the app inicializes'''
@@ -2169,6 +2227,9 @@ class MainWindow(QMainWindow, mainApplication):
             formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
             Current_date = str(formatted_datetime)
 
+            codigo_serial=str(self.serial_code)
+            codigo_qr=str(self.qrcode)
+
 
 
             formatted_time = current_datetime.strftime("%H:%M:%S")
@@ -2200,10 +2261,46 @@ class MainWindow(QMainWindow, mainApplication):
             
             # Call csv register add function 
             self.test.add_csv_register(csv_register,user,shop_order)
+
+            register_dict = {
+                "id-prueba": self.test_id,
+                "id-pieza": self.piece_id,
+                "numero-empleado": user,
+                "numero-orden": shop_order,
+                "codigo-serial": codigo_serial,
+                "codigo-qr":codigo_qr,
+                "version-firmware": Firmware,
+                "comunicacion-232": Comunicacion232,
+                "prueba-leds": LEDS_result,
+                "prueba-lcds": LCDS_result,
+                "prueba-botones":Buttons_result,
+                "prueba-entradas-digitales": Entradas_result,
+                
+            } 
+            try:
+
+                database_config=self.config.get_pg_database_information()
+
+                host=database_config[0]
+                database=database_config[1]
+                table=database_config[2]
+
+                #Database connection
+            
+                self.postgress_database.create_connection(host,database)
+
+                #Insert register
+                self.postgress_database.insert_multiple_columns(table,register_dict)
+
+                #Close connection 
+                self.postgress_database.close_connection()
+            except Exception as e :
+                print("Error al insertar registro en base de datos")   
+
         except Exception as e:
             print("Error on add register function: ",e)
 
-############  PIECE COUNTER ##########################################
+############  TRACEABILITY  ##########################################
     def obtain_piece_register_id_and_test(self, filepath):
         try:
             with open(filepath, mode='r', newline='', encoding='utf-8') as archivo:
@@ -2279,6 +2376,13 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Error inesperado al obtener la ruta del archivo: {e}")
             return None
 
+    ########### .INI FLAGS  ################################### 
+
+    def _read_database_activation_flag(self):
+        config = configparser.ConfigParser()
+        config.read('settings/settings.ini')
+        response_setting = config.get('Leak_tester', 'db_enabled', fallback="true").replace('"', '').strip().strip('"').lower()
+        return response_setting == "true"
 
 
 
