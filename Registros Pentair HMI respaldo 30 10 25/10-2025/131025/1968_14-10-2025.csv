@@ -1,0 +1,2 @@
+ID_Prueba,ID,Numero Empleado,Numero Orden,"Codigos serial ,QR",Version Firmware,Comunicación232,Prueba LEDS,Prueba LCDS,Prueba pulsacion Botones,Prueba entradas digitales,Hora y Fecha
+13,12,1968,131025,"BV25412310506 , T253909294 ",FAIL,FAIL,FAIL,FAIL,FAIL,FAIL,08:59:53_14-10-25
