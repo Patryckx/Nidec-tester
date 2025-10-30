@@ -494,6 +494,11 @@ class MainWindow(QMainWindow, mainApplication):
         #Disable stop button 
         self.btnLogout.setEnabled(False)
 
+        #Counters
+        self.piece_id=None
+        self.test_id=None
+        self.bad_piece_id=None
+
 
         # Asegurar que la ventana pueda recibir eventos de teclado
         self.setFocusPolicy(Qt.StrongFocus)
@@ -1061,12 +1066,14 @@ class MainWindow(QMainWindow, mainApplication):
                 self.lblCurrentUser.setText("")
                 self.lblCurrentOrder.setText("")
 
-                self.lblCounter.setText("")
+                self.lblPiezasBuenas.setText("")
+                self.lblPiezasMalas.setText("")
                 #Restore inicialized app flag
                 self.initialized_flag=False
 
                 self.piece_id=0
                 self.test_id=0
+                self.bad_piece_id=0
 
 
             else:
@@ -1218,14 +1225,21 @@ class MainWindow(QMainWindow, mainApplication):
 
             if filepath:
                 #Obtain id and id test
-                self.piece_id,self.test_id=self.obtain_piece_register_id_and_test(filepath)
-                print(f"Piece Id{self.piece_id}")
-                print(f"Test Id{self.test_id}")
-                self.lblCounter.setText(str( self.piece_id))
+                self.piece_id,self.test_id,self.bad_piece_id=self.obtain_piece_register_id_and_test(filepath)
+                print(f"Piezas OK{self.piece_id}")
+                print(f"Contador pruebas{self.test_id}")
+                print(f"Piezas NG {self.bad_piece_id}")
+
+                self.lblPiezasBuenas.setText(str( self.piece_id))
+                self.lblPiezasMalas.setText(str( self.bad_piece_id))
+
             else:
                 self.piece_id=0
                 self.test_id=0
-                self.lblCounter.setText(str( self.piece_id))
+                self.bad_piece_id=0
+                self.lblPiezasBuenas.setText(str( self.piece_id))
+                self.lblPiezasMalas.setText(str( self.bad_piece_id))
+
 
 
         except Exception as e:
@@ -1248,7 +1262,7 @@ class MainWindow(QMainWindow, mainApplication):
             table_name = 'nidec-pentair-tester'
 
             # Columnas que deseas obtener del registro
-            desired_fields = ['id-prueba', 'id-pieza']
+            desired_fields = ['id-prueba', 'id-pieza','id-pieza-mala']
 
             conditions = {
             "numero-usuario": user,
@@ -1265,12 +1279,16 @@ class MainWindow(QMainWindow, mainApplication):
                 # Extraer valores específicos del registro
                 self.test_id = record.get('id-prueba', 0)
                 self.piece_id = record.get('id-pieza', 0)
+                self.bad_piece_id=record.get('id-pieza-mala', 0)
 
                 # Mostrar resultados en la interfaz
-                print(f"Piece Id: {self.piece_id}")
-                print(f"Test Id: {self.test_id}")
+                print(f"Piezas OK DB: {self.piece_id}")
+                print(f"Piezas NG DB: {self.bad_piece_id}")
+                print(f"Contador pruebas DB: {self.test_id}")
 
-                self.lblCounter.setText(str(self.piece_id))
+
+                self.lblPiezasBuenas.setText(str(self.piece_id))
+                self.lblPiezasMalas.setText(str(self.bad_piece_id))
                 return True
             else:
                 # Si no hay registro, reiniciar valores
@@ -1278,7 +1296,10 @@ class MainWindow(QMainWindow, mainApplication):
 
                 self.piece_id=0
                 self.test_id=0
-                self.lblCounter.setText(str( self.piece_id))
+                self.bad_piece_id=0
+                self.lblPiezasBuenas.setText(str( self.piece_id))
+                self.lblPiezasMalas.setText(str(self.bad_piece_id))
+
                 return False
 
         except Exception as e:
@@ -2139,7 +2160,13 @@ class MainWindow(QMainWindow, mainApplication):
             if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
                 self.piece_id+=1
 
-                self.lblCounter.setText(str( self.piece_id))
+                self.lblPiezasBuenas.setText(str( self.piece_id))
+
+            else:
+                self.bad_piece_id+=1
+
+                self.lblPiezasMalas.setText(str(self.bad_piece_id))
+
 
             if not self.dont_add_register:
 
@@ -2323,7 +2350,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
                 col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
         
-            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"ID_pieza_mala":self.bad_piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
             
             # Call csv register add function 
             self.test.add_csv_register(csv_register,user,shop_order)
@@ -2341,6 +2368,7 @@ class MainWindow(QMainWindow, mainApplication):
                 "prueba-lcds": LCDS_result,
                 "prueba-botones":Buttons_result,
                 "prueba-entradas-digitales": Entradas_result,
+                "id-pieza-mala":self.bad_piece_id
                 
             } 
             try:
@@ -2380,7 +2408,7 @@ class MainWindow(QMainWindow, mainApplication):
                 # Verificar si hay filas en el archivo
                 if not filas:
                     # Si no hay filas, devolver 0 en ambos casos
-                    return 0, 0
+                    return 0, 0 ,0
                 
                 # Obtener la última fila
                 ultima_fila = filas[-1]
@@ -2389,21 +2417,25 @@ class MainWindow(QMainWindow, mainApplication):
                 id_prueba = ultima_fila.get('ID_Prueba', '0')  # Usar '0' como valor predeterminado
                 id = ultima_fila.get('ID', '0')  # Usar '0' como valor predeterminado
 
+                id_pieza_mala=ultima_fila.get('ID_pieza_mala', '0')
+
                 # Convertir a enteros
                 int_id_prueba = int(id_prueba) if id_prueba.isdigit() else 0
                 int_id = int(id) if id.isdigit() else 0
+                int_id_pieza_mala= int(id_pieza_mala) if id_pieza_mala.isdigit() else 0
 
-                return  int_id,int_id_prueba
+
+                return  int_id,int_id_prueba,int_id_pieza_mala
 
         except FileNotFoundError:
             print(f"Error: El archivo {filepath} no existe.")
-            return 0, 0
+            return 0, 0 ,0
         except PermissionError:
             print(f"Error: No tienes permisos para leer el archivo {filepath}.")
-            return 0, 0
+            return 0, 0,0
         except Exception as e:
             print(f"Error inesperado al procesar el archivo {filepath}: {e}")
-            return 0, 0
+            return 0, 0,0
 
     def obtain_filepath(self):
         try:
