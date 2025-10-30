@@ -112,3 +112,27 @@ class Configuration():
         except Exception as e:
             print("Error al borrar la informacion del usuario y orden de compra",e)
 
+
+    ###################### POSTGRESS ###############################
+
+
+    def get_pg_database_information(self):
+        config = configparser.ConfigParser()
+
+        try:
+            config.read('settings/settings.ini')
+           
+            host=config.get('DATABASE', 'host', fallback='127.0.0.1').replace('"', '')
+
+            database=config.get('DATABASE','db',fallback='nidec-pentair-tester').replace('"', '')
+
+            table=config.get('DATABASE', 'table', fallback='"pentair-tester-registers"')
+
+
+
+            return host,database,table
+        except Exception as e:
+            print(f"Error reading settings.ini: {e}")
+            return None,None,None
+
+
