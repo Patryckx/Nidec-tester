@@ -21,7 +21,6 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 from utilities.Postgress_SQL.postgress_lib import PostgresDatabase
-from utilities.Traceability.manage_info_csv import Manage_data
 from utilities.Logs.logger import setup_logger
 
 setup_logger()
@@ -469,7 +468,6 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.postgress_database=PostgresDatabase() 
 
-        self.traceability_csv=Manage_data()
 
         # Space bar function initialized flag 
         self.initialized_flag = False
@@ -539,7 +537,7 @@ class MainWindow(QMainWindow, mainApplication):
         """Carga los registros existentes del CSV y los muestra en la tabla."""
         try:
             # Obtener ruta del archivo CSV actual
-            filepath = self.traceability_csv.obtain_filepath()
+            filepath = self.obtain_filepath()
             if not filepath or not os.path.exists(filepath):
                 print("No se encontró archivo CSV existente.")
                 return
