@@ -1227,8 +1227,8 @@ class MainWindow(QMainWindow, mainApplication):
                 #Obtain id and id test
                 self.piece_id,self.test_id,self.bad_piece_id=self.obtain_piece_register_id_and_test(filepath)
                 print(f"Piezas OK{self.piece_id}")
-                print(f"Contador pruebas{self.test_id}")
                 print(f"Piezas NG {self.bad_piece_id}")
+                print(f"Contador pruebas{self.test_id}")
 
                 self.lblPiezasBuenas.setText(str( self.piece_id))
                 self.lblPiezasMalas.setText(str( self.bad_piece_id))
