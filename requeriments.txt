@@ -22,3 +22,4 @@ pyqtdarktheme==2.1.0
 pyserial==3.5
 pywin32-ctypes==0.2.3
 six==1.16.0
+psycopg2==2.9.10
