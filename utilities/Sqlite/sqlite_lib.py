@@ -182,6 +182,7 @@ class SQLiteDatabase:
             # Límite
             limit_clause = f"LIMIT {limit}" if limit else ""
 
+            table_name = str(table_name).replace('"', '').replace("'", "")
             # Consulta SQL
             sql = f"""
                 SELECT 

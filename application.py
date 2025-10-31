@@ -556,9 +556,18 @@ class MainWindow(QMainWindow, mainApplication):
         Carga los registros obtenidos desde la base de datos y los muestra en la tabla PyQt5.
         """
         try:
+
+            database_config=self.config.get_sqlite_database_information()
+
+            database_path=str(database_config[0])
+            database_table=str(database_config[1]).replace('"', '')
+            #Database connection
+                
+            self.sqlite_database.create_connection(database_path)
             # Obtener los datos desde la base de datos
             registros = self.sqlite_database.get_records_with_conditions(
-                table_name="pentair-tester-registers",
+                #table_name="pentair-tester-registers",
+                table_name=database_table,
                 conditions=conditions,
                 limit=limit
             )
@@ -2364,7 +2373,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             register_dict = {
                 "id-prueba": self.test_id,
-                "id-pieza": self.piece_id,
+                "id-pieza-ok": self.piece_id,
+                "id-pieza-ng":self.bad_piece_id,
                 "numero-empleado": user,
                 "numero-orden": shop_order,
                 "codigo-serial": codigo_serial,
@@ -2375,7 +2385,6 @@ class MainWindow(QMainWindow, mainApplication):
                 "prueba-lcds": LCDS_result,
                 "prueba-botones":Buttons_result,
                 "prueba-entradas-digitales": Entradas_result,
-                "id-pieza-mala":self.bad_piece_id
                 
             } 
             try:
