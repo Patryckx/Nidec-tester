@@ -150,6 +150,67 @@ class SQLiteDatabase:
         except Exception as e:
             print(f"Error al obtener registro filtrado: {e}")
             return None
+        
+
+
+    def get_records_with_conditions(self, table_name, conditions: dict = None, limit: int = 22):
+        """
+        Obtiene una lista de registros desde la base de datos SQLite 
+        aplicando condiciones opcionales y un límite de cantidad.
+        
+        Retorna: lista de diccionarios (cada registro es un dict con clave = nombre de columna)
+        """
+        if not self.connection:
+            print("No hay conexión a la base de datos.")
+            return []
+
+        try:
+            cursor = self.connection.cursor()
+
+            # Construcción dinámica de condiciones
+            where_clauses = []
+            values = []
+
+            if conditions:
+                for col, val in conditions.items():
+                    where_clauses.append(f'"{col}" = ?')
+                    values.append(val)
+                where_str = " AND ".join(where_clauses)
+            else:
+                where_str = "1=1"
+
+            # Límite
+            limit_clause = f"LIMIT {limit}" if limit else ""
+
+            # Consulta SQL
+            sql = f"""
+                SELECT 
+                    "codigo-serial" AS Codigo,
+                    "version-firmware" AS Firmware,
+                    "comunicacion-232" AS "Comunicación232",
+                    "prueba-leds" AS LED,
+                    "prueba-lcds" AS LCDS,
+                    "prueba-botones" AS Botones,
+                    "prueba-entradas-digitales" AS Entradas,
+                    fecha AS Fecha
+                FROM "{table_name}"
+                WHERE {where_str}
+                ORDER BY fecha DESC
+                {limit_clause};
+            """
+
+            print("Ejecutando SQL:", sql)
+            print("Con valores:", values)
+
+            cursor.execute(sql, tuple(values))
+            rows = cursor.fetchall()
+
+            # Retornar registros como lista de diccionarios
+            return [dict(row) for row in rows]
+
+        except Exception as e:
+            print(f"Error al obtener registros desde la base de datos: {e}")
+            return []
 
 
     def close_connection(self):

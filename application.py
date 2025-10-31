@@ -536,53 +536,55 @@ class MainWindow(QMainWindow, mainApplication):
             # Actualizar la vista
             self.ResultsTable.update()
 
-            #load table info
-            self.load_traceability_from_csv_to_table()
+            # Cargar los últimos registros según la orden y usuario actual
+            session_info = self.config.get_current_user()
+            numero_orden = session_info[1]
+            numero_empleado = session_info[0]
+
+            self.load_traceability_from_db_to_table(
+                conditions={"numero-orden": numero_orden, "numero-empleado": numero_empleado},
+                limit=22
+            )
+
 
         except Exception as e:
             print("Error seting up tracaebility table: ",e)
  
     
-    def load_traceability_from_csv_to_table(self):
-        """Carga los registros existentes del CSV y los muestra en la tabla."""
+    def load_traceability_from_db_to_table(self, conditions: dict = None, limit: int = 22):
+        """
+        Carga los registros obtenidos desde la base de datos y los muestra en la tabla PyQt5.
+        """
         try:
-            # Obtener ruta del archivo CSV actual
-            filepath = self.obtain_filepath()
-            if not filepath or not os.path.exists(filepath):
-                print("No se encontró archivo CSV existente.")
-                return
+            # Obtener los datos desde la base de datos
+            registros = self.sqlite_database.get_records_with_conditions(
+                table_name="pentair-tester-registers",
+                conditions=conditions,
+                limit=limit
+            )
 
-            with open(filepath, mode='r', newline='', encoding='utf-8') as file:
-                reader = csv.DictReader(file)
-                rows = list(reader)
+            # Definir encabezados
+            headers = ['Codigo', 'Firmware', 'Comunicación232', 'LED', 'LCDS', 'Botones', 'Entradas', 'Fecha']
+            self.ResultsTable.setColumnCount(len(headers))
+            self.ResultsTable.setHorizontalHeaderLabels(headers)
 
-            if not rows:
-                print("No hay registros en el archivo CSV.")
-                return
-
-            # Configurar columnas con base en encabezados del CSV
-            fieldnames = reader.fieldnames
-            self.ResultsTable.setColumnCount(len(fieldnames))
-            self.ResultsTable.setHorizontalHeaderLabels(fieldnames)
-
-            # Limpiar tabla antes de cargar
+            # Limpiar tabla
             self.ResultsTable.setRowCount(0)
 
-            # Insertar registros desde el CSV (más reciente primero)
-            #for row_data in reversed(rows[-22:]):  # Mostrar solo los últimos 22 si hay muchos
-            for row_data in reversed(rows):  # para mostrar todos
-                row_index = self.ResultsTable.rowCount()
+            # Llenar la tabla
+            for row_index, registro in enumerate(registros):
                 self.ResultsTable.insertRow(row_index)
-                for col, key in enumerate(fieldnames):
-                    item = QTableWidgetItem(str(row_data.get(key, "")))
+                for col_index, key in enumerate(headers):
+                    value = registro.get(key, "")
+                    item = QTableWidgetItem(str(value))
                     item.setTextAlignment(Qt.AlignCenter)
-                    self.ResultsTable.setItem(row_index, col, item)
+                    self.ResultsTable.setItem(row_index, col_index, item)
 
-            print(f"Se cargaron {len(rows)} registros desde {filepath}")
+            print(f"Se cargaron {len(registros)} registros en la tabla.")
 
         except Exception as e:
-            print(f"Error al cargar registros desde CSV: {e}")  
-    
+            print(f"Error al mostrar registros en la tabla: {e}")
+        
     ############# TIMER #####################
 
     def start_timer_clicked(self):
