@@ -224,38 +224,38 @@ if __name__ == "__main__":
     db = SQLiteDatabase()
 
     # Ruta del archivo SQLite (se crea automáticamente si no existe)
-    db_path = "test_database.db"
-    table_name = "registers"
+    db_path = "C:/NidecDB/nidec-pentair-tester.db"
+    table_name = '"pentair-tester-registers"'
 
     db.create_connection(db_path)
-    db.create_table(table_name)
+    #db.create_table(table_name)
 
-    # --- Insertar registros de prueba ---
-    registros_prueba = [
-        {
-            "id_prueba": 1,
-            "id_pieza_ok": 10,
-            "id_pieza_ng": 2,
-            "sensores_resorte_a": "OK",
-            "sensores_resorte_b": "OK",
-            "inspeccion_visual": "Pieza correcta",
-            "resultado": "Aprobado",
-            "fecha": "2025-10-02 10:00:00"
-        },
-        {
-            "id_prueba": 2,
-            "id_pieza_ok": 8,
-            "id_pieza_ng": 1,
-            "sensores_resorte_a": "NG",
-            "sensores_resorte_b": "NG",
-            "inspeccion_visual": "Pieza con defecto visual",
-            "resultado": "Rechazado",
-            "fecha": "2025-10-02 11:30:00"
-        }
-    ]
+    # # --- Insertar registros de prueba ---
+    # registros_prueba = [
+    #     {
+    #         "id_prueba": 1,
+    #         "id_pieza_ok": 10,
+    #         "id_pieza_ng": 2,
+    #         "sensores_resorte_a": "OK",
+    #         "sensores_resorte_b": "OK",
+    #         "inspeccion_visual": "Pieza correcta",
+    #         "resultado": "Aprobado",
+    #         "fecha": "2025-10-02 10:00:00"
+    #     },
+    #     {
+    #         "id_prueba": 2,
+    #         "id_pieza_ok": 8,
+    #         "id_pieza_ng": 1,
+    #         "sensores_resorte_a": "NG",
+    #         "sensores_resorte_b": "NG",
+    #         "inspeccion_visual": "Pieza con defecto visual",
+    #         "resultado": "Rechazado",
+    #         "fecha": "2025-10-02 11:30:00"
+    #     }
+    # ]
 
-    for registro in registros_prueba:
-        db.insert_multiple_columns(table_name, registro)
+    # for registro in registros_prueba:
+    #     db.insert_multiple_columns(table_name, registro)
 
     # --- Leer registros ---
     db.read_data(table_name)
