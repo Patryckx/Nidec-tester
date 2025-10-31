@@ -21,6 +21,8 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 from utilities.Postgress_SQL.postgress_lib import PostgresDatabase
+from utilities.Sqlite.sqlite3 import SQLiteDatabase
+
 from utilities.Logs.logger import setup_logger
 
 setup_logger()
@@ -466,7 +468,10 @@ class MainWindow(QMainWindow, mainApplication):
 
         self.test=Manage_tests()
 
-        self.postgress_database=PostgresDatabase() 
+        #self.postgress_database=PostgresDatabase() 
+
+        self.sqlite_database=SQLiteDatabase()
+
 
 
         # Space bar function initialized flag 
@@ -1185,27 +1190,27 @@ class MainWindow(QMainWindow, mainApplication):
 
                 if self.is_database_enabled:
 
-                    is_data_valid=self.verify_data_postgress(currentUserId,currentShopOrder)
+                    self.verify_data_sqlite(currentUserId,currentShopOrder)
                 else:    
-                    is_data_valid=self.verify_data_csv()
+                    self.verify_data_csv()
 
-                if is_data_valid:
-                    #Disable inicialize button
-                    self.btnInicializar.setEnabled(False)
-                    
-                    self.btnConfiguracion.setEnabled(False)
+                #"if is_data_valid:
+                #Disable inicialize button
+                self.btnInicializar.setEnabled(False)
+                
+                self.btnConfiguracion.setEnabled(False)
 
-                    #Show first test index screen
-                    self.stackedWidget.setCurrentIndex(6)
+                #Show first test index screen
+                self.stackedWidget.setCurrentIndex(6)
 
-                    #Enable log out button 
-                    self.btnLogout.setEnabled(True)
-                    
-                    self.btnPrueba1.setEnabled(True)
-                    
-                    self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+                #Enable log out button 
+                self.btnLogout.setEnabled(True)
+                
+                self.btnPrueba1.setEnabled(True)
+                
+                self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
-                    self.txtSerialCode.setFocus()
+                self.txtSerialCode.setFocus()
                 
             else:
                 print("Datos no válidos o no cumplen con los requisitos")
@@ -1246,31 +1251,31 @@ class MainWindow(QMainWindow, mainApplication):
             print(f"Error obtaining most recent path file to csv: {e}")
 
 
-    def verify_data_postgress(self, user,order):
+    def verify_data_sqlite(self, user,order):
 
         try:
-            database_config=self.config.get_pg_database_information()
+            database_config=self.config.get_sqlite_database_information()
 
-            host=database_config[0]
-            database=database_config[1]
+            database_path=database_config[0]
+            database_table=database_config[1]
             #table_name=database_config[2]
             #Database connection
                 
-            self.postgress_database.create_connection(host,database)
+            self.sqlite_database.create_connection(database_path)
 
             # Parámetros para tu búsqueda
             table_name = 'nidec-pentair-tester'
 
             # Columnas que deseas obtener del registro
-            desired_fields = ['id-prueba', 'id-pieza','id-pieza-mala']
+            desired_fields = ['id-prueba', 'id-pieza-ok','id-pieza-ng']
 
             conditions = {
             "numero-usuario": user,
             "numero-orden": order
                 }
             # Obtener el registro más reciente desde PostgreSQL
-            record = self.postgress_database.get_last_record_fields_by_columns(
-                table_name=table_name,
+            record = self.sqlite_database.get_last_record_fields_by_columns(
+                table_name=database_table,
                 conditions=conditions,
                 fields=desired_fields
             )
@@ -1278,8 +1283,8 @@ class MainWindow(QMainWindow, mainApplication):
             if record:
                 # Extraer valores específicos del registro
                 self.test_id = record.get('id-prueba', 0)
-                self.piece_id = record.get('id-pieza', 0)
-                self.bad_piece_id=record.get('id-pieza-mala', 0)
+                self.piece_id = record.get('id-pieza-ok', 0)
+                self.bad_piece_id=record.get('id-pieza-ng', 0)
 
                 # Mostrar resultados en la interfaz
                 print(f"Piezas OK DB: {self.piece_id}")
@@ -1303,7 +1308,7 @@ class MainWindow(QMainWindow, mainApplication):
                 return False
 
         except Exception as e:
-            print(f"Error al obtener datos desde PostgreSQL: {e}")
+            print(f"Error al obtener datos desde SQlite: {e}")
             return None
 
     def housekeeping_gateway(self):
@@ -2373,21 +2378,20 @@ class MainWindow(QMainWindow, mainApplication):
             } 
             try:
 
-                database_config=self.config.get_pg_database_information()
+                database_config=self.config.get_sqlite_database_information()
 
-                host=database_config[0]
-                database=database_config[1]
-                table=database_config[2]
+                database_path=database_config[0]
+                table=database_config[1]
 
                 #Database connection
             
-                self.postgress_database.create_connection(host,database)
+                self.sqlite_database.create_connection(database_path)
 
                 #Insert register
-                self.postgress_database.insert_multiple_columns(table,register_dict)
+                self.sqlite_database.insert_multiple_columns(table,register_dict)
 
                 #Close connection 
-                self.postgress_database.close_connection()
+                self.sqlite_database.close_connection()
             except Exception as e :
                 print("Error al insertar registro en base de datos")   
 

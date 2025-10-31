@@ -116,23 +116,21 @@ class Configuration():
     ###################### POSTGRESS ###############################
 
 
-    def get_pg_database_information(self):
+    def get_sqlite_database_information(self):
         config = configparser.ConfigParser()
 
         try:
             config.read('settings/settings.ini')
            
-            host=config.get('DATABASE', 'host', fallback='127.0.0.1').replace('"', '')
+            host=config.get('DATABASE', 'db_path', fallback='127.0.0.1').replace('"', '')
 
-            database=config.get('DATABASE','db',fallback='nidec-pentair-tester').replace('"', '')
-
-            table=config.get('DATABASE', 'table', fallback='"pentair-tester-registers"')
+            table=config.get('DATABASE', 'table_name', fallback='"pentair-tester-registers"')
 
 
 
-            return host,database,table
+            return host,table
         except Exception as e:
             print(f"Error reading settings.ini: {e}")
-            return None,None,None
+            return None,None
 
 
