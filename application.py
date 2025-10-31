@@ -21,7 +21,7 @@ from utilities.PySerial.PySerial_lib import SerialDevice
 from utilities.Configuration.Config import Configuration
 from utilities.Tests.Tests import Manage_tests
 from utilities.Postgress_SQL.postgress_lib import PostgresDatabase
-from utilities.Sqlite.sqlite3 import SQLiteDatabase
+from utilities.Sqlite.sqlite_lib import SQLiteDatabase
 
 from utilities.Logs.logger import setup_logger
 
