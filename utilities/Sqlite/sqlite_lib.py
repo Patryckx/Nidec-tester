@@ -114,21 +114,22 @@ class SQLiteDatabase:
         try:
             cursor = self.connection.cursor()
 
-            # Campos a obtener
-            columns_str = ', '.join(fields)
+            # Asegurar nombres correctos
+            safe_table_name = str(table_name).replace('"', '').replace("'", "")
+            safe_columns = ', '.join([f'"{col}"' for col in fields])
 
             # Construir condiciones dinámicamente
             where_clauses = []
             values = []
             for col, val in conditions.items():
-                where_clauses.append(f"{col} = ?")
+                where_clauses.append(f'"{col}" = ?')
                 values.append(val)
             where_str = " AND ".join(where_clauses)
 
-            # Query SQL
+            # Query SQL segura
             sql = f"""
-                SELECT {columns_str}
-                FROM {table_name}
+                SELECT {safe_columns}
+                FROM "{safe_table_name}"
                 WHERE {where_str}
                 ORDER BY fecha DESC
                 LIMIT 1
@@ -150,7 +151,7 @@ class SQLiteDatabase:
         except Exception as e:
             print(f"Error al obtener registro filtrado: {e}")
             return None
-        
+            
 
 
     def get_records_with_conditions(self, table_name, conditions: dict = None, limit: int = 22):
