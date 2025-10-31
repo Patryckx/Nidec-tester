@@ -2380,8 +2380,8 @@ class MainWindow(QMainWindow, mainApplication):
 
                 database_config=self.config.get_sqlite_database_information()
 
-                database_path=database_config[0]
-                table=database_config[1]
+                database_path=str(database_config[0])
+                table=str(database_config[1])
 
                 #Database connection
             
