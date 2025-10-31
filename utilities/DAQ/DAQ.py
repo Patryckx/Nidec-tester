@@ -2,7 +2,7 @@
 # Website Support Pymodbus : https://pymodbus.readthedocs.io/en/latest/
 
 import time
-from infi.devicemanager import DeviceManager
+#from infi.devicemanager import DeviceManager
 from pymodbus.client import ModbusSerialClient
 
 try:
