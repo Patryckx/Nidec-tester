@@ -1,0 +1,3 @@
+Resumen de prueba
+ Error on show resume function:  unsupported operand type(s) for +=: 'NoneType' and 'int'
+Error on test 6 GUI Changes funtion: unsupported operand type(s) for +=: 'NoneType' and 'int'

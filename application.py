@@ -1281,7 +1281,7 @@ class MainWindow(QMainWindow, mainApplication):
             desired_fields = ['id-prueba', 'id-pieza-ok','id-pieza-ng']
 
             conditions = {
-            "numero-usuario": user,
+            "numero-empleado": user,
             "numero-orden": order
                 }
             # Obtener el registro más reciente desde PostgreSQL
@@ -2404,7 +2404,7 @@ class MainWindow(QMainWindow, mainApplication):
                 #Close connection 
                 self.sqlite_database.close_connection()
             except Exception as e :
-                print("Error al insertar registro en base de datos")   
+                print(f"Error al insertar registro en base de datos: {e}")
 
         except Exception as e:
             print("Error on add register function: ",e)

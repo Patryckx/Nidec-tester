@@ -60,10 +60,11 @@ class SQLiteDatabase:
         try:
             with self.connection:
                 cursor = self.connection.cursor()
-                columns = ', '.join(data.keys())
+                safe_table_name = str(table_name).replace('"', '').replace("'", "")
+                safe_columns = ', '.join([f'"{col}"' for col in data.keys()])
                 placeholders = ', '.join(['?'] * len(data))
                 values = tuple(data.values())
-                sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+                sql = f'INSERT INTO "{safe_table_name}" ({safe_columns}) VALUES ({placeholders})'
                 cursor.execute(sql, values)
             print(f"Datos insertados en '{table_name}': {data}")
         except Error as e:
@@ -145,8 +146,11 @@ class SQLiteDatabase:
                 print(f"No se encontró registro con {conditions}")
                 return None
 
-            print("Registro correcto:", record)
-            return record
+            # Convertir sqlite3.Row → dict
+            record_dict = dict(record)
+
+            print("Registro correcto:", record_dict)
+            return record_dict
 
         except Exception as e:
             print(f"Error al obtener registro filtrado: {e}")
