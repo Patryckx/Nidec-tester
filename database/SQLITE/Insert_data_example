@@ -1,0 +1,28 @@
+INSERT INTO "pentair-tester-registers" (
+    "id-prueba", "id-pieza-ok", "id-pieza-ng", "numero-empleado", "numero-orden",
+    "codigo-serial", "codigo-qr", "version-firmware", "comunicacion-232",
+    "prueba-leds", "prueba-lcds", "prueba-botones", "prueba-entradas-digitales", "fecha"
+)
+VALUES
+-- Registro 1 (FAIL → pieza NG)
+(0, 0, 1, '8617', '004796',
+ 'BV25402310007', 'T253906600', 'FAIL', 'FAIL',
+ 'FAIL', 'FAIL', 'FAIL', 'FAIL', '2025-10-01 10:07:01'),
+
+-- Registro 2 (PASS → pieza OK)
+(1, 1, 0, '8617', '004796',
+ 'BV25402310008', 'T253907998', 'FF00FFA50010600D1FD0761C01072E4F01520D6D000200C800300001000DDBCD0301839A8245009C0929', 'PASS',
+ 'PASS, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1}',
+ 'PASS, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1}',
+ 'PASS , {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1} ',
+ 'PASS , {1: 1, 2: 1, 3: 1, 4: 1} ',
+ '2025-10-01 10:09:27'),
+
+-- Registro 3 (PASS → pieza OK)
+(2, 1, 0, '8617', '004796',
+ 'BV25402310010', 'T253907982', 'FF00FFA50010600D1FD0761C01072E4F01520D6D000200C800300001000DDBCD0301839A8245009C0929', 'PASS',
+ 'PASS, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1}',
+ 'PASS, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1}',
+ 'PASS , {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1} ',
+ 'PASS , {1: 1, 2: 1, 3: 1, 4: 1} ',
+ '2025-10-01 10:10:39');
