@@ -1021,6 +1021,27 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.txtSerialCode.setFocus()
 
+            self.test_id=0
+            
+            self.piece_id=0
+
+            self.bad_piece_id=0
+
+            self.lblPiezasBuenas.setText(str(self.piece_id))
+
+            self.lblPiezasMalas.setText(str(self.bad_piece_id))
+
+            print("Verificacion valor de contadores ")
+
+            print(f"contador de pruebas :{self.test_id}")
+
+            print(f"contador de piezas OK :{self.piece_id}")
+
+            print(f"contador de piezas NG :{self.bad_piece_id}")
+
+
+
+
         except Exception as e:
             print("Error saving and confirm user and order:",e)
             raise
@@ -2145,6 +2166,14 @@ class MainWindow(QMainWindow, mainApplication):
         
 
             print("Resumen de prueba")
+
+            print("Verificacion valor de contadores ")
+
+            print(f"contador de pruebas :{self.test_id}")
+
+            print(f"contador de piezas OK :{self.piece_id}")
+
+            print(f"contador de piezas NG :{self.bad_piece_id}")
 
             self.btnResultados.setStyleSheet("background-color: green;")
 
