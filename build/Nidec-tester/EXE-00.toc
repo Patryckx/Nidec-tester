@@ -1,5 +1,5 @@
 ('C:\\Nidec-tester\\build\\Nidec-tester\\Nidec-tester.exe',
- False,
+ True,
  True,
  True,
  ['C:\\Nidec-tester\\resources\\nidec-icon.ico'],
@@ -49,7 +49,7 @@
    'C:\\Nidec-tester\\build\\Nidec-tester\\localpycs\\pyimod04_pywin32.pyc',
    'PYMODULE'),
   ('pyiboot01_bootstrap',
-   'C:\\Nidec-tester\\virtualenv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'C:\\Nidec-tester\\virtualenv\\lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
    'PYSOURCE'),
   ('pyi_rth_inspect',
    'C:\\Nidec-tester\\virtualenv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
@@ -67,8 +67,9 @@
  [],
  False,
  False,
- 1762185495,
- [('runw_d.exe',
-   'C:\\Nidec-tester\\virtualenv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw_d.exe',
+ 1762276911,
+ [('run_d.exe',
+   'C:\\Nidec-tester\\virtualenv\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run_d.exe',
    'EXECUTABLE')],
- 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python311\\python311.dll')
+ 'C:\\Users\\EDWIN '
+ 'CASTILLO\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll')
