@@ -1601,13 +1601,15 @@ class MainWindow(QMainWindow, mainApplication):
 
 
                 self.bad_piece_id+=1
-                
+
                 self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
+
+                self.lblPiezasMalas.setText(str(self.bad_piece_id))
 
                 
 
                 # Crear un QTimer para emitir la señal después de 3 segundos
-                QTimer.singleShot(5000, lambda: self.failed_firmware_version_signal.emit())
+                QTimer.singleShot(4000, lambda: self.failed_firmware_version_signal.emit())
 
             elif not driver_firmware_232_verification:
 
