@@ -1598,6 +1598,10 @@ class MainWindow(QMainWindow, mainApplication):
                 # def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
 
                 Result1=self.test.test1_result
+
+
+                self.bad_piece_id+=1
+                
                 self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
 
                 
