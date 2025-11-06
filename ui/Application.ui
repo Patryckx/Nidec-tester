@@ -1314,7 +1314,7 @@ QPushButton {
             <cursorShape>ArrowCursor</cursorShape>
            </property>
            <property name="toolTip">
-            <string>Temporizador prueba</string>
+            <string>Contador piezas buenas</string>
            </property>
            <property name="text">
             <string/>
@@ -1375,7 +1375,7 @@ QPushButton {
             <cursorShape>ArrowCursor</cursorShape>
            </property>
            <property name="toolTip">
-            <string>Temporizador prueba</string>
+            <string>Contador piezas malas</string>
            </property>
            <property name="text">
             <string/>
