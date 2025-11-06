@@ -2368,7 +2368,7 @@ class MainWindow(QMainWindow, mainApplication):
 
                 
             current_datetime = datetime.now()
-            formatted_datetime = current_datetime.strftime("%H:%M:%S_%d-%m-%y")
+            formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
             Current_date = str(formatted_datetime)
 
             codigo_serial=str(self.serial_code)
