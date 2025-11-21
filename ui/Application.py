@@ -4524,7 +4524,7 @@ class Ui_MainWindow(object):
         self.label_39.setText(_translate("MainWindow", "-Credenciales invalidas"))
         self.label_40.setText(_translate("MainWindow", " - Controladores de Dispositivo\n"
 " Faltantes o Desactualizados"))
-import resources_rc
+import resources.resources
 
 
 if __name__ == "__main__":
