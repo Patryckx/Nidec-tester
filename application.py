@@ -1017,55 +1017,51 @@ class MainWindow(QMainWindow, mainApplication):
 
     
     def confirm_and_save_userId_and_ShopOrder(self,event):
-        try:
 
-            currentUserId=str(self.lblNumeroEmpleado.text())
-            currentShopOrder=str(self.lblNumeroOrden.text())
+        currentUserId=str(self.lblNumeroEmpleado.text())
+        currentShopOrder=str(self.lblNumeroOrden.text())
 
-            self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
+        self.config.save_new_user_and_shop_info(currentUserId,currentShopOrder)
 
-            #Put information in GUI 
-            self.lblCurrentUser.setText(currentUserId)
-            self.lblCurrentOrder.setText(currentShopOrder)
-            
-            #Show first test index screen
-            self.stackedWidget.setCurrentIndex(6)
+        #Put information in GUI 
+        self.lblCurrentUser.setText(currentUserId)
+        self.lblCurrentOrder.setText(currentShopOrder)
+        
+        #Show first test index screen
+        self.stackedWidget.setCurrentIndex(6)
 
-            #Enable log out button 
-            self.btnLogout.setEnabled(True)
-            self.btnInicializar.setEnabled(False)
-            self.btnConfiguracion.setEnabled(False)
+        #Enable log out button 
+        self.btnLogout.setEnabled(True)
+        self.btnInicializar.setEnabled(False)
+        self.btnConfiguracion.setEnabled(False)
 
-            self.btnPrueba1.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+        self.btnPrueba1.setEnabled(True)
+        self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
 
-            self.txtSerialCode.setFocus()
+        self.txtSerialCode.setFocus()
 
-            self.test_id=0
-            
-            self.piece_id=0
+        self.test_id=0
+        
+        self.piece_id=0
 
-            self.bad_piece_id=0
+        self.bad_piece_id=0
 
-            self.lblPiezasBuenas.setText(str(self.piece_id))
+        self.lblPiezasBuenas.setText(str(self.piece_id))
 
-            self.lblPiezasMalas.setText(str(self.bad_piece_id))
+        self.lblPiezasMalas.setText(str(self.bad_piece_id))
 
-            print("Verificacion valor de contadores ")
+        print("Verificacion valor de contadores ")
 
-            print(f"contador de pruebas :{self.test_id}")
+        print(f"contador de pruebas :{self.test_id}")
 
-            print(f"contador de piezas OK :{self.piece_id}")
+        print(f"contador de piezas OK :{self.piece_id}")
 
-            print(f"contador de piezas NG :{self.bad_piece_id}")
-
+        print(f"contador de piezas NG :{self.bad_piece_id}")
 
 
 
-        except Exception as e:
-            print("Error saving and confirm user and order:",e)
-            raise
 
+       
     
     def deny_userId_and_ShopOrder(self,event):
 
@@ -1158,109 +1154,212 @@ class MainWindow(QMainWindow, mainApplication):
     def back_to_inicialize_app(self):
         self.stackedWidget.setCurrentIndex(0)
 
-    def inicialize(self,event):
+    def inicialize(self, event=None):
 
+        print("Starting app initialization...")
+
+        # -----------------------------------------
+        # 1) Evitar doble inicialización
+        # -----------------------------------------
+        if getattr(self, "is_initializing", False):
+            print("Initialization already in progress. Abort.")
+            return
         
-        print("App inicialized")
+        self.is_initializing = True
 
-        print("Obtaining instruments configuration")
-        current_config=self.config.get_current_config()
+        # -----------------------------------------
+        # 2) Reset visual mínimo antes de iniciar
+        # -----------------------------------------
+        self.btnInicializar.setEnabled(False)
+        self.btnConfiguracion.setEnabled(False)
 
-        gateway_port=current_config[0]
-        RS232_port=current_config[1]
-        RS485_port=current_config[2]
-        camera_address=current_config[3]
-        camera_port=current_config[4]
-        self.timer_value = int(current_config[5])  
-        self.led_program=current_config[6]
-        self.ocr_program=current_config[7]
+        # -----------------------------------------
+        # 3) Validar configuración del archivo INI
+        # -----------------------------------------
+        try:
+            current_config = self.config.get_current_config()
 
+            if len(current_config) < 8:
+                raise ValueError("Incomplete configuration in .ini file")
 
-        # Convertir segundos a minutos y segundos
-        minutes, seconds = divmod(  self.timer_value, 60)
-        self.formatted_timer_time = f"{minutes:02}:{seconds:02}"  # Formato MM:SS
+            gateway_port   = current_config[0]
+            RS232_port     = current_config[1]
+            RS485_port     = current_config[2]
+            camera_address = current_config[3]
+            camera_port    = current_config[4]
 
+            self.timer_value = int(current_config[5])
+            self.led_program = current_config[6]
+            self.ocr_program = current_config[7]
+
+        except Exception as e:
+            print(f"Error reading configuration: {e}")
+            self.stackedWidget.setCurrentIndex(4)
+            self.btnInicializar.setEnabled(True)
+            self.is_initializing = False
+            return
+
+        # Mostrar tiempo formateado
+        minutes, seconds = divmod(self.timer_value, 60)
+        self.formatted_timer_time = f"{minutes:02}:{seconds:02}"
         self.lbltimer.setText(self.formatted_timer_time)
 
-        print("Verifiying instruments...")
+        print("Config loaded successfully.")
+        print("Verifying instruments...")
 
-        print("Verifiying Serial port ")
-        
-        self.gateway.open(gateway_port)
+        # -----------------------------------------
+        # 4) Limpiar posibles conexiones previas
+        # -----------------------------------------
+        self.cleanup_connections()
 
-        if not self.gateway.is_connected():
+        # -----------------------------------------
+        # 5) Conectar Gateway (Modbus RTU master)
+        # -----------------------------------------
+        print("Connecting gateway...")
+        try:
+            self.gateway.open(gateway_port)
+            if not self.gateway.is_connected():
+                print("Gateway not connected")
+                self.stackedWidget.setCurrentIndex(2)
+                self.cleanup_connections()
+                self.is_initializing = False
+                return
+                
+        except Exception as e:
+            print(f"Gateway connection error: {e}")
             self.stackedWidget.setCurrentIndex(2)
+            self.cleanup_connections()
+            self.is_initializing = False
             return
 
-        #Housekeeping registers gateway
-        self.housekeeping_gateway()
+        print("Gateway connected OK")
 
-        self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
-        if not self.Rs485.connect():
-            print("Serial 485 Device NOT connected connected")
+        # -----------------------------------------
+        # 6) Housekeeping (importante)
+        # -----------------------------------------
+        try:
+            self.housekeeping_gateway()
+        except Exception as e:
+            print(f"Error in housekeeping: {e}")
+
+        # -----------------------------------------
+        # 7) Conectar RS485
+        # -----------------------------------------
+        print("Connecting RS485...")
+        try:
+            self.Rs485 = SerialDevice(port=RS485_port, baudrate=9600, timeout=1)
+            if not self.Rs485.connect():
+                print("RS485 device not connected")
+                self.stackedWidget.setCurrentIndex(1)
+                self.cleanup_connections()
+                self.is_initializing = False
+                return
+        except Exception as e:
+            print(f"RS485 error: {e}")
             self.stackedWidget.setCurrentIndex(1)
+            self.cleanup_connections()
+            self.is_initializing = False
             return
 
-        #Camera Connection through telnet protocol
+        print("RS485 connected OK")
 
-        
-        self.Camera=TelnetClient(camera_address,camera_port)
-
-        if not self.Camera.connect():
-            print("Camera connection Telnet not established")
+        # -----------------------------------------
+        # 8) Conectar Cámara (Telnet)
+        # -----------------------------------------
+        print("Connecting camera...")
+        try:
+            self.Camera = TelnetClient(camera_address, camera_port)
+            if not self.Camera.connect():
+                print("Camera not reachable")
+                self.stackedWidget.setCurrentIndex(3)
+                self.cleanup_connections()
+                self.is_initializing = False
+                return
+        except Exception as e:
+            print(f"Camera error: {e}")
             self.stackedWidget.setCurrentIndex(3)
+            self.cleanup_connections()
+            self.is_initializing = False
             return
 
-        print("All devices sucessfully conected")  
+        print("Camera connected OK")
+        print("All devices connected successfully!")
 
-        #Instrument verification finished
-
+        # -----------------------------------------
+        # 9) Verificación de sesión (.ini)
+        # -----------------------------------------
         data = self.config.get_current_user()
+        employee = str(data[0]).strip()
+        order = str(data[1]).strip()
 
-        # Verificar si ambos valores son números y cumplen con la longitud requerida
-        if re.fullmatch(r'\d{4}', data[0]) and re.fullmatch(r'\d{6}', data[1]):
-            print("Datos válidos obtenidos")
+        if re.fullmatch(r'\d{4}', employee) and re.fullmatch(r'\d{6}', order):
+            print("Valid session data found.")
 
-            currentUserId=str(data[0])
-            self.lblCurrentUser.setText(currentUserId)
+            self.lblCurrentUser.setText(employee)
+            self.lblCurrentOrder.setText(order)
 
-            currentShopOrder=str(data[1])
-            self.lblCurrentOrder.setText(currentShopOrder)
-
-            
-
+            # -----------------------------------------
+            # 10) Cargar últimos datos de DB / CSV
+            # -----------------------------------------
             if self.is_database_enabled:
+                db_result = self.verify_data_sqlite(employee, order)
 
-                self.verify_data_sqlite(currentUserId,currentShopOrder)
-            else:    
+                # Error grave de conexión → mostrar pantalla especial
+                if db_result is None:
+                    print("Database connection failed! Showing DB error screen...")
+                    self.cleanup_connections()
+                    self.stackedWidget.setCurrentIndex(16)   # <- ÍNDICE QUE TÚ QUIERAS PARA ERROR DB
+                    self.is_initializing = False
+                    return
+            else:
                 self.verify_data_csv()
 
-            #"if is_data_valid:
-            #Disable inicialize button
-            self.btnInicializar.setEnabled(False)
-            
-            self.btnConfiguracion.setEnabled(False)
-
-            #Show first test index screen
+            # -----------------------------------------
+            # 11) Mostrar pantalla de pruebas
+            # -----------------------------------------
             self.stackedWidget.setCurrentIndex(6)
-
-            #Enable log out button 
             self.btnLogout.setEnabled(True)
-            
             self.btnPrueba1.setEnabled(True)
-            
             self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-
             self.txtSerialCode.setFocus()
-            
-        else:
-            print("Datos no válidos o no cumplen con los requisitos")
 
-            #Show User and Shop order input 
+        else:
+            print("Invalid or missing session data.")
             self.stackedWidget.setCurrentIndex(4)
             self.txtNumeroEmpleado.setFocus()
-        
 
+        # -----------------------------------------
+        # 12) Finalizar inicialización
+        # -----------------------------------------
+        self.is_initializing = False
+        print("Initialization complete.")
+
+    def is_session_valid(self):
+        user, order = self.config.get_current_user()
+
+        if re.fullmatch(r"\d{4}", user) and re.fullmatch(r"\d{6}", order):
+            return True
+        return False
+
+        
+    def cleanup_connections(self):
+        try:
+            if hasattr(self, "gateway") and self.gateway:
+                self.gateway.close()
+        except:
+            pass
+
+        try:
+            if hasattr(self, "Rs485") and self.Rs485:
+                self.Rs485.disconnect()
+        except:
+            pass
+
+        try:
+            if hasattr(self, "Camera") and self.Camera:
+                self.Camera.disconnect()
+        except:
+            pass
 
     def verify_data_csv(self):
         try:

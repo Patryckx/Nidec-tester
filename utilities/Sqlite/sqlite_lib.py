@@ -108,52 +108,60 @@ class SQLiteDatabase:
         
 
     def get_last_record_fields_by_columns(self, table_name, conditions, fields):
+
         if not self.connection:
-            print("No hay conexión a la base de datos.")
+            print("ERROR: No database connection.")
             return None
 
         try:
+            self.connection.row_factory = sqlite3.Row
             cursor = self.connection.cursor()
 
-            # Asegurar nombres correctos
-            safe_table_name = str(table_name).replace('"', '').replace("'", "")
-            safe_columns = ', '.join([f'"{col}"' for col in fields])
+            # Sanitizar nombres de columnas y tabla
+            safe_table = str(table_name).replace('"', '').replace("'", "")
+            safe_fields = ", ".join([f'"{col}"' for col in fields])
 
-            # Construir condiciones dinámicamente
+            # Construir WHERE dinámico
             where_clauses = []
             values = []
             for col, val in conditions.items():
                 where_clauses.append(f'"{col}" = ?')
                 values.append(val)
+
             where_str = " AND ".join(where_clauses)
 
-            # Query SQL segura
+            # Verificar que exista la columna fecha
+            cursor.execute(f'PRAGMA table_info("{safe_table}")')
+            columns = [col[1] for col in cursor.fetchall()]
+
+            if "fecha" in columns:
+                order_clause = 'ORDER BY "fecha" DESC'
+            else:
+                # Si la tabla no tiene fecha, usa ROWID
+                order_clause = 'ORDER BY ROWID DESC'
+
             sql = f"""
-                SELECT {safe_columns}
-                FROM "{safe_table_name}"
+                SELECT {safe_fields}
+                FROM "{safe_table}"
                 WHERE {where_str}
-                ORDER BY fecha DESC
+                {order_clause}
                 LIMIT 1
             """
 
-            print("SQL ejecutado:", sql)
-            print("Valores:", values)
+            print("\nSQL:", sql)
+            print("Values:", values)
 
             cursor.execute(sql, tuple(values))
             record = cursor.fetchone()
 
-            if not record:
-                print(f"No se encontró registro con {conditions}")
+            if record is None:
+                print("No matching rows found.")
                 return None
 
-            # Convertir sqlite3.Row → dict
-            record_dict = dict(record)
-
-            print("Registro correcto:", record_dict)
-            return record_dict
+            return dict(record)
 
         except Exception as e:
-            print(f"Error al obtener registro filtrado: {e}")
+            print(f"Error in get_last_record_fields_by_columns(): {e}")
             return None
             
 

@@ -1,4 +1,5 @@
 import configparser
+import os
 
 from ui.Application import Ui_MainWindow as mainApplication
 class Configuration():
@@ -32,15 +33,36 @@ class Configuration():
 
     def get_current_user(self):
         config = configparser.ConfigParser()
+        session_path = 'settings/session.ini'
+
+        # 1. Verificar que el archivo exista
+        if not os.path.exists(session_path):
+            print("session.ini not found.")
+            return None, None
+
         try:
-            config.read('settings/session.ini')
-            user_Id = config.get('Session', 'ID_User', fallback='None').replace('"', '')
-            shop_Order = config.get('Session', 'Shop_order', fallback='None').replace('"', '')
-           
-            return user_Id,shop_Order
+            config.read(session_path)
+
+            # 2. Validar que exista la sección
+            if 'Session' not in config:
+                print("Missing 'Session' section in session.ini")
+                return None, None
+
+            # 3. Obtener valores de forma robusta
+            user_id = config['Session'].get('ID_User', None)
+            shop_order = config['Session'].get('Shop_order', None)
+
+            # 4. Limpiar comillas solo si existen
+            if user_id:
+                user_id = user_id.strip().replace('"', '')
+            if shop_order:
+                shop_order = shop_order.strip().replace('"', '')
+
+            return user_id, shop_order
+
         except Exception as e:
             print(f"Error reading session.ini: {e}")
-            return None,None
+            return None, None
 
     
     def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value):
@@ -71,25 +93,40 @@ class Configuration():
             print("Error al guardar la configuracion",e)
     
     
-    def save_new_user_and_shop_info(self,user_Id,Shop_order):
+    def save_new_user_and_shop_info(self, user_Id, Shop_order):
         try:
-            
-            # Crear un objeto ConfigParser
+            session_path = 'settings/session.ini'
+
+            # 1. Crear el directorio si no existe
+            os.makedirs(os.path.dirname(session_path), exist_ok=True)
+
             config = configparser.ConfigParser()
 
-            # Cargar el archivo .ini
-            config.read('settings/session.ini')
+            # 2. Cargar archivo existente si ya existe
+            if os.path.exists(session_path):
+                config.read(session_path)
+            else:
+                # 3. Crear archivo y sección nueva
+                config['Session'] = {}
 
-            # DAQ
-            config.set('Session', 'ID_User', user_Id)
-            # RS232
-            config.set('Session', 'Shop_order', Shop_order)
-            
-            # Guardar los cambios en el archivo .ini
-            with open('settings/session.ini', 'w') as configfile:
+            # 4. Si la sección no existe, crearla
+            if 'Session' not in config:
+                config['Session'] = {}
+
+            # 5. Validar valores de entrada
+            user_Id = user_Id if user_Id not in (None, "") else "None"
+            Shop_order = Shop_order if Shop_order not in (None, "") else "None"
+
+            # 6. Guardar valores limpios
+            config['Session']['ID_User'] = str(user_Id).strip()
+            config['Session']['Shop_order'] = str(Shop_order).strip()
+
+            # 7. Escribir archivo
+            with open(session_path, 'w') as configfile:
                 config.write(configfile)
+
         except Exception as e:
-            print("Error al guardar la informacion del usuario y orden de compra",e)
+            print("Error al guardar la información del usuario y orden de compra:", e)
 
     def erase_user_and_shop_info(self):
         try:
