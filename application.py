@@ -449,10 +449,6 @@ class MainWindow(QMainWindow, mainApplication):
     failed_firmware_version_signal=pyqtSignal()
 
     def __init__(self):
-        super(MainWindow, self).__init__()
-        self.setupUi(self)
-
-
         # Leer banderas desde config.ini
         enable_logs, log_dir = self.read_logs_to_file_flag()
 
@@ -462,7 +458,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.logger = OutputLogger(log_dir)
             self.logger.start()
 
-        print("Aplicación iniciada correctamente.")
+        super(MainWindow, self).__init__()
+        self.setupUi(self)
 
         self.connect_signals()
 
