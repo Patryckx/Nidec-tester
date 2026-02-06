@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>chip.png</file>
+    <file>upc.png</file>
     <file>correcto.png</file>
     <file>verified.png</file>
     <file>check.png</file>
@@ -62,6 +64,7 @@
     <file>number-1.png</file>
     <file>webcam.png</file>
     <file>microchip.png</file>
+    <file>placa-madre.png</file>
     <file>magnifying-glass.png</file>
     <file>warning.png</file>
     <file>connection.png</file>

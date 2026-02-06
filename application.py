@@ -513,16 +513,15 @@ class MainWindow(QMainWindow, mainApplication):
         self.test_id=None
         self.bad_piece_id=None
 
+        #Firmware models
+        self.firmware_model_selected=None
+        self.firmware_model_a=None
+        self.firmware_model_b=None
+
 
         # Asegurar que la ventana pueda recibir eventos de teclado
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFocus()
-
-
-
-        
-
-
 
     ############# TABLE FUNCTIONS   ########################## 
 
@@ -789,7 +788,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.lblCancelar.mousePressEvent = self.show_configuration
 
         #User ID and Shop order 
-        self.lblConfirmUserInfo.mousePressEvent = self.confirm_and_save_userId_and_ShopOrder
+        #self.lblConfirmUserInfo.mousePressEvent = self.confirm_and_save_userId_and_ShopOrder
+        self.lblConfirmUserInfo.mousePressEvent = self.is_firmware_version_enabled
         self.lblDenyUserInfo.mousePressEvent = self.deny_userId_and_ShopOrder
 
         self.btnVerificarDatos.clicked.connect(self.verify_user_and_ShopOrder)
@@ -836,6 +836,10 @@ class MainWindow(QMainWindow, mainApplication):
         #Firmware version Test 2
         self.Test_2_signal.connect(self.Test_2_GUI_changes)
         self.failed_firmware_version_signal.connect(self.test_2_failed_firmware_version_response)
+
+        #Firmware models 
+        self.btnModelA.clicked.connect(self.firmware_model_A_selected)
+        self.btnModelB.clicked.connect(self.firmware_model_B_selected)
 
 
         #LEDs test 3
@@ -987,9 +991,17 @@ class MainWindow(QMainWindow, mainApplication):
                     self.lblNumeroOrden.setText(currentShopOrder)
 
                     
+                    firmware_model_verification_enabled=self.is_firmware_version_enabled()
 
-                    #Show User and Shop order input confirm Screen
-                    self.stackedWidget.setCurrentIndex(5)
+                    if firmware_model_verification_enabled:
+                        print("Firmware model verification enabled")
+
+                        self.firmware_model_a,self.firmware_model_b=self.get_firmware_models()
+                        self.stackedWidget.setCurrentIndex(17)
+
+                    else:
+                        #Show User and Shop order input confirm Screen
+                        self.stackedWidget.setCurrentIndex(5)
                 
                 else:
                     print("Datos no válidos o no cumplen con los requisitos")
@@ -1311,17 +1323,25 @@ class MainWindow(QMainWindow, mainApplication):
                     self.stackedWidget.setCurrentIndex(16)   # <- ÍNDICE QUE TÚ QUIERAS PARA ERROR DB
                     self.is_initializing = False
                     return
+                elif db_result is False:
+                    # No se encontró la orden
+                    print("Orden no válida o no encontrada.")
+                    self.stackedWidget.setCurrentIndex(4)
+                    self.txtNumeroEmpleado.setFocus()
+                    self.is_initializing = False
+                    return
+                # -----------------------------------------
+                # 11) Mostrar pantalla de pruebas
+                # -----------------------------------------
+                self.stackedWidget.setCurrentIndex(6)
+                self.btnLogout.setEnabled(True)
+                self.btnPrueba1.setEnabled(True)
+                self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
+                self.txtSerialCode.setFocus()
+
+
             else:
                 self.verify_data_csv()
-
-            # -----------------------------------------
-            # 11) Mostrar pantalla de pruebas
-            # -----------------------------------------
-            self.stackedWidget.setCurrentIndex(6)
-            self.btnLogout.setEnabled(True)
-            self.btnPrueba1.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-            self.txtSerialCode.setFocus()
 
         else:
             print("Invalid or missing session data.")
@@ -1624,6 +1644,51 @@ class MainWindow(QMainWindow, mainApplication):
 
 ############## TEST2   #####################################
 
+    def is_firmware_version_enabled(self,event):
+
+        config = configparser.ConfigParser()
+
+        config.read('settings/settings.ini')
+        
+        is_firmware_model_verification_enabled=config.get('Firmware_Verification', 'enabled', fallback=True).replace('"', '')
+
+        return is_firmware_model_verification_enabled
+    
+    def firmware_model_A_selected(self):
+
+        print("Model A")
+
+        self.firmware_model_selected=str(self.firmware_model_a)
+
+        #Show confirm order screen
+
+        self.stackedWidget.setCurrentIndex(5)
+
+    def firmware_model_B_selected(self):
+
+        print("Model B")
+        self.firmware_model_selected=str(self.firmware_model_b)
+
+        #Show confirm order screen
+
+        self.stackedWidget.setCurrentIndex(5)
+
+
+
+    def get_firmware_models(self):
+        print("Obtaining firmware models formats")
+
+        config = configparser.ConfigParser()
+
+        config.read('settings/settings.ini')
+        
+        firmware_model_a=str(config.get('Firmware_Verification', 'model_A', fallback='127.0.0.1').replace('"', ''))
+
+        firmware_model_b=str(config.get('Firmware_Verification', 'model_B', fallback='"pentair-tester-registers"'))
+
+        return firmware_model_a,firmware_model_b
+        
+
     def test_2(self):
         try:
             print("Segunda prueba")
@@ -1692,6 +1757,8 @@ class MainWindow(QMainWindow, mainApplication):
 
             print(f"Firmware response:{firmware_version}")
 
+            
+
             if firmware_version == '' or firmware_version=='None':
                 self.lblVerifyFirmware.setText("Firmware NO capturado")
                 self.lblVerifyFirmware.setStyleSheet("color: red;")
@@ -1718,7 +1785,45 @@ class MainWindow(QMainWindow, mainApplication):
                 # Crear un QTimer para emitir la señal después de 3 segundos
                 QTimer.singleShot(4000, lambda: self.failed_firmware_version_signal.emit())
 
-            elif not driver_firmware_232_verification:
+
+
+            #VERIFY FIRMWARE MODEL SELECTION
+
+            if firmware_version == self.firmware_model_selected:
+                print(f"PASS , La version del firmware coincide con la seleccionada:{self.firmware_model_selected} ")
+
+            else:
+
+                print(f"FAIL , La version del firmware NO coincide con la seleccionada:{self.firmware_model_selected} ")
+
+                self.lblVerifyFirmware.setText("Firmware NO coincide con modelo seleccionado")
+                self.lblVerifyFirmware.setStyleSheet("color: red;")
+
+                #Test Button 
+                self.btnPrueba2.setStyleSheet("background-color: red;")
+
+                # Crear un QTimer para emitir la señal después de 3 segundos
+                #QTimer.singleShot(6000, lambda: self.failed_firmware_version_signal.emit())
+
+                # def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
+
+                Result1=self.test.test1_result
+
+
+                self.bad_piece_id+=1
+
+                self.add_register(Result1,firmware_version,"FAIL","FAIL","FAIL","FAIL","FAIL")
+
+                self.lblPiezasMalas.setText(str(self.bad_piece_id))
+
+                
+
+                # Crear un QTimer para emitir la señal después de 3 segundos
+                QTimer.singleShot(4000, lambda: self.failed_firmware_version_signal.emit())
+
+            #VERIFY 232 FIRMWARE RESPONSE
+
+            if not driver_firmware_232_verification:
 
                 self.txtFirmware.setText(firmware_version)
 
@@ -2508,7 +2613,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
                 col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
         
-            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"ID_pieza_mala":self.bad_piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"ID_pieza_mala":self.bad_piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Firmware Model":self.firmware_model_selected,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
             
             # Call csv register add function 
             self.test.add_csv_register(csv_register,user,shop_order)
