@@ -136,14 +136,18 @@ class Configuration:
             return (None,) * 8
 
         try:
-            gateway_port  = config.get('DAQ',      'address',    fallback='None').strip()
-            rs485_port    = config.get('RS485',     'address',    fallback='None').strip()
-            rs232_port    = config.get('RS232',     'address',    fallback='None').strip()
-            camera_address= config.get('Camera',    'address',    fallback='None').strip()
-            camera_port   = config.get('Camera',    'port',       fallback='None').strip()
-            timer         = config.get('Timer',     'cycle_time', fallback='None').strip()
-            led_program   = config.get('Programs',  'led',        fallback='None').strip()
-            ocr_program   = config.get('Programs',  'ocr',        fallback='None').strip()
+            def clean(value: str) -> str:
+                """Elimina espacios y comillas dobles/simples de un valor .ini"""
+                return value.strip().strip('"').strip("'")
+
+            gateway_port   = clean(config.get('DAQ',     'address',    fallback='None'))
+            rs485_port     = clean(config.get('RS485',   'address',    fallback='None'))
+            rs232_port     = clean(config.get('RS232',   'address',    fallback='None'))
+            camera_address = clean(config.get('Camera',  'address',    fallback='None'))
+            camera_port    = clean(config.get('Camera',  'port',       fallback='None'))
+            timer          = clean(config.get('Timer',   'cycle_time', fallback='None'))
+            led_program    = clean(config.get('Programs','led',        fallback='None'))
+            ocr_program    = clean(config.get('Programs','ocr',        fallback='None'))
 
             return (
                 gateway_port, rs232_port, rs485_port,
@@ -154,33 +158,32 @@ class Configuration:
         except Exception as e:
             print(f"[Config] Error leyendo settings: {e}")
             return (None,) * 8
-
     # =========================================================
     # SESSION
     # =========================================================
 
     def get_current_user(self) -> tuple[str, str]:
-        """
-        Retorna (user_id, shop_order).
-        Garantiza strings vacíos en lugar de None cuando no hay sesión.
-        """
+
         config = self.load_config(self.SESSION_FILE)
 
         if config is None:
-            return '', ''                           # ← nunca retorna None
+            return '', ''
 
         try:
             if not config.has_section('Session'):
                 return '', ''
 
-            user_id    = config.get('Session', 'id_user',    fallback='').strip()
-            shop_order = config.get('Session', 'shop_order', fallback='').strip()
+            def clean(value: str) -> str:
+                return value.strip().strip('"').strip("'")
+
+            user_id    = clean(config.get('Session', 'id_user',    fallback=''))
+            shop_order = clean(config.get('Session', 'shop_order', fallback=''))
 
             return user_id, shop_order
 
         except Exception as e:
             print(f"[Config] Error leyendo sesión: {e}")
-            return '', ''                           # ← nunca retorna None
+            return '', ''
 
     # =========================================================
     # SAVE SETTINGS
