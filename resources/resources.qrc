@@ -1,5 +1,13 @@
 <RCC>
   <qresource prefix="resources">
+    <file>Fallo_prueba6.png</file>
+    <file>Fallo_prueba5.png</file>
+    <file>Fallo_prueba4.png</file>
+    <file>Fallo_prueba3.png</file>
+    <file>Fallo_prueba3.png</file>
+    <file>informacion.png</file>
+    <file>botoneras.png</file>
+    <file>warning_test.png</file>
     <file>correcto.png</file>
     <file>verified.png</file>
     <file>check.png</file>

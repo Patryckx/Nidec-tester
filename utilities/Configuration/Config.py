@@ -1,136 +1,249 @@
 import configparser
+import os
 
-from ui.Application import Ui_MainWindow as mainApplication
-class Configuration():
+
+class Configuration:
     """ Configure functions """
-    
-    def __init__(self):       
-        #connect signals
-       pass
+
+    SETTINGS_FILE = 'settings/settings.ini'
+    SESSION_FILE = 'settings/session.ini'
+
+    def __init__(self):
+        pass
+
+    # =========================================================
+    # INTERNAL METHODS
+    # =========================================================
+
+    def load_config(self, file_path):
+        config = configparser.ConfigParser()
+
+        try:
+            with open(file_path, 'r', encoding='utf-8-sig') as f:
+                config.read_file(f)
+
+            return config
+
+        except FileNotFoundError:
+            print(f"Configuration file not found: {file_path}")
+            return None
+
+        except Exception as e:
+            print(f"Error reading config file {file_path}: {e}")
+            return None
+
+    def save_config(self, config, file_path):
+        try:
+            with open(file_path, 'w', encoding='utf-8') as configfile:
+                config.write(configfile)
+
+            return True
+
+        except Exception as e:
+            print(f"Error saving config file {file_path}: {e}")
+            return False
+
+    def ensure_section(self, config, section):
+        if not config.has_section(section):
+            config.add_section(section)
+
+    # =========================================================
+    # SETTINGS
+    # =========================================================
 
     def get_current_config(self):
-        config = configparser.ConfigParser()
+
+        config = self.load_config(self.SETTINGS_FILE)
+
+        if config is None:
+            return (None,) * 8
 
         try:
-            config.read('settings/settings.ini')
-            gateway_port = config.get('DAQ', 'address', fallback='None').replace('"', '')
-            rs485_port = config.get('RS485', 'address', fallback='None').replace('"', '')
-            rs232_port = config.get('RS232', 'address', fallback='None').replace('"', '')
 
-            camera_address=config.get('Camera', 'address', fallback='None').replace('"', '')
-            camera_port=config.get('Camera', 'port', fallback='None').replace('"', '')
+            gateway_port = config.get('DAQ', 'address', fallback='None').strip()
 
-            timer=config.get('Timer', 'cycle_time', fallback='None')
+            rs485_port = config.get('RS485', 'address', fallback='None').strip()
 
-            led_program=config.get('Programs', 'led', fallback='None').replace('"', '')
+            rs232_port = config.get('RS232', 'address', fallback='None').strip()
 
-            ocr_program=config.get('Programs', 'ocr', fallback='None').replace('"', '')
-            return gateway_port,rs232_port, rs485_port,camera_address,camera_port,timer,led_program,ocr_program
+            camera_address = config.get('Camera', 'address', fallback='None').strip()
+
+            camera_port = config.get('Camera', 'port', fallback='None').strip()
+
+            timer = config.get('Timer', 'cycle_time', fallback='None').strip()
+
+            led_program = config.get('Programs', 'led', fallback='None').strip()
+
+            ocr_program = config.get('Programs', 'ocr', fallback='None').strip()
+
+            return (
+                gateway_port,
+                rs232_port,
+                rs485_port,
+                camera_address,
+                camera_port,
+                timer,
+                led_program,
+                ocr_program
+            )
+
         except Exception as e:
-            print(f"Error reading settings.ini: {e}")
-            return None,None,None,None,None,None
+            print(f"Error reading settings values: {e}")
+            return (None,) * 8
+
+    # =========================================================
+    # SESSION
+    # =========================================================
 
     def get_current_user(self):
-        config = configparser.ConfigParser()
-        try:
-            config.read('settings/session.ini')
-            user_Id = config.get('Session', 'ID_User', fallback='None').replace('"', '')
-            shop_Order = config.get('Session', 'Shop_order', fallback='None').replace('"', '')
-           
-            return user_Id,shop_Order
-        except Exception as e:
-            print(f"Error reading session.ini: {e}")
-            return None,None
 
-    
-    def save_new_configuration(self,gateway_port,rs232_port,rs485_port,camera_address,timer_value):
+        config = self.load_config(self.SESSION_FILE)
+
+        if config is None:
+            return None, None
+
         try:
-            
-            # Crear un objeto ConfigParser
+
+            if not config.has_section('Session'):
+                raise ValueError("Section [Session] does not exist")
+
+            user_id = config.get(
+                'Session',
+                'id_user',
+                fallback=''
+            ).strip()
+
+            shop_order = config.get(
+                'Session',
+                'shop_order',
+                fallback=''
+            ).strip()
+
+            return user_id, shop_order
+
+        except Exception as e:
+            print(f"Error reading session data: {e}")
+            return None, None
+
+    # =========================================================
+    # SAVE SETTINGS
+    # =========================================================
+
+    def save_new_configuration(
+        self,
+        gateway_port,
+        rs232_port,
+        rs485_port,
+        camera_address,
+        timer_value
+    ):
+
+        config = self.load_config(self.SETTINGS_FILE)
+
+        if config is None:
             config = configparser.ConfigParser()
 
-            # Cargar el archivo .ini
-            config.read('settings/settings.ini')
-
-            # DAQ
-            config.set('DAQ', 'address', gateway_port)
-            # RS232
-            config.set('RS232', 'address', rs232_port)
-            # RS485
-            config.set('RS485', 'address', rs485_port)
-            # Camera
-            config.set('Camera', 'address', camera_address)
-
-            # Timer
-            config.set('Timer', 'cycle_time', timer_value)
-
-            # Guardar los cambios en el archivo .ini
-            with open('settings/settings.ini', 'w') as configfile:
-                config.write(configfile)
-        except Exception as e:
-            print("Error al guardar la configuracion",e)
-    
-    
-    def save_new_user_and_shop_info(self,user_Id,Shop_order):
         try:
-            
-            # Crear un objeto ConfigParser
+
+            sections = [
+                'DAQ',
+                'RS232',
+                'RS485',
+                'Camera',
+                'Timer'
+            ]
+
+            for section in sections:
+                self.ensure_section(config, section)
+
+            config.set('DAQ', 'address', str(gateway_port))
+
+            config.set('RS232', 'address', str(rs232_port))
+
+            config.set('RS485', 'address', str(rs485_port))
+
+            config.set('Camera', 'address', str(camera_address))
+
+            config.set('Timer', 'cycle_time', str(timer_value))
+
+            self.save_config(config, self.SETTINGS_FILE)
+
+        except Exception as e:
+            print(f"Error saving configuration: {e}")
+
+    # =========================================================
+    # SAVE SESSION
+    # =========================================================
+
+    def save_new_user_and_shop_info(self, user_id, shop_order):
+
+        config = self.load_config(self.SESSION_FILE)
+
+        if config is None:
             config = configparser.ConfigParser()
 
-            # Cargar el archivo .ini
-            config.read('settings/session.ini')
+        try:
 
-            # DAQ
-            config.set('Session', 'ID_User', user_Id)
-            # RS232
-            config.set('Session', 'Shop_order', Shop_order)
-            
-            # Guardar los cambios en el archivo .ini
-            with open('settings/session.ini', 'w') as configfile:
-                config.write(configfile)
+            self.ensure_section(config, 'Session')
+
+            config.set('Session', 'id_user', str(user_id))
+
+            config.set('Session', 'shop_order', str(shop_order))
+
+            self.save_config(config, self.SESSION_FILE)
+
         except Exception as e:
-            print("Error al guardar la informacion del usuario y orden de compra",e)
+            print(f"Error saving user/shop info: {e}")
 
     def erase_user_and_shop_info(self):
-        try:
-            
-            print("Erasing session info")
-            # Crear un objeto ConfigParser
+
+        config = self.load_config(self.SESSION_FILE)
+
+        if config is None:
             config = configparser.ConfigParser()
 
-            # Cargar el archivo .ini
-            config.read('settings/session.ini')
+        try:
 
-            # DAQ
-            config.set('Session', 'ID_User', "")
-            # RS232
-            config.set('Session', 'Shop_order', "")
-            
-            # Guardar los cambios en el archivo .ini
-            with open('settings/session.ini', 'w') as configfile:
-                config.write(configfile)
+            self.ensure_section(config, 'Session')
+
+            config.set('Session', 'id_user', '')
+
+            config.set('Session', 'shop_order', '')
+
+            self.save_config(config, self.SESSION_FILE)
+
+            print("Session info erased")
+
         except Exception as e:
-            print("Error al borrar la informacion del usuario y orden de compra",e)
+            print(f"Error erasing session info: {e}")
 
-
-    ###################### POSTGRESS ###############################
-
+    # =========================================================
+    # SQLITE
+    # =========================================================
 
     def get_sqlite_database_information(self):
-        config = configparser.ConfigParser()
+
+        config = self.load_config(self.SETTINGS_FILE)
+
+        if config is None:
+            return None, None
 
         try:
-            config.read('settings/settings.ini')
-           
-            host=config.get('DATABASE', 'db_path', fallback='127.0.0.1').replace('"', '')
 
-            table=config.get('DATABASE', 'table_name', fallback='"pentair-tester-registers"')
+            host = config.get(
+                'DATABASE',
+                'db_path',
+                fallback='127.0.0.1'
+            ).strip()
 
+            table = config.get(
+                'DATABASE',
+                'table_name',
+                fallback='pentair-tester-registers'
+            ).strip()
 
+            return host, table
 
-            return host,table
         except Exception as e:
-            print(f"Error reading settings.ini: {e}")
-            return None,None
-
-
+            print(f"Error reading database information: {e}")
+            return None, None
