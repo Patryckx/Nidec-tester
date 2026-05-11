@@ -17,14 +17,6 @@ class Configuration:
     # INTERNAL METHODS
     # =========================================================
 
-    @staticmethod
-    def _clean(value: str) -> str:
-        """
-        Elimina espacios y comillas dobles/simples de un valor leído del .ini.
-        Uso: self._clean(config.get(...))
-        """
-        return value.strip().strip('"').strip("'")
-
     def _is_file_corrupt(self, file_path: str) -> bool:
         """
         Detecta si un archivo .ini está corrupto (vacío, solo nulos,
@@ -49,7 +41,7 @@ class Configuration:
             return False
 
         except Exception as e:
-            print(f"[Config] Error checking file integrity {file_path}: {e}")
+            print(f"Error checking file integrity {file_path}: {e}")
             return True                             # ante la duda, tratar como corrupto
 
     def _backup_and_recreate(self, file_path: str):
@@ -58,13 +50,13 @@ class Configuration:
         y lo elimina para que sea recreado limpio.
         """
         try:
-            timestamp   = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_path = f"{file_path}.corrupt_{timestamp}.bak"
             shutil.copy2(file_path, backup_path)
             os.remove(file_path)
-            print(f"[Config] Archivo corrupto respaldado en: {backup_path}")
+            print(f"Archivo corrupto respaldado en: {backup_path}")
         except Exception as e:
-            print(f"[Config] Error al respaldar archivo corrupto {file_path}: {e}")
+            print(f"Error al respaldar archivo corrupto {file_path}: {e}")
 
     def load_config(self, file_path: str) -> configparser.ConfigParser | None:
         """
@@ -84,6 +76,7 @@ class Configuration:
             return config
 
         except configparser.MissingSectionHeaderError:
+            # El archivo existe pero no tiene secciones válidas
             print(f"[Config] Sin encabezados de sección en: {file_path}. Recreando...")
             self._backup_and_recreate(file_path)
             return None
@@ -104,13 +97,16 @@ class Configuration:
         """
         tmp_path = file_path + ".tmp"
         try:
+            # Asegurar que el directorio existe
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
+            # Escribir en temporal primero
             with open(tmp_path, 'w', encoding='utf-8') as f:
                 config.write(f)
                 f.flush()
                 os.fsync(f.fileno())               # forzar escritura a disco
 
+            # Reemplazar el original solo si el temporal es válido
             if os.path.getsize(tmp_path) > 0:
                 shutil.move(tmp_path, file_path)
                 return True
@@ -140,14 +136,18 @@ class Configuration:
             return (None,) * 8
 
         try:
-            gateway_port   = self._clean(config.get('DAQ',      'address',    fallback='None'))
-            rs485_port     = self._clean(config.get('RS485',    'address',    fallback='None'))
-            rs232_port     = self._clean(config.get('RS232',    'address',    fallback='None'))
-            camera_address = self._clean(config.get('Camera',   'address',    fallback='None'))
-            camera_port    = self._clean(config.get('Camera',   'port',       fallback='None'))
-            timer          = self._clean(config.get('Timer',    'cycle_time', fallback='None'))
-            led_program    = self._clean(config.get('Programs', 'led',        fallback='None'))
-            ocr_program    = self._clean(config.get('Programs', 'ocr',        fallback='None'))
+            def clean(value: str) -> str:
+                """Elimina espacios y comillas dobles/simples de un valor .ini"""
+                return value.strip().strip('"').strip("'")
+
+            gateway_port   = clean(config.get('DAQ',     'address',    fallback='None'))
+            rs485_port     = clean(config.get('RS485',   'address',    fallback='None'))
+            rs232_port     = clean(config.get('RS232',   'address',    fallback='None'))
+            camera_address = clean(config.get('Camera',  'address',    fallback='None'))
+            camera_port    = clean(config.get('Camera',  'port',       fallback='None'))
+            timer          = clean(config.get('Timer',   'cycle_time', fallback='None'))
+            led_program    = clean(config.get('Programs','led',        fallback='None'))
+            ocr_program    = clean(config.get('Programs','ocr',        fallback='None'))
 
             return (
                 gateway_port, rs232_port, rs485_port,
@@ -158,16 +158,12 @@ class Configuration:
         except Exception as e:
             print(f"[Config] Error leyendo settings: {e}")
             return (None,) * 8
-
     # =========================================================
     # SESSION
     # =========================================================
 
     def get_current_user(self) -> tuple[str, str]:
-        """
-        Retorna (user_id, shop_order).
-        Garantiza strings vacíos en lugar de None cuando no hay sesión.
-        """
+
         config = self.load_config(self.SESSION_FILE)
 
         if config is None:
@@ -177,8 +173,11 @@ class Configuration:
             if not config.has_section('Session'):
                 return '', ''
 
-            user_id    = self._clean(config.get('Session', 'id_user',    fallback=''))
-            shop_order = self._clean(config.get('Session', 'shop_order', fallback=''))
+            def clean(value: str) -> str:
+                return value.strip().strip('"').strip("'")
+
+            user_id    = clean(config.get('Session', 'id_user',    fallback=''))
+            shop_order = clean(config.get('Session', 'shop_order', fallback=''))
 
             return user_id, shop_order
 
@@ -263,8 +262,19 @@ class Configuration:
             return '', ''
 
         try:
-            host  = self._clean(config.get('DATABASE', 'db_path',    fallback=''))
-            table = self._clean(config.get('DATABASE', 'table_name', fallback='pentair-tester-registers'))
+            host = (
+                config.get('DATABASE', 'db_path', fallback='')
+                .strip()
+                .strip('"')      # ← elimina comillas dobles
+                .strip("'")      # ← elimina comillas simples
+            )
+
+            table = (
+                config.get('DATABASE', 'table_name', fallback='pentair-tester-registers')
+                .strip()
+                .strip('"')      # ← elimina comillas dobles
+                .strip("'")      # ← elimina comillas simples
+            )
 
             return host, table
 
