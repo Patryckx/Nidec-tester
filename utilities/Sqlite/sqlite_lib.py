@@ -1,19 +1,31 @@
 import sqlite3
 from sqlite3 import Error
+import os
+
 
 class SQLiteDatabase:
     def __init__(self):
         self.connection = None
 
     def create_connection(self, db_path):
-        """Establece una conexión a la base de datos SQLite"""
+        """Establece conexión a SQLite, creando el directorio si no existe."""
+        if not db_path:
+            print("[SQLite] db_path vacío o None — conexión cancelada.")
+            return None
         try:
+            # Crear el directorio si no existe
+            db_dir = os.path.dirname(db_path)
+            if db_dir and not os.path.exists(db_dir):
+                os.makedirs(db_dir, exist_ok=True)
+                print(f"[SQLite] Directorio creado: {db_dir}")
+
             self.connection = sqlite3.connect(db_path)
-            self.connection.row_factory = sqlite3.Row  # permite obtener resultados como diccionarios
-            print(f"Conexión exitosa a la base de datos SQLite: {db_path}")
+            self.connection.row_factory = sqlite3.Row
+            print(f"[SQLite] Conexión exitosa: {db_path}")
             return self.connection
+
         except Error as e:
-            print(f"Error al conectar a SQLite: {e}")
+            print(f"[SQLite] Error al conectar: {e} — path recibido: '{db_path}'")
             return None
 
     def create_table(self, table_name):
