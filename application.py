@@ -2614,20 +2614,13 @@ class MainWindow(QMainWindow, mainApplication):
             self.housekeeping_gateway()
 
 
-            self.housekeeping_button_actuators()
 
 
 
             # Detener el temporizador principal
             self.timer.stop()
 
-            # ── Actualizar la pantalla de falla ──────────────────────────
-            # Ajusta los nombres de los widgets según tu .ui
-            self.lblFailedTestName.setText(f"Prueba fallida: {prueba_fallida}")
-            self.lblFailInstruction.setText(
-                "Por favor pulse la botonera bimanual para continuar con la siguiente pieza."
-            )
-
+            
             # Ir a la pantalla de falla (índice 15 — ajusta al tuyo)
             self.stackedWidget.setCurrentIndex(16)
 
