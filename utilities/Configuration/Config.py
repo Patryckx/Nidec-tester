@@ -259,15 +259,19 @@ class Configuration:
             return '', ''
 
         try:
-            host = config.get(
-                'DATABASE', 'db_path',
-                fallback='127.0.0.1'
-            ).strip()
+            host = (
+                config.get('DATABASE', 'db_path', fallback='')
+                .strip()
+                .strip('"')      # ← elimina comillas dobles
+                .strip("'")      # ← elimina comillas simples
+            )
 
-            table = config.get(
-                'DATABASE', 'table_name',
-                fallback='pentair-tester-registers'
-            ).strip()
+            table = (
+                config.get('DATABASE', 'table_name', fallback='pentair-tester-registers')
+                .strip()
+                .strip('"')      # ← elimina comillas dobles
+                .strip("'")      # ← elimina comillas simples
+            )
 
             return host, table
 
