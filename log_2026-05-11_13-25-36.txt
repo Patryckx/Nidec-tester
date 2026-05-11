@@ -1,0 +1,519 @@
+[INFO] Logging iniciado: C:\Nidec-tester-logs-output\logs\log_2026-05-11_13-25-36.txt
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Conexión exitosa a la base de datos SQLite: C:/Nidec-database/nidec-pentair-tester.db
+Ejecutando SQL: 
+                SELECT 
+                    "codigo-serial" AS Codigo,
+                    "version-firmware" AS Firmware,
+                    "comunicacion-232" AS "Comunicación232",
+                    "prueba-leds" AS LED,
+                    "prueba-lcds" AS LCDS,
+                    "prueba-botones" AS Botones,
+                    "prueba-entradas-digitales" AS Entradas,
+                    fecha AS Fecha
+                FROM "pentair-tester-registers"
+                WHERE "numero-orden" = ? AND "numero-empleado" = ?
+                ORDER BY fecha DESC
+                LIMIT 22;
+            
+Con valores: [None, None]
+Se cargaron 0 registros en la tabla.
+Barra espaciadora presionada
+Starting app initialization...
+Config loaded successfully.
+Verifying instruments...
+Connecting gateway...
+PLC Found: COM11
+Good connection to the Modbus server.
+Gateway connected OK
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Coil Write Response: 1: False
+Coil Write Response: 2: False
+Coil Write Response: 3: False
+Coil Write Response: 4: False
+Coil Write Response: 5: False
+Coil Write Response: 6: False
+Coil Write Response: 7: False
+Coil Write Response: 8: False
+Coil Write Response: 9: False
+Coil Write Response: 12: False
+Coil Write Response: 13: False
+Coil Write Response: 14: False
+Coil Write Response: 15: False
+Connecting RS485...
+Connected to COM7
+RS485 connected OK
+Connecting camera...
+# code object from 'C:\\Nidec-tester-release\\deploy\\Nidec-tester\\_internal\\stringprep.pyc'
+# extension module 'unicodedata' loaded from 'C:\\Nidec-tester-release\\deploy\\Nidec-tester\\_internal\\unicodedata.pyd'
+# extension module 'unicodedata' executed from 'C:\\Nidec-tester-release\\deploy\\Nidec-tester\\_internal\\unicodedata.pyd'
+import 'unicodedata' # <_frozen_importlib_external.ExtensionFileLoader object at 0x00000249866B7850>
+import 'stringprep' # <_frozen_importlib_external.SourcelessFileLoader object at 0x00000249866B6950>
+import 'encodings.idna' # <zipimporter object "C:\Nidec-tester-release\deploy\Nidec-tester\_internal\base_library.zip\encodings\">
+Conexión establecida con 192.168.1.101:8500
+Camera connected OK
+All devices connected successfully!
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Invalid or missing session data.
+Initialization complete.
+Datos no válidos o no cumplen con los requisitos
+Datos válidos obtenidos
+Error al guardar la información del usuario y orden de compra: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Verificacion valor de contadores 
+contador de pruebas :0
+contador de piezas OK :0
+contador de piezas NG :0
+Primera prueba verificando codigo serial
+Codigo introducido: IK2506231T250602345
+Código serial válido: IK2506231T250602345
+Primera prueba codigo QR
+False
+False
+False
+True
+Monitoreo detenido.
+Monitoreo detenido.
+Segunda prueba
+Encendiendo bobina para alimentar 5V a hmi
+Coil Write Response: 0: True
+Attempt 1: No response received, retrying...
+Attempt 2: No response received, retrying...
+Attempt 3: No response received, retrying...
+No response after maximum retries, continuing execution...
+Turning off LCD screen
+Obtaining firmware version 
+Firmware response:
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+11-05-2026
+Conexión exitosa a la base de datos SQLite: C:/Nidec-database/nidec-pentair-tester.db
+Error al insertar datos múltiples: NOT NULL constraint failed: pentair-tester-registers.numero-empleado
+Conexión cerrada.
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Primera prueba verificando codigo serial
+Codigo introducido: IK2506231T250602345
+Código serial válido: IK2506231T250602345
+Primera prueba codigo QR
+False
+False
+False
+False
+False
+False
+False
+True
+Monitoreo detenido.
+Monitoreo detenido.
+Segunda prueba
+Encendiendo bobina para alimentar 5V a hmi
+Coil Write Response: 0: True
+Attempt 1: No response received, retrying...
+Attempt 2: No response received, retrying...
+Attempt 3: No response received, retrying...
+No response after maximum retries, continuing execution...
+Turning off LCD screen
+Obtaining firmware version 
+Firmware response:
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+11-05-2026
+Conexión exitosa a la base de datos SQLite: C:/Nidec-database/nidec-pentair-tester.db
+Error al insertar datos múltiples: NOT NULL constraint failed: pentair-tester-registers.numero-empleado
+Conexión cerrada.
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Primera prueba verificando codigo serial
+Codigo introducido: IK2506231T250602336
+Código serial válido: IK2506231T250602336
+Primera prueba codigo QR
+False
+False
+False
+False
+False
+True
+Monitoreo detenido.
+Monitoreo detenido.
+Segunda prueba
+Encendiendo bobina para alimentar 5V a hmi
+Coil Write Response: 0: True
+Response received: 5CF94CF9FEC830C4CC3CC2C0FC015B82C0C0FC015B82C0C0FC015B82C0C0FC015B82C0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0C08C08000106037E0BC0
+Turning off LCD screen
+Obtaining firmware version 
+Firmware response:FF00FFA50010600D1FD0761C0106389901508C85000100C800300001000DDBCD0301839A8245009C0A10
+Tercera prueba
+Encendiendo todos los LEDS
+Datos enviados: PW,000
+Datos enviados: T2
+Datos recibidos: PWRT,00001,NG,01,NG,0000000,02,OK,0000100,03,NG,0000000,04,NG,0000000,05,NG,0000000,06,NG,0000000,07,NG,0000000,08,NG,0000000,09,NG,0000000,10,NG,0000000,11,OK,0000100
+resultadoss PWRT,00001,NG,01,NG,0000000,02,OK,0000100,03,NG,0000000,04,NG,0000000,05,NG,0000000,06,NG,0000000,07,NG,0000000,08,NG,0000000,09,NG,0000000,10,NG,0000000,11,OK,0000100
+{1: 0, 2: 1, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 1}
+Prueba 4
+Encendiendo pantalla LCD 100%
+Encendiendo todos los Segmentos LCDs
+Imprimiendo todos los segmentos con 8 ochos
+Imprimiendo todos los iconos LCD (AM)
+Datos enviados: PW,001
+Datos enviados: T2
+Datos recibidos: PWRT,00002,NG,01,NG,0000000,02,NG,0000000,03,NG,0000000,04,OK,0000001,05,OK,0000001,06,NG,0000000,07,NG,0000000,08,NG,0000000,09,NG,0000000,10,NG,0000000
+{1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
+Coil Write Response: 1: True
+{'Display': '80', 'Schedule 1': '01', 'Schedule 2': '02', 'Schedule 3': '04', 'Quick Clean': '08', 'Start/Stop': '10', 'Down Arrow': '40', 'Up Arrow': '20'}
+{1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None}
+Activando bobina 2
+Coil Write Response: 2: True
+FF00FFA50010600D0BD072080000000002D01100035A
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072088000000002D0120003DB
+Botón detectado: 80
+Desactivando bobina 2
+Actualizando estado de los botones: lblButton1, lblButtonInput1
+Coil Write Response: 2: False
+Activando bobina 3
+Coil Write Response: 3: True
+FF00FFA50010600D0BD072080000000002D01300035C
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080100000002D01400035E
+Botón detectado: 01
+Desactivando bobina 3
+Actualizando estado de los botones: lblButton2, lblButtonInput2
+Coil Write Response: 3: False
+Activando bobina 4
+Coil Write Response: 4: True
+FF00FFA50010600D0BD072080000000002D01500035E
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080200000002D016000361
+Botón detectado: 02
+Desactivando bobina 4
+Actualizando estado de los botones: lblButton3, lblButtonInput3
+Coil Write Response: 4: False
+Activando bobina 5
+Coil Write Response: 5: True
+FF00FFA50010600D0BD072080000000002D017000360
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080400000002D018000365
+Botón detectado: 04
+Desactivando bobina 5
+Actualizando estado de los botones: lblButton4, lblButtonInput4
+Coil Write Response: 5: False
+Activando bobina 6
+Coil Write Response: 6: True
+FF00FFA50010600D0BD072080000000002D019000362
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080800000002D01A00036B
+Botón detectado: 08
+Desactivando bobina 6
+Actualizando estado de los botones: lblButton5, lblButtonInput5
+Coil Write Response: 6: False
+Activando bobina 7
+Coil Write Response: 7: True
+FF00FFA50010600D0BD072080000000002D01B000364
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072081000000002D01D000376
+Botón detectado: 10
+Desactivando bobina 7
+Actualizando estado de los botones: lblButton6, lblButtonInput6
+Coil Write Response: 7: False
+Activando bobina 9
+Coil Write Response: 9: True
+FF00FFA50010600D0BD072080000030102D01E00036B
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080000030102D01F00036C
+Intento 2 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080000030102D02000036D
+Intento 3 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080000030102D02100036E
+Intento 4 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080000030102D02200036F
+Intento 5 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080000030102D023000370
+Intento 6 de 6 para detectar el botón.
+Desactivando bobina 9
+Coil Write Response: 9: False
+Botón no detectado tras 5 intentos.
+Activando bobina 8
+Actualizando estado de los botones: lblButton7, lblButtonInput7
+Coil Write Response: 8: True
+FF00FFA50010600D0BD072080000030102D024000371
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072082000030102D025000392
+Botón detectado: 20
+Desactivando bobina 8
+Actualizando estado de los botones: lblButton8, lblButtonInput8
+Coil Write Response: 8: False
+Todos los botones han sido procesados.
+La prueba de botones ha finalizado.
+Desactivando actuadores pequeños...
+Coil Write Response: 2: False
+Coil Write Response: 3: False
+Coil Write Response: 4: False
+Coil Write Response: 5: False
+Coil Write Response: 6: False
+Coil Write Response: 7: False
+Coil Write Response: 9: False
+Coil Write Response: 8: False
+Esperando 2 segundos para garantizar retracción...
+Coil Write Response: 1: False
+{'Schedule 1': '01', 'Schedule 2': '02', 'Schedule 3': '04', 'Quick Clean': '08'}
+{1: None, 2: None, 3: None, 4: None}
+Activando bobina 10
+Coil Write Response: 10: True
+FF00FFA50010600D0BD072080000030102D029000376
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080001030102D02A000378
+Entrada detectada: 01
+1
+Desactivando bobina 10
+Actualizando estado de las entradas digitales: lblDigital1, lblDigitalInput1
+Coil Write Response: 10: False
+Activando bobina 11
+Coil Write Response: 11: True
+FF00FFA50010600D0BD072080001030102D02B000379
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080002030102D02C00037B
+Entrada detectada: 02
+2
+Desactivando bobina 11
+Actualizando estado de las entradas digitales: lblDigital2, lblDigitalInput2
+Coil Write Response: 11: False
+Activando bobina 12
+Coil Write Response: 12: True
+FF00FFA50010600D0BD072080002030102D02E00037D
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080004030102D02F000380
+Entrada detectada: 04
+3
+Desactivando bobina 12
+Actualizando estado de las entradas digitales: lblDigital3, lblDigitalInput3
+Coil Write Response: 12: False
+Activando bobina 13
+Coil Write Response: 13: True
+FF00FFA50010600D0BD072080004030102D030000381
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080008070002D031000389
+Entrada detectada: 08
+4
+Desactivando bobina 13
+Actualizando estado de las entradas digitales: lblDigital4, lblDigitalInput4
+Coil Write Response: 13: False
+Todas las señales han sido capturadas.
+La prueba de entradas digitales ha finalizado.
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Resumen de prueba
+Verificacion valor de contadores 
+contador de pruebas :0
+contador de piezas OK :0
+contador de piezas NG :2
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+11-05-2026
+Conexión exitosa a la base de datos SQLite: C:/Nidec-database/nidec-pentair-tester.db
+Error al insertar datos múltiples: NOT NULL constraint failed: pentair-tester-registers.numero-empleado
+Conexión cerrada.
+Reiniciar parametros de prueba
+Primera prueba verificando codigo serial
+Codigo introducido: IK2506231T250602336
+Código serial válido: IK2506231T250602336
+Primera prueba codigo QR
+False
+False
+True
+Monitoreo detenido.
+Monitoreo detenido.
+Segunda prueba
+Encendiendo bobina para alimentar 5V a hmi
+Coil Write Response: 0: True
+Response received: FF00FFA50010600D0BD0720800000A0002D114000368
+Turning off LCD screen
+Obtaining firmware version 
+Firmware response:FF00FFA50010600D1FD0761C0106389901508C85000100C800300001000DDBCD0301839A8245009C0A10
+Tercera prueba
+Encendiendo todos los LEDS
+Datos enviados: PW,000
+Datos enviados: T2
+Datos recibidos: PWRT,00003,OK,01,OK,0000100,02,OK,0000100,03,OK,0000100,04,OK,0000100,05,OK,0000100,06,OK,0000100,07,OK,0000100,08,OK,0000100,09,OK,0000100,10,OK,0000100,11,OK,0000100
+resultadoss PWRT,00003,OK,01,OK,0000100,02,OK,0000100,03,OK,0000100,04,OK,0000100,05,OK,0000100,06,OK,0000100,07,OK,0000100,08,OK,0000100,09,OK,0000100,10,OK,0000100,11,OK,0000100
+{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1}
+Prueba 4
+Encendiendo pantalla LCD 100%
+Encendiendo todos los Segmentos LCDs
+Imprimiendo todos los segmentos con 8 ochos
+Imprimiendo todos los iconos LCD (AM)
+Datos enviados: PW,001
+Datos enviados: T2
+Datos recibidos: PWRT,00004,OK,01,OK,0000100,02,OK,0000001,03,OK,0000100,04,OK,0000001,05,OK,0000001,06,OK,0000001,07,OK,0000100,08,OK,0000001,09,OK,0000100,10,OK,0000100
+{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1}
+Coil Write Response: 1: True
+{'Display': '80', 'Schedule 1': '01', 'Schedule 2': '02', 'Schedule 3': '04', 'Quick Clean': '08', 'Start/Stop': '10', 'Down Arrow': '40', 'Up Arrow': '20'}
+{1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None}
+Activando bobina 2
+Coil Write Response: 2: True
+FF00FFA50010600D0BD072080000030002D125000372
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072088000030102D1260003F4
+Botón detectado: 80
+Desactivando bobina 2
+Actualizando estado de los botones: lblButton1, lblButtonInput1
+Coil Write Response: 2: False
+Activando bobina 3
+Coil Write Response: 3: True
+FF00FFA50010600D0BD072080000030102D127000375
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080100030102D128000377
+Botón detectado: 01
+Desactivando bobina 3
+Actualizando estado de los botones: lblButton2, lblButtonInput2
+Coil Write Response: 3: False
+Activando bobina 4
+Coil Write Response: 4: True
+FF00FFA50010600D0BD072080000030102D129000377
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080200030102D12A00037A
+Botón detectado: 02
+Desactivando bobina 4
+Actualizando estado de los botones: lblButton3, lblButtonInput3
+Coil Write Response: 4: False
+Activando bobina 5
+Coil Write Response: 5: True
+FF00FFA50010600D0BD072080000030102D12C00037A
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080400030102D12D00037F
+Botón detectado: 04
+Desactivando bobina 5
+Actualizando estado de los botones: lblButton4, lblButtonInput4
+Coil Write Response: 5: False
+Activando bobina 6
+Coil Write Response: 6: True
+FF00FFA50010600D0BD072080000030102D12E00037C
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072080800030102D12F000385
+Botón detectado: 08
+Desactivando bobina 6
+Actualizando estado de los botones: lblButton5, lblButtonInput5
+Coil Write Response: 6: False
+Activando bobina 7
+Coil Write Response: 7: True
+FF00FFA50010600D0BD072080000030202D1301B039A
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072081000000002D1311B03A6
+Botón detectado: 10
+Desactivando bobina 7
+Actualizando estado de los botones: lblButton6, lblButtonInput6
+Coil Write Response: 7: False
+Activando bobina 9
+Coil Write Response: 9: True
+FF00FFA50010600D0BD072080000000002D1321B0397
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072084000000002D1331B03D8
+Botón detectado: 40
+Desactivando bobina 9
+Actualizando estado de los botones: lblButton7, lblButtonInput7
+Coil Write Response: 9: False
+Activando bobina 8
+Coil Write Response: 8: True
+FF00FFA50010600D0BD072080000000002D1341B0399
+Intento 1 de 6 para detectar el botón.
+FF00FFA50010600D0BD072082000000002D1351B03BA
+Botón detectado: 20
+Desactivando bobina 8
+Actualizando estado de los botones: lblButton8, lblButtonInput8
+Coil Write Response: 8: False
+Todos los botones han sido procesados.
+La prueba de botones ha finalizado.
+Desactivando actuadores pequeños...
+Coil Write Response: 2: False
+Coil Write Response: 3: False
+Coil Write Response: 4: False
+Coil Write Response: 5: False
+Coil Write Response: 6: False
+Coil Write Response: 7: False
+Coil Write Response: 9: False
+Coil Write Response: 8: False
+Esperando 2 segundos para garantizar retracción...
+Coil Write Response: 1: False
+{'Schedule 1': '01', 'Schedule 2': '02', 'Schedule 3': '04', 'Quick Clean': '08'}
+{1: None, 2: None, 3: None, 4: None}
+Activando bobina 10
+Coil Write Response: 10: True
+FF00FFA50010600D0BD072080000000002D1391B039E
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080001000002D13B1B03A1
+Entrada detectada: 01
+1
+Desactivando bobina 10
+Actualizando estado de las entradas digitales: lblDigital1, lblDigitalInput1
+Coil Write Response: 10: False
+Activando bobina 11
+Coil Write Response: 11: True
+FF00FFA50010600D0BD072080000000002D2001B0366
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080002000002D2011B0369
+Entrada detectada: 02
+2
+Desactivando bobina 11
+Actualizando estado de las entradas digitales: lblDigital2, lblDigitalInput2
+Coil Write Response: 11: False
+Activando bobina 12
+Coil Write Response: 12: True
+FF00FFA50010600D0BD072080000000002D2021B0368
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080004000002D2031B036D
+Entrada detectada: 04
+3
+Desactivando bobina 12
+Actualizando estado de las entradas digitales: lblDigital3, lblDigitalInput3
+Coil Write Response: 12: False
+Activando bobina 13
+Coil Write Response: 13: True
+FF00FFA50010600D0BD072080000000002D2041B036A
+Intento 1 de 5 para detectar la entrada
+FF00FFA50010600D0BD072080008000002D2051B0373
+Entrada detectada: 08
+4
+Desactivando bobina 13
+Actualizando estado de las entradas digitales: lblDigital4, lblDigitalInput4
+Coil Write Response: 13: False
+Todas las señales han sido capturadas.
+La prueba de entradas digitales ha finalizado.
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Resumen de prueba
+Verificacion valor de contadores 
+contador de pruebas :1
+contador de piezas OK :0
+contador de piezas NG :3
+Error reading session.ini: File contains no section headers.
+file: 'settings/session.ini', line: 1
+'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+11-05-2026
+Conexión exitosa a la base de datos SQLite: C:/Nidec-database/nidec-pentair-tester.db
+Error al insertar datos múltiples: NOT NULL constraint failed: pentair-tester-registers.numero-empleado
+Conexión cerrada.
+Reiniciar parametros de prueba
+Apagando bobina para alimentar 5V a hmi
+Coil Write Response: 0: False
+Coil Write Response: 1: False
+Coil Write Response: 2: False
+Coil Write Response: 3: False
+Coil Write Response: 4: False
+Coil Write Response: 5: False
+Coil Write Response: 6: False
+Coil Write Response: 7: False
+Coil Write Response: 8: False
+Coil Write Response: 9: False
+Coil Write Response: 12: False
+Coil Write Response: 13: False
+Coil Write Response: 14: False
+Coil Write Response: 15: False
