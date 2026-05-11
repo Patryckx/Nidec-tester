@@ -51,42 +51,6 @@ def excepthook(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook
 
-class FailConfirmationThread(QThread):
-    """
-    Espera a que el operador pulse la botonera bimanual (coil 17)
-    para confirmar la falla y liberar el sistema para un nuevo ciclo.
-    Emite confirmed_signal cuando detecta la señal, o timeout_signal
-    si se agota el tiempo máximo de espera.
-    """
-    confirmed_signal  = pyqtSignal()   # operador confirmó la falla
-    timeout_signal    = pyqtSignal()   # tiempo agotado sin confirmación
-
-    def __init__(self, gateway, max_attempts: int = 60, parent=None):
-        super().__init__(parent)
-        self.gateway      = gateway
-        self.max_attempts = max_attempts   # 60 intentos × 1 s = 60 s máximo
-        self._running     = True
-
-    def run(self):
-        attempts = 0
-        while attempts < self.max_attempts and self._running:
-            try:
-                if self.gateway.read_coil(17):      # misma bobina bimanual
-                    self.confirmed_signal.emit()
-                    return
-            except Exception as e:
-                print(f"[FailConfirmationThread] Error leyendo bobina: {e}")
-            attempts += 1
-            self.msleep(1000)
-
-        if self._running:                           # se agotó el tiempo
-            self.timeout_signal.emit()
-
-    def stop(self):
-        self._running = False
-        self.quit()
-        self.wait()
-
 class Palmswitch_inicialize_Thread(QThread):
     # Señales para comunicar con el hilo principal
     inicialize_signal = pyqtSignal()  # Señal cuando el monitoreo detecta un False y detiene el hilo
@@ -484,8 +448,6 @@ class MainWindow(QMainWindow, mainApplication):
 
     failed_firmware_version_signal=pyqtSignal()
 
-    test_failed_signal = pyqtSignal(int)   # lleva el nombre de la prueba que falló
-
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
@@ -872,9 +834,6 @@ class MainWindow(QMainWindow, mainApplication):
         #Resume test
 
         self.Test_resume_signal.connect(self.Test_resume_GUI_changes)
-
-        #Failed test cycle signal 
-        self.test_failed_signal.connect(self.show_fail_screen)
 
 
 
@@ -1857,33 +1816,21 @@ class MainWindow(QMainWindow, mainApplication):
         except Exception as e:
             print("Error updating leds function:",e)
             raise
-
-
     def process_test_3_verification(self, result,leds_results):
         try:
-            self.btnPrueba3.setStyleSheet(
-                "background-color: green;" if result == "PASS" else "background-color: red;"
-            )
-            Test_3_result = f"{result, leds_results}"
+            self.btnPrueba3.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
+            
+            Test_3_result=f"{result,leds_results}"
             self.test.result_T3(Test_3_result)
 
             self.test3_thread.quit()
             self.test3_thread.wait()
-
-            if result == "PASS":
-                QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
-                self.test_4()                               # continuar normalmente
-            else:
-                # ── FALLA: cancelar pruebas 4, 5 y 6 ──────────────────
-                # Marcar pruebas no ejecutadas como FAIL en el objeto test
-                self.test.result_T4("FAIL")
-                self.test.result_T5("FAIL", {})
-                self.test.result_T6("FAIL", {})
-
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(3))
-
+            
+            # Esperar 5 segundos antes de continuar con la siguiente prueba
+            QTimer.singleShot(3000, lambda: self.Test_3_signal.emit())
+            self.test_4()
         except Exception as e:
-            print("Error processing test 3 verification:", e)
+            print("Error processing test 3 verification function:",e)
             raise
 
     def Test_3_GUI_changes(self):
@@ -1936,18 +1883,9 @@ class MainWindow(QMainWindow, mainApplication):
             self.test4_thread.quit()
             self.test4_thread.wait()
 
-            if result == "PASS":
-                QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
-                self.test_5() 
-            else:
-                # ── FALLA: cancelar pruebas 4, 5 y 6 ──────────────────
-                # Marcar pruebas no ejecutadas como FAIL en el objeto test
-                self.test.result_T5("FAIL", {})
-                self.test.result_T6("FAIL", {})
-                
+            QTimer.singleShot(3000, lambda: self.Test_4_signal.emit())
 
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(4))
-
+            self.test_5()
         except Exception as e:
             print("Error processing test 4 verification: ",e)
             raise
@@ -2063,40 +2001,44 @@ class MainWindow(QMainWindow, mainApplication):
 
         
 
-    def on_test_finished(self, test_failed, buttons_results,
-                     actuator_sensor_required, actuator_sensor_result):
+    def on_test_finished(self,test_failed,buttons_results,actuator_sensor_required,actuator_sensor_result):
+
         try:
+            # Lógica que se ejecuta cuando la prueba ha finalizado
             print("La prueba de botones ha finalizado.")
 
             self.housekeeping_button_actuators()
-            try:
-                self.gateway.write_coil(1, False)
+            try: 
+                #self.msleep(1500) 
+                self.gateway.write_coil(1,False)
             except Exception as e:
-                print(f"Error desactivando pistón: {e}")
+                print(f"Ha ocurrido un error al desactivar el piston de la caja de actuadores : {e}")
 
-            if actuator_sensor_required and not actuator_sensor_result:
-                self.lblButtonTestMsg.setText("Actuador NO detectado...")
-                self.lblButtonTestMsg.setStyleSheet("color: red;")
+            if actuator_sensor_required:
+                if not actuator_sensor_result:
+                    self.lblButtonTestMsg.setText("Actuador NO detectado...")
+                    self.lblButtonTestMsg.setStyleSheet("color: red;")
+            
 
-            if not test_failed:
-                button_result = "PASS"
+            button_result_dict=buttons_results
+
+            if test_failed==False:
+
+                button_result="PASS"
                 self.btnPrueba5.setStyleSheet("background-color: green;")
             else:
-                button_result = "FAIL"
+                button_result="FAIL"
                 self.btnPrueba5.setStyleSheet("background-color: red;")
 
-            self.test.result_T5(button_result, buttons_results)
+            self.test.result_T5(button_result,button_result_dict)
 
-            if button_result == "PASS":
-                QTimer.singleShot(4000, self.Test_5_signal.emit)
-                self.test_6()                               # continuar normalmente
-            else:
-                # ── FALLA: cancelar prueba 6 ───────────────────────────
-                self.test.result_T6("FAIL", {})
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(5))
-
+            # En lugar de time.sleep(6), usamos QTimer
+            QTimer.singleShot(4000,self.Test_5_signal.emit)
+            #QTimer.singleShot(6000,self.Test_5_signal.emit())
+            #self.Test_5_signal.emit()
+            self.test_6()  # Llamar a la siguiente prueba
         except Exception as e:
-            print("Error on test 5 finished function:", e)
+            print("Error on test 5 finished function:",e)
             raise
     
 
@@ -2592,183 +2534,6 @@ class MainWindow(QMainWindow, mainApplication):
         return response_setting == "true"
 
 
-# ─────────────────────────────────────────────
-# Ciclo fallido
-# ─────────────────────────────────────────────
-
-
-    def show_fail_screen(self, prueba_fallida: int):
-        """
-        Muestra la pantalla de falla, indica qué prueba falló
-        y espera a que el operador pulse la botonera bimanual.
-        Ajusta el índice 15 al índice real de tu stackedWidget.
-        """
-        try:
-            print(f"[FALLA] Prueba fallida: {prueba_fallida}")
-
-            # Apagar alimentación HMI por seguridad
-            # try:
-            #     self.gateway.write_coil(0, False)
-            # except Exception as e:
-            #     print(f"Error apagando bobina 5 V: {e}")
-            self.housekeeping_gateway()
-
-
-            self.housekeeping_button_actuators()
-
-
-
-            # Detener el temporizador principal
-            self.timer.stop()
-
-            # ── Actualizar la pantalla de falla ──────────────────────────
-            # Ajusta los nombres de los widgets según tu .ui
-            self.lblFailedTestName.setText(f"Prueba fallida: {prueba_fallida}")
-            self.lblFailInstruction.setText(
-                "Por favor pulse la botonera bimanual para continuar con la siguiente pieza."
-            )
-
-            # Ir a la pantalla de falla (índice 15 — ajusta al tuyo)
-            self.stackedWidget.setCurrentIndex(16)
-
-
-            if prueba_fallida ==3:
-                self.stackedWidget_failed_test.setCurrentIndex(1)
-
-            elif prueba_fallida ==4:
-                self.stackedWidget_failed_test.setCurrentIndex(2)
-
-            if prueba_fallida ==5:
-                self.stackedWidget_failed_test.setCurrentIndex(3)
-
-            
-
-            # ── Iniciar hilo de confirmación ─────────────────────────────
-            self.fail_confirmation_thread = FailConfirmationThread(self.gateway)
-            self.fail_confirmation_thread.confirmed_signal.connect(self.on_fail_confirmed)
-            self.fail_confirmation_thread.timeout_signal.connect(self.on_fail_timeout)
-            self.fail_confirmation_thread.start()
-
-        except Exception as e:
-            print(f"Error en show_fail_screen: {e}")
-
-    def on_fail_confirmed(self):
-        """El operador pulsó la botonera — reiniciar ciclo."""
-        try:
-            print("[FALLA] Operador confirmó falla. Reiniciando ciclo...")
-
-            self.fail_confirmation_thread.stop()
-
-            # Registrar la pieza mala y guardar el registro parcial
-            self.bad_piece_id += 1
-            self.lblPiezasMalas.setText(str(self.bad_piece_id))
-
-            Result1   = self.test.test1_result
-            Result2   = self.test.test2_result
-            Result232 = self.test.test232_result
-
-            # Rellenar con FAIL las pruebas que no se ejecutaron
-            Result3 = getattr(self.test, 'test3_result', 'FAIL')
-            Result4 = getattr(self.test, 'test4_result', 'FAIL')
-            Result5 = getattr(self.test, 'test5_result', 'FAIL')
-            Result6 = getattr(self.test, 'test6_result', 'FAIL')
-
-            self.test_id += 1
-
-            if not self.dont_add_register:
-                self.add_register(Result1, Result2, Result232,
-                                Result3, Result4, Result5, Result6)
-
-            # Limpiar y volver al inicio del ciclo
-            self._reset_cycle()
-
-        except Exception as e:
-            print(f"Error en on_fail_confirmed: {e}")
-
-    def on_fail_timeout(self):
-        """Tiempo agotado esperando confirmación — misma lógica de reinicio."""
-        print("[FALLA] Tiempo agotado esperando confirmación del operador.")
-        self.on_fail_confirmed()   # reutilizamos la misma lógica de reset
-
-
-    def _reset_cycle(self):
-        """Reinicia todos los parámetros visuales y de estado para un nuevo ciclo."""
-        try:
-            # Reutilizar la lógica ya existente en Test_resume_GUI_changes
-            # pero sin emitir la señal de resumen
-            self.test.clear_record()
-
-            # Test 1
-            self.txtSerialCode.setText("")
-            self.txtSerialCode.setEnabled(True)
-            self.txtSerialCode.setFocus()
-            self.lblVerifySerialCode.setText("")
-            self.btnPrueba1.setStyleSheet("background-color: ;")
-            self.txtQrcode.setText("")
-            self.txtQrcode.setEnabled(True)
-            self.lblRequestHMI.setText("")
-            self.lblRequestHMI.setStyleSheet("")
-
-            # Test 2
-            self.txtFirmware.setText("")
-            self.lblVerifyFirmware.setText("")
-            self.btnPrueba2.setStyleSheet("background-color: ;")
-
-            # Test 3 — LEDs
-            for i in range(1, 12):
-                getattr(self, f"lblLED{i}").setEnabled(False)
-                getattr(self, f"lblLEDInput{i}").setEnabled(True)
-            self.btnPrueba3.setStyleSheet("background-color: ;")
-
-            # Test 4 — LCDs
-            for i in range(1, 11):
-                getattr(self, f"lblLCD{i}").setEnabled(False)
-                getattr(self, f"lblLCDInput{i}").setEnabled(True)
-            self.btnPrueba4.setStyleSheet("background-color: ;")
-
-            # Test 5 — Botones
-            for i in range(1, 9):
-                getattr(self, f"lblButton{i}").setEnabled(False)
-                getattr(self, f"lblButtonInput{i}").setEnabled(True)
-            self.btnPrueba5.setStyleSheet("background-color: ;")
-            self.lblButtonTestMsg.setText("Verificando funcionalidad botones...")
-            self.lblButtonTestMsg.setStyleSheet("color: ;")
-
-            # Test 6 — Digitales
-            for i in range(1, 5):
-                getattr(self, f"lblDigital{i}").setEnabled(False)
-                getattr(self, f"lblDigitalInput{i}").setEnabled(True)
-            self.btnPrueba6.setStyleSheet("background-color: ;")
-
-            # Resumen
-            self.lblResumenCodigoSerial.setText("")
-            self.lblResumenFirmware.setText("")
-            self.lblResumenLEDS.setText("")
-            self.lblResumenLCD.setText("")
-            self.lblResumenBotones.setText("")
-            self.lblResumeDigitalInputs.setText("")
-            self.btnResultados.setStyleSheet("background-color: ;")
-
-            # Banderas y timer
-            self.dont_add_register = False
-            self.lbltimer.setText(self.formatted_timer_time)
-            self.serial_code_captured = None
-
-            # Botones de navegación
-            self.btnLogout.setEnabled(True)
-            self.btnTrazabilidad.setEnabled(True)
-            self.btnPrueba1.setEnabled(True)
-            self.btnPrueba1.setStyleSheet("background-color: rgb(36, 146, 255);")
-
-            # Volver a la pantalla principal de pruebas
-            self.stackedWidget.setCurrentIndex(6)
-
-            #Reiniciar pantalla de errores
-
-            self.stackedWidget_failed_test.setCurrentIndex(0)
-
-        except Exception as e:
-            print(f"Error en _reset_cycle: {e}")
 
 if __name__ == "__main__":
     app = QApplication([])
