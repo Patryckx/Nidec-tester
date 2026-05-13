@@ -2624,7 +2624,6 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.pass_confirmation_thread = Fail_Pass_ConfirmationThread(self.gateway)
             self.pass_confirmation_thread.confirmed_signal.connect(self.on_pass_confirmed)
-            self.pass_confirmation_thread.timeout_signal.connect(self.on_pass_timeout)
             self.pass_confirmation_thread.start()
 
         except Exception as e:
