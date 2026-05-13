@@ -59,29 +59,28 @@ class FailConfirmationThread(QThread):
     si se agota el tiempo máximo de espera.
     """
     confirmed_signal  = pyqtSignal()   # operador confirmó la falla
-    #timeout_signal    = pyqtSignal()   # tiempo agotado sin confirmación
+    timeout_signal    = pyqtSignal()   # tiempo agotado sin confirmación
 
     def __init__(self, gateway, max_attempts: int = 60, parent=None):
         super().__init__(parent)
         self.gateway      = gateway
-        #self.max_attempts = max_attempts   # 60 intentos × 1 s = 60 s máximo
+        self.max_attempts = max_attempts   # 60 intentos × 1 s = 60 s máximo
         self._running     = True
 
     def run(self):
-        #attempts = 0
-        #while attempts < self.max_attempts and self._running:
-        while self._running:
+        attempts = 0
+        while attempts < self.max_attempts and self._running:
             try:
                 if self.gateway.read_coil(17):      # misma bobina bimanual
                     self.confirmed_signal.emit()
                     return
             except Exception as e:
                 print(f"[FailConfirmationThread] Error leyendo bobina: {e}")
-            #attempts += 1
+            attempts += 1
             self.msleep(1000)
 
-        # if self._running:                           # se agotó el tiempo
-        #     self.timeout_signal.emit()
+        if self._running:                           # se agotó el tiempo
+            self.timeout_signal.emit()
 
     def stop(self):
         self._running = False
@@ -2640,7 +2639,7 @@ class MainWindow(QMainWindow, mainApplication):
             # ── Iniciar hilo de confirmación ─────────────────────────────
             self.fail_confirmation_thread = FailConfirmationThread(self.gateway)
             self.fail_confirmation_thread.confirmed_signal.connect(self.on_fail_confirmed)
-            #self.fail_confirmation_thread.timeout_signal.connect(self.on_fail_timeout)
+            self.fail_confirmation_thread.timeout_signal.connect(self.on_fail_timeout)
             self.fail_confirmation_thread.start()
 
         except Exception as e:
