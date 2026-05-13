@@ -51,7 +51,7 @@ def excepthook(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook
 
-class FailConfirmationThread(QThread):
+class Fail_Pass_ConfirmationThread(QThread):
     """
     Espera a que el operador pulse la botonera bimanual (coil 17)
     para confirmar la falla y liberar el sistema para un nuevo ciclo.
@@ -76,7 +76,7 @@ class FailConfirmationThread(QThread):
                     self.confirmed_signal.emit()
                     return
             except Exception as e:
-                print(f"[FailConfirmationThread] Error leyendo bobina: {e}")
+                print(f"[Fail_Pass_ConfirmationThread] Error leyendo bobina: {e}")
             #attempts += 1
             self.msleep(1000)
 
@@ -487,6 +487,8 @@ class MainWindow(QMainWindow, mainApplication):
 
     test_failed_signal = pyqtSignal(int)   # lleva el nombre de la prueba que falló
 
+    test_passed_signal = pyqtSignal()
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
@@ -876,6 +878,8 @@ class MainWindow(QMainWindow, mainApplication):
 
         #Failed test cycle signal 
         self.test_failed_signal.connect(self.show_fail_screen)
+
+        self.test_passed_signal.connect(self.show_pass_screen)
 
 
 
@@ -1815,9 +1819,17 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnLogout.setEnabled(True)
             self.btnTrazabilidad.setEnabled(True)
 
-            #self.txtComunicacion232.setText("")
 
-            #self.lblVerify232communication.setText("")
+            # ── FALLA: cancelar pruebas 3, 4, 5 y 6 ──────────────────
+            # Marcar pruebas no ejecutadas como FAIL en el objeto test
+            self.test.result_T3("FAIL")
+            self.test.result_T4("FAIL")
+            self.test.result_T5("FAIL", {})
+            self.test.result_T6("FAIL", {})
+
+            QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(2))
+
+           
         except Exception as e:
             print("Error executing test 2 failed firmware function: ",e)
             raise
@@ -2171,20 +2183,23 @@ class MainWindow(QMainWindow, mainApplication):
 
                 self.btnPrueba6.setStyleSheet("background-color: green;")
 
+                self.test.result_T6(digital_result,digital_results_dict)
+
+                #QTimer.singleShot(4000,self.Test_6_signal.emit)
+
+                QTimer.singleShot(2000, lambda: self.test_passed_signal.emit())
+
+                 #Stop timer
+                self.timer.stop()
+
             else:
-                digital_result="FAIL"
 
                 self.btnPrueba6.setStyleSheet("background-color: red;")
 
-            self.test.result_T6(digital_result,digital_results_dict)
+                self.test.result_T6("FAIL", {})
 
-            # En lugar de time.sleep(6), usamos QTimer
-            QTimer.singleShot(4000,self.Test_6_signal.emit)
-            #QTimer.singleShot(6000,self.Test_6_signal.emit())
-
-            #Stop timer
-            self.timer.stop()
-
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(6))
+          
         except Exception as e:
             print("Error on test 6 finished function: ",e)
             raise
@@ -2284,7 +2299,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.add_register(Result1,Result2,Result232,Result3,Result4,Result5,Result6)
 
             # En lugar de time.sleep(6), usamos QTimer
-            QTimer.singleShot(8000,self.Test_resume_signal.emit)
+            QTimer.singleShot(4500,self.Test_resume_signal.emit)
             #QTimer.singleShot(6000,self.Test_resume_signal.emit())
 
             #self.Test_resume_signal.emit()
@@ -2594,6 +2609,42 @@ class MainWindow(QMainWindow, mainApplication):
 
 
 # ─────────────────────────────────────────────
+# Ciclo exitoso
+# ─────────────────────────────────────────────
+    def show_pass_screen(self):
+        """
+        Muestra pantalla de éxito y espera confirmación
+        de botonera bimanual antes de ir al resumen.
+        """
+        try:
+            print("[PASS] Todas las pruebas superadas.")
+
+            # Ajusta el índice al de tu pantalla de éxito en el stackedWidget
+            self.stackedWidget.setCurrentIndex(17)
+
+            self.pass_confirmation_thread = Fail_Pass_ConfirmationThread(self.gateway)
+            self.pass_confirmation_thread.confirmed_signal.connect(self.on_pass_confirmed)
+            self.pass_confirmation_thread.timeout_signal.connect(self.on_pass_timeout)
+            self.pass_confirmation_thread.start()
+
+        except Exception as e:
+            print(f"Error en show_pass_screen: {e}")
+
+
+    def on_pass_confirmed(self):
+        """Operador confirmó pieza buena — proceder al resumen."""
+        try:
+            print("[PASS] Operador confirmó. Mostrando resumen...")
+
+            self.pass_confirmation_thread.stop()
+
+            # Continuar con el flujo normal de resumen
+            self.Test_6_signal.emit()
+
+        except Exception as e:
+            print(f"Error en on_pass_confirmed: {e}")
+
+# ─────────────────────────────────────────────
 # Ciclo fallido
 # ─────────────────────────────────────────────
 
@@ -2626,19 +2677,25 @@ class MainWindow(QMainWindow, mainApplication):
             self.stackedWidget.setCurrentIndex(16)
 
 
-            if prueba_fallida ==3:
+            if prueba_fallida ==2:
                 self.stackedWidget_failed_test.setCurrentIndex(1)
 
-            elif prueba_fallida ==4:
+            elif prueba_fallida ==3:
                 self.stackedWidget_failed_test.setCurrentIndex(2)
 
-            if prueba_fallida ==5:
+            if prueba_fallida ==4:
                 self.stackedWidget_failed_test.setCurrentIndex(3)
+
+            if prueba_fallida ==5:
+                self.stackedWidget_failed_test.setCurrentIndex(4)
+            
+            if prueba_fallida ==6:
+                self.stackedWidget_failed_test.setCurrentIndex(5)
 
             
 
             # ── Iniciar hilo de confirmación ─────────────────────────────
-            self.fail_confirmation_thread = FailConfirmationThread(self.gateway)
+            self.fail_confirmation_thread = Fail_Pass_ConfirmationThread(self.gateway)
             self.fail_confirmation_thread.confirmed_signal.connect(self.on_fail_confirmed)
             #self.fail_confirmation_thread.timeout_signal.connect(self.on_fail_timeout)
             self.fail_confirmation_thread.start()
