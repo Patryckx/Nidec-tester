@@ -1646,7 +1646,7 @@ class MainWindow(QMainWindow, mainApplication):
                 Result1=self.test.test1_result
 
 
-                self.bad_piece_id+=1
+                #self.bad_piece_id+=1
 
                 self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
 
@@ -1655,7 +1655,7 @@ class MainWindow(QMainWindow, mainApplication):
                 
 
                 # Crear un QTimer para emitir la señal después de 3 segundos
-                QTimer.singleShot(4000, lambda: self.failed_firmware_version_signal.emit())
+                QTimer.singleShot(1000, lambda: self.failed_firmware_version_signal.emit())
 
             elif not driver_firmware_232_verification:
 
@@ -2624,7 +2624,6 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.pass_confirmation_thread = Fail_Pass_ConfirmationThread(self.gateway)
             self.pass_confirmation_thread.confirmed_signal.connect(self.on_pass_confirmed)
-            self.pass_confirmation_thread.timeout_signal.connect(self.on_pass_timeout)
             self.pass_confirmation_thread.start()
 
         except Exception as e:
