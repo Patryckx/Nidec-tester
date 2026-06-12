@@ -10688,7 +10688,143 @@ QPushButton &gt; * {
                         <string/>
                        </property>
                        <property name="pixmap">
-                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba5.png</pixmap>
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_23">
+                    <layout class="QGridLayout" name="gridLayout_25">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_96">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_pruebas_boton_display.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_24">
+                    <layout class="QGridLayout" name="gridLayout_26">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_97">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_boton_1.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_25">
+                    <layout class="QGridLayout" name="gridLayout_27">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_98">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_2.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_27">
+                    <layout class="QGridLayout" name="gridLayout_31">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_102">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_3.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_28">
+                    <layout class="QGridLayout" name="gridLayout_32">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_103">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_quickclean.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_29">
+                    <layout class="QGridLayout" name="gridLayout_33">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_104">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_startStop.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_30">
+                    <layout class="QGridLayout" name="gridLayout_34">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_105">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_mas.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_31">
+                    <layout class="QGridLayout" name="gridLayout_35">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_106">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba_botones_menos.png</pixmap>
                        </property>
                        <property name="scaledContents">
                         <bool>true</bool>

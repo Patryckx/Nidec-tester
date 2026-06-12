@@ -2104,9 +2104,49 @@ class MainWindow(QMainWindow, mainApplication):
                 QTimer.singleShot(4000, self.Test_5_signal.emit)
                 self.test_6()                               # continuar normalmente
             else:
-                # ── FALLA: cancelar prueba 6 ───────────────────────────
+                # ── Generar lista de botones fallidos ─────────────────────
+                button_names_map = {
+                    i + 1: name for i, name in enumerate(self.buttons_order.keys())
+                }
+
+                failed_buttons = [
+                    button_names_map[idx]
+                    for idx, result in buttons_results.items()
+                    if result == 0
+                ]
+
+                print(f"[Test 5] Botones FAIL: {failed_buttons}")
+
+                # ── Mapeo botón → índice de pantalla ──────────────────────
+                button_fail_screen = {
+                    "Display"    : 5,
+                    "Schedule 1" : 6,
+                    "Schedule 2" : 7,
+                    "Schedule 3" : 8,
+                    "Quick Clean": 9,
+                    "Start/Stop" : 10,
+                    "Down Arrow" : 11,
+                    "Up Arrow"   : 12,
+                }
+
+                 # ── Determinar pantalla según botones fallidos ─────────────
+                if len(failed_buttons) == 1:
+                    # Un solo botón falló — pantalla específica
+                    screen_index = button_fail_screen.get(failed_buttons[0], 15)
+
+                elif len(failed_buttons) > 1:
+                    # Varios botones fallaron — pantalla general de falla
+                    screen_index = 15
+
+                else:
+                    # Lista vacía pero test_failed=True (caso actuador)
+                    screen_index = 15
+
+
+                print(f"[Test 5] Mostrando pantalla índice: {screen_index}")
+
                 self.test.result_T6("FAIL", {})
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(5))
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(screen_index))
 
         except Exception as e:
             print("Error on test 5 finished function:", e)
@@ -2676,21 +2716,51 @@ class MainWindow(QMainWindow, mainApplication):
             # Ir a la pantalla de falla (índice 15 — ajusta al tuyo)
             self.stackedWidget.setCurrentIndex(16)
 
-
+            # Prueba firmware
             if prueba_fallida ==2:
                 self.stackedWidget_failed_test.setCurrentIndex(1)
+            # Prueba LEDS
 
             elif prueba_fallida ==3:
                 self.stackedWidget_failed_test.setCurrentIndex(2)
+            # Prueba LCDS
 
-            if prueba_fallida ==4:
+            elif prueba_fallida ==4:
                 self.stackedWidget_failed_test.setCurrentIndex(3)
 
-            if prueba_fallida ==5:
+            # Prueba botones (uno o mas )
+
+            elif prueba_fallida ==5:
                 self.stackedWidget_failed_test.setCurrentIndex(4)
+            # Prueba botones (Display )
             
-            if prueba_fallida ==6:
+            elif prueba_fallida ==6:
                 self.stackedWidget_failed_test.setCurrentIndex(5)
+            # Prueba botones (Schedule 1 )
+            
+            elif prueba_fallida ==7:
+                self.stackedWidget_failed_test.setCurrentIndex(6)
+            # Prueba botones (Schedule 2 )
+            elif prueba_fallida ==8:
+                self.stackedWidget_failed_test.setCurrentIndex(7)
+            # Prueba botones (Schedule 3 )
+            elif prueba_fallida ==9:
+                self.stackedWidget_failed_test.setCurrentIndex(8)
+            # Prueba botones (Quick clean )
+            elif prueba_fallida ==10:
+                self.stackedWidget_failed_test.setCurrentIndex(9)
+            # Prueba botones (Start stop)
+            elif prueba_fallida ==11:
+                self.stackedWidget_failed_test.setCurrentIndex(10)
+            # Prueba botones (+ )
+            elif prueba_fallida ==12:
+                self.stackedWidget_failed_test.setCurrentIndex(11)
+            # Prueba botones (-)
+            elif prueba_fallida ==13:
+                self.stackedWidget_failed_test.setCurrentIndex(12)
+
+            elif prueba_fallida ==14:
+                self.stackedWidget_failed_test.setCurrentIndex(13)
 
             
 

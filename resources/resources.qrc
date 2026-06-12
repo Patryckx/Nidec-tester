@@ -1,5 +1,14 @@
 <RCC>
   <qresource prefix="resources">
+    <file>Fallo_prueba_botones_menos.png</file>
+    <file>Fallo_prueba_botones_mas.png</file>
+    <file>Fallo_prueba_botones_startStop.png</file>
+    <file>Fallo_prueba_botones_quickclean.png</file>
+    <file>Fallo_prueba_botones_3.png</file>
+    <file>Fallo_prueba_botones_2.png</file>
+    <file>Fallo_prueba_boton_1.png</file>
+    <file>Fallo_pruebas_boton_display.png</file>
+    <file>Fallo_prueba_botones.png</file>
     <file>sucess_prueba.png</file>
     <file>Fallo_prueba3.png</file>
     <file>Fallo_prueba2.png</file>
