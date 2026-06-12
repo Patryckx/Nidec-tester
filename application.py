@@ -1399,11 +1399,11 @@ class MainWindow(QMainWindow, mainApplication):
 
         #activating actuator box 
 
-        try: 
-            self.gateway.write_coil(1,False)
-        except Exception as e:
-            print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
-            raise
+        # try: 
+        #     self.gateway.write_coil(1,False)
+        # except Exception as e:
+        #     print(f"Ha ocurrido un error al activar el piston de la caja de actuadores : {e}")
+        #     raise
 
         #Acuators buttons
         
@@ -2082,10 +2082,10 @@ class MainWindow(QMainWindow, mainApplication):
             print("La prueba de botones ha finalizado.")
 
             self.housekeeping_button_actuators()
-            try:
-                self.gateway.write_coil(1, False)
-            except Exception as e:
-                print(f"Error desactivando pistón: {e}")
+            # try: BYPASS USAR BOTONES PARA RETROCEDER CAJA DE ACTUADORES
+            #     self.gateway.write_coil(1, False)
+            # except Exception as e:
+            #     print(f"Error desactivando pistón: {e}")
 
             if actuator_sensor_required and not actuator_sensor_result:
                 self.lblButtonTestMsg.setText("Actuador NO detectado...")
@@ -2637,6 +2637,8 @@ class MainWindow(QMainWindow, mainApplication):
             print("[PASS] Operador confirmó. Mostrando resumen...")
 
             self.pass_confirmation_thread.stop()
+            #Retornar caja de actuadores principal
+            self.gateway.write_coil(1, False)
 
             # Continuar con el flujo normal de resumen
             self.Test_6_signal.emit()
@@ -2817,6 +2819,11 @@ class MainWindow(QMainWindow, mainApplication):
             #Reiniciar pantalla de errores
 
             self.stackedWidget_failed_test.setCurrentIndex(0)
+
+
+            #Retornar caja de actuadores principal
+            self.gateway.write_coil(1, False)
+            
 
         except Exception as e:
             print(f"Error en _reset_cycle: {e}")
