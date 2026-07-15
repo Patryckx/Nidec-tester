@@ -53,7 +53,7 @@ class SerialDevice:
 
 if __name__ == "__main__":
     # Crear una instancia del dispositivo serial
-    device = SerialDevice(port='COM7', baudrate=9600, timeout=1)
+    device = SerialDevice(port='COM8', baudrate=9600, timeout=1)
 
     # Conectar al dispositivo
     device.connect()
@@ -62,17 +62,45 @@ if __name__ == "__main__":
     command = 'FF00FFA50060100D04D05101010249'  # Comando en formato hexadecimal
     response = device.send_command(command)
 
-    # Enviar un comando al dispositivo
-    command = 'FF00FFA50060100D07D05D0438383838033A'  # Comando en formato hexadecimal
-    response = device.send_command(command)
+    # # Enviar un comando al dispositivo
+    # command = 'FF00FFA50060100D07D05D0438383838033A'  # Comando en formato hexadecimal
+    # response = device.send_command(command)
 
-    # Enviar un comando al dispositivo
-    command = 'FF00FFA50060100D04D05E013F0294'  # Comando en formato hexadecimal
-    response = device.send_command(command)
+    # command = 'FF00FFA50060100D07D05D04333333330326'
+    # response = device.send_command(command) #Escribir unicamente 3 
 
-    # Enviar un comando al dispositivo
-    command = 'FF00FFA50060100D05D05B0203FF0356'  # Comando en formato hexadecimal
-    response = device.send_command(command)
+
+    # command = 'FF00FFA50060100D07D05D0435353535032E'
+    # response = device.send_command(command) #Escribir unicamente 5
+    
+    # command = 'FF00FFA50060100D07D05D04363636360332'
+    # response = device.send_command(command) #Escribir unicamente 6 
+
+
+    # command = 'FF00FFA50060100D07D05D0448484848037A'
+    # response = device.send_command(command) #Escribir unicamente LETRA H
+
+    # command = 'FF00FFA50060100D07D05D044F4F4F4F0396'
+    # response = device.send_command(command) #Escribir unicamente LETRA O
+
+
+    command = 'FF00FFA50060100D07D05D04434343430366'
+    response = device.send_command(command) #Escribir unicamente LETRA C
+
+
+
+
+    #  # Enviar un comando al dispositivo
+    # command = 'FF00FFA50060100D07D05D043333333302F4'  # Comando en formato hexadecimal
+    # response = device.send_command(command)
+
+    # # Enviar un comando al dispositivo
+    # command = 'FF00FFA50060100D04D05E013F0294'  # Comando en formato hexadecimal
+    # response = device.send_command(command)
+
+    # # Enviar un comando al dispositivo
+    # command = 'FF00FFA50060100D05D05B0203FF0356'  # Comando en formato hexadecimal
+    # response = device.send_command(command)
 
 
     
