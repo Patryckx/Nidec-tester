@@ -50,6 +50,66 @@ class SerialDevice:
         except Exception as e:
             print(f"Failed to read response: {e}")
             return None
+        
+
+
+    def calculate_checksum(self, packet_bytes):
+        """
+        Calcula el checksum Pentair.
+
+        packet_bytes:
+            Lista de bytes comenzando desde 0xA5
+        """
+
+        checksum = sum(packet_bytes)
+
+        high = (checksum >> 8) & 0xFF
+        low = checksum & 0xFF
+
+        return high, low
+    
+
+    def build_lcd_text(self,text):
+        """
+        Construye un comando Write LCD Text.
+
+        Ejemplos:
+
+            build_lcd_text("1234")
+            build_lcd_text("HELP")
+            build_lcd_text("8888")
+        """
+
+        # El LCD únicamente acepta 4 caracteres
+        text = text[:4].ljust(4)
+
+        ascii_bytes = [ord(c) for c in text]
+
+        packet = [
+            0xA5,
+            0x00,
+            0x60,
+            0x10,
+            0x0D,
+            0x07,
+            0xD0,
+            0x5D,
+            0x04,
+            *ascii_bytes
+        ]
+
+        high, low = self.calculate_checksum(packet)
+
+        full_packet = [
+            0xFF,
+            0x00,
+            0xFF,
+            *packet,
+            high,
+            low
+        ]
+
+        return ''.join(f'{b:02X}' for b in full_packet)
 
 if __name__ == "__main__":
     # Crear una instancia del dispositivo serial
@@ -86,9 +146,6 @@ if __name__ == "__main__":
 
     command = 'FF00FFA50060100D07D05D04434343430366'
     response = device.send_command(command) #Escribir unicamente LETRA C
-
-
-
 
     #  # Enviar un comando al dispositivo
     # command = 'FF00FFA50060100D07D05D043333333302F4'  # Comando en formato hexadecimal
