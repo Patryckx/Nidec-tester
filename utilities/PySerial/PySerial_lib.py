@@ -24,8 +24,6 @@ class SerialDevice:
             print(f"Failed to connect to {self.port}: {e}")
             return False
 
-
-
     def disconnect(self):
         if self.serial_connection and self.serial_connection.is_open:
             self.serial_connection.close()
@@ -50,8 +48,6 @@ class SerialDevice:
         except Exception as e:
             print(f"Failed to read response: {e}")
             return None
-        
-
 
     def calculate_checksum(self, packet_bytes):
         """
@@ -68,7 +64,6 @@ class SerialDevice:
 
         return high, low
     
-
     def build_lcd_text(self,text):
         """
         Construye un comando Write LCD Text.

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="resources">
+    <file>number-7.png</file>
     <file>sucess_prueba.png</file>
     <file>Fallo_prueba3.png</file>
     <file>Fallo_prueba2.png</file>
