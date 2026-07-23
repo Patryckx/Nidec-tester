@@ -271,3 +271,44 @@ class Configuration:
         except Exception as e:
             print(f"[Config] Error leyendo información de base de datos: {e}")
             return '', ''
+    # =========================================================
+    # LCD_SHORT_CIRCUIT_TEST_CONFIG
+    # =========================================================
+    def get_lcd_short_circuit_config(self):
+
+        config = self.load_config(self.SETTINGS_FILE)
+
+        if config is None:
+            return {}
+
+        return {
+
+            "3": {
+                "program": self._clean(
+                    config.get("LCD_short_circuit_test", "program_3")
+                ),
+                "command": "FF00FFA50060100D07D05D04333333330326"
+            },
+
+            "H": {
+                "program": self._clean(
+                    config.get("LCD_short_circuit_test", "program_H")
+                ),
+                "command": "FF00FFA50060100D07D05D0448484848037A"
+            },
+
+            "O": {
+                "program": self._clean(
+                    config.get("LCD_short_circuit_test", "program_O")
+                ),
+                "command": "FF00FFA50060100D07D05D044F4F4F4F0396"
+            },
+
+            "C": {
+                "program": self._clean(
+                    config.get("LCD_short_circuit_test", "program_C")
+                ),
+                "command": "FF00FFA50060100D07D05D04434343430366"
+            }
+
+        }

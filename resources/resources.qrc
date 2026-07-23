@@ -1,14 +1,13 @@
 <RCC>
   <qresource prefix="resources">
+    <file>prueba7.png</file>
+    <file>prueba6.png</file>
+    <file>prueba5.png</file>
+    <file>prueba4.png</file>
+    <file>prueba3.png</file>
+    <file>Fallo_prueba2.png</file>
     <file>number-7.png</file>
     <file>sucess_prueba.png</file>
-    <file>Fallo_prueba3.png</file>
-    <file>Fallo_prueba2.png</file>
-    <file>Fallo_prueba6.png</file>
-    <file>Fallo_prueba5.png</file>
-    <file>Fallo_prueba4.png</file>
-    <file>Fallo_prueba3.png</file>
-    <file>Fallo_prueba3.png</file>
     <file>informacion.png</file>
     <file>botoneras.png</file>
     <file>warning_test.png</file>
@@ -24,8 +23,6 @@
     <file>qr.png</file>
     <file>port.png</file>
     <file>open-folder.png</file>
-    <file>folder (1).png</file>
-    <file>folder.png</file>
     <file>folder.png</file>
     <file>documents.png</file>
     <file>cerrar.png</file>

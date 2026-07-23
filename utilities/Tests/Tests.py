@@ -20,6 +20,7 @@ class Manage_tests():
         self.test1_result=None
         self.test2_result=None
         self.test232_result=None
+        self.lcd_short_circuit_vision_test_result=None
         self.test3_result=None
         self.test4_result=None
         self.test5_result=None
@@ -57,6 +58,11 @@ class Manage_tests():
     #         "Resultado": leds_result,
     #         "Leds": leds_array
     #     }
+
+    def result_lcd_short_circuit_vision_test_result(self,result:str):
+        self.lcd_short_circuit_vision_test_result=result.replace('(', '').replace(')', '').replace("'", '')
+        self.record["Prueba corto circuito LCD vision"]
+
 
     def result_T3(self,leds_result:str):
         self.test3_result=leds_result.replace('(', '').replace(')', '').replace("'", '')

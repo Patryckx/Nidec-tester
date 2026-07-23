@@ -123,6 +123,105 @@ class Palmswitch_inicialize_Thread(QThread):
         self._is_running = False
         self.quit()  # Detiene el hilo sin bloquear
         self.wait()
+##################### LCD SHORT CIRCUIT TEST THREAD  ##########################
+
+class Test_LCD_Short_Circuit_test(QThread):
+    sucess_update_led_signal=pyqtSignal(str)
+    test_finished_signal=pyqtSignal(bool,dict)
+
+    def __init__(self, rs485, camera, lcd_programs, parent=None):
+        super(Test_LCD_Short_Circuit_test,self).__init__(parent)
+        self.rs485 =rs485
+        self.Camera=camera
+        self.lcd_programs=lcd_programs
+        
+        self.lcd_short_circuit_test_order=["3","H","O","C"]
+
+    def run (self):
+        print("Prueba vision corto circuitos")
+
+        test_failed=False
+
+        results = {}
+
+
+        for character in self.lcd_short_circuit_test_order:
+            configuration=self.lcd_programs[character]
+            program=configuration["program"]
+            command=configuration["command"]
+
+            print(character)
+            print(program)
+            print(command)
+
+            self.Rs485.send_command(command)
+            self.Camera.send_data(f"PW,{program}")
+
+            # Realizar el disparo y leer la respuesta
+            self.Camera.send_data('T2')
+            time.sleep(0.5)  # Esperar un breve momento
+            response = self.Camera.read_data()
+            print(f"resultadoss {response}")
+
+            inspection = self.procesar_respuesta(response)
+
+            if inspection["global_result"] == "OK":
+                print("Programa correcto")
+                print(f"{character}: PASS")
+
+                self.sucess_update_led_signal.emit(character)
+
+                results[character] = "OK" 
+
+            else:
+
+                print("Programa incorrecto")
+
+                print(f"{character}: inspección NG")
+
+                test_failed=True
+
+                results[character] = "NG" 
+
+        self.test_finished_signal.emit(test_failed,results)
+
+
+
+
+    def procesar_respuesta(self, respuesta):
+
+        resultado = {
+            "inspection_id": None,
+            "global_result": None,
+            "tools": {}
+        }
+
+        try:
+
+            partes = respuesta.split(",")
+
+            resultado["inspection_id"] = partes[1]
+
+            resultado["global_result"] = partes[2]
+
+            for i in range(3, len(partes), 3):
+
+                tool = int(partes[i])
+
+                status = partes[i + 1]
+
+                score = partes[i + 2]
+
+                resultado["tools"][tool] = {
+                    "status": status,
+                    "score": score
+                }
+
+        except Exception as e:
+
+            print(e)
+
+        return resultado
 
 
 class Test3Thread(QThread):
@@ -473,6 +572,8 @@ class MainWindow(QMainWindow, mainApplication):
 
     Test_2_signal = pyqtSignal()
 
+    Test_LCD_Short_circuit_signal=pyqtSignal()
+
     Test_3_signal = pyqtSignal()
 
     Test_4_signal=pyqtSignal()
@@ -717,7 +818,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnPrueba5.setStyleSheet("background-color: red;")
             self.btnPrueba6.setStyleSheet("background-color: red;")
 
-            self.btnResultados.setStyleSheet("background-color: red;")
+            self.btnPrueba7.setStyleSheet("background-color: red;")
             self.Test_6_signal.emit()
             
 
@@ -858,6 +959,8 @@ class MainWindow(QMainWindow, mainApplication):
         self.Test_2_signal.connect(self.Test_2_GUI_changes)
         self.failed_firmware_version_signal.connect(self.test_2_failed_firmware_version_response)
 
+
+        self.Test_LCD_Short_circuit_signal.connect(self.Test_LCD_Short_circuit_GUI_changes)
 
         #LEDs test 3
         self.Test_3_signal.connect(self.Test_3_GUI_changes)
@@ -1820,8 +1923,9 @@ class MainWindow(QMainWindow, mainApplication):
             self.btnTrazabilidad.setEnabled(True)
 
 
-            # ── FALLA: cancelar pruebas 3, 4, 5 y 6 ──────────────────
+            # ── FALLA: cancelar pruebas lcd, 3, 4, 5 y 6 ──────────────────
             # Marcar pruebas no ejecutadas como FAIL en el objeto test
+            self.test.result_lcd_short_circuit_vision_test_result("FAIL")
             self.test.result_T3("FAIL")
             self.test.result_T4("FAIL")
             self.test.result_T5("FAIL", {})
@@ -1837,7 +1941,91 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_2_GUI_changes(self):
             #Third Test
-            self.stackedWidget.setCurrentIndex(7)  
+            self.stackedWidget.setCurrentIndex(18)  
+
+
+########################  LCD SHORT CIRCUIT TEST   ############################################
+
+
+
+    def get_lcd_short_circuit_test_configuration(self):
+
+        print("Obtaining LCD Short Circuit test configuration")
+
+        lcd_short_circuit_test_config=self.config.get_lcd_short_circuit_config()
+
+        return lcd_short_circuit_test_config
+
+
+    def short_circuit_lcd_test(self):
+
+        try:
+
+            self.lcd_short_circuit_config_programs=self.get_lcd_short_circuit_test_configuration()
+
+            # Crear el hilo de prueba
+            self.lcd_short_circuit_thread = Test_LCD_Short_Circuit_test(self.Rs485, self.Camera, self.lcd_short_circuit_config_programs)
+
+            # Conectar señales para actualizar la interfaz
+            self.lcd_short_circuit_thread.sucess_update_led_signal.connect(self.update_lcd_test)
+            self.lcd_short_circuit_thread.test_finished_signal.connect(self.process_lcd_short_circuit_test_verification)
+            # Iniciar el hilo
+            self.lcd_short_circuit_thread.start()
+
+        except Exception as e:
+            print("Error executing lcd short circuit test :",e)
+            raise
+
+    def update_lcd_test(self, character:str):
+        try:
+            lcd_name = f"lblLCD_ShortCircuit{character}"           
+            led_input_names = f"lblLCD_ShortCircuitInput{character}" 
+
+            getattr(self, lcd_name.setEnabled(True))
+            getattr(self, led_input_names.setEnabled(False))
+
+        except Exception as e:
+            print("Error updating lcds function:",e)
+            raise
+
+
+    def process_lcd_short_circuit_test_verification(self, result:bool,lcds_short_circuit_result:dict):
+        try:
+            
+            Short_circuit_lcd_result = f"{result, lcds_short_circuit_result}"
+            self.test.result_lcd_short_circuit_vision_test_result(Short_circuit_lcd_result)
+
+            self.lcd_short_circuit_thread.quit()
+            self.lcd_short_circuit_thread.wait()
+
+            if result == "PASS":
+                self.btnPrueba3.setStyleSheet(
+                "background-color: green;" 
+            )
+                QTimer.singleShot(3000, lambda: self.Test_LCD_Short_circuit_signal.emit())
+                self.test_3()                               
+            else:
+                # ── FALLA: cancelar pruebas3, 4, 5 y 6 ──────────────────
+                # Marcar pruebas no ejecutadas como FAIL en el objeto test
+
+                self.btnPrueba3.setStyleSheet(
+                "background-color: red;" 
+            )
+                self.test.result_T3("FAIL")
+
+                self.test.result_T4("FAIL")
+                self.test.result_T5("FAIL", {})
+                self.test.result_T6("FAIL", {})
+
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(3))
+
+        except Exception as e:
+            print("Error processing test 3 verification:", e)
+            raise
+
+
+    def Test_LCD_Short_circuit_GUI_changes(self):
+        self.stackedWidget.setCurrentIndex(8)
 
 
 
@@ -1874,7 +2062,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def process_test_3_verification(self, result,leds_results):
         try:
-            self.btnPrueba3.setStyleSheet(
+            self.btnPrueba4.setStyleSheet(
                 "background-color: green;" if result == "PASS" else "background-color: red;"
             )
             Test_3_result = f"{result, leds_results}"
@@ -1901,7 +2089,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_3_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(8) 
+        self.stackedWidget.setCurrentIndex(9) 
 
 ############## TEST4   #####################################
 
@@ -1942,7 +2130,7 @@ class MainWindow(QMainWindow, mainApplication):
     def process_test_4_verification(self, result,lcds_results):
 
         try:
-            self.btnPrueba4.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
+            self.btnPrueba5.setStyleSheet("background-color: green;" if result == "PASS" else "background-color: red;")
             Test_4_result=f"{result,lcds_results}"
             self.test.result_T4(Test_4_result)
             # Esperar 5 segundos antes de continuar con la siguiente prueba
@@ -1969,7 +2157,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_4_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(9) 
+        self.stackedWidget.setCurrentIndex(10) 
 
 
 ##############  TEST 5   ##########################
@@ -2093,10 +2281,10 @@ class MainWindow(QMainWindow, mainApplication):
 
             if not test_failed:
                 button_result = "PASS"
-                self.btnPrueba5.setStyleSheet("background-color: green;")
+                self.btnPrueba6.setStyleSheet("background-color: green;")
             else:
                 button_result = "FAIL"
-                self.btnPrueba5.setStyleSheet("background-color: red;")
+                self.btnPrueba6.setStyleSheet("background-color: red;")
 
             self.test.result_T5(button_result, buttons_results)
 
@@ -2115,7 +2303,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_5_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(10) 
+        self.stackedWidget.setCurrentIndex(11) 
 
 
     ################ TEST 6   #######################
@@ -2181,7 +2369,7 @@ class MainWindow(QMainWindow, mainApplication):
             if test_failed==False:
                 digital_result="PASS"
 
-                self.btnPrueba6.setStyleSheet("background-color: green;")
+                self.btnPrueba.setStyleSheet("background-color: green;")
 
                 self.test.result_T6(digital_result,digital_results_dict)
 
@@ -2221,7 +2409,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         try:
 
-            self.stackedWidget.setCurrentIndex(11) 
+            self.stackedWidget.setCurrentIndex(12) 
 
             #Stop monitoring Hmi position thread
             #self.monitor_thread.stop()
@@ -2243,8 +2431,6 @@ class MainWindow(QMainWindow, mainApplication):
 
         try:
 
-        
-
             print("Resumen de prueba")
 
             print("Verificacion valor de contadores ")
@@ -2255,7 +2441,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             print(f"contador de piezas NG :{self.bad_piece_id}")
 
-            self.btnResultados.setStyleSheet("background-color: green;")
+            self.btnPrueba7.setStyleSheet("background-color: green;")
 
             Result1=self.test.test1_result
             self.lblResumenCodigoSerial.setText(Result1)
@@ -2264,6 +2450,8 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblResumenFirmware.setText(Result2)
 
             Result232=self.test.test232_result
+
+            Result_LCD_Short_circuit_vision_test=self.test.lcd_short_circuit_vision_test_result
 
             Result3=self.test.test3_result
             self.lblResumenLEDS.setText(Result3)
@@ -2282,7 +2470,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             #Verify if is a good piece
 
-            if "PASS" in Result232 and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
+            if "PASS" in Result232 and "PASS" in Result_LCD_Short_circuit_vision_test and "PASS" in Result3 and "PASS" in Result4 and "PASS" in Result5 and "PASS" in Result6:
                 self.piece_id+=1
 
                 self.lblPiezasBuenas.setText(str( self.piece_id))
@@ -2401,7 +2589,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             self.lblResumeDigitalInputs.setText("")
 
-            self.btnResultados.setStyleSheet("background-color: ;")
+            self.btnPrueba7.setStyleSheet("background-color: ;")
         
             #Go back to main Screen test
             self.stackedWidget.setCurrentIndex(6) 
@@ -2799,7 +2987,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.lblResumenLCD.setText("")
             self.lblResumenBotones.setText("")
             self.lblResumeDigitalInputs.setText("")
-            self.btnResultados.setStyleSheet("background-color: ;")
+            self.btnPrueba7.setStyleSheet("background-color: ;")
 
             # Banderas y timer
             self.dont_add_register = False

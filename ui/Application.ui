@@ -9709,7 +9709,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../resources/resources.qrc">:/resources/folder (1).png</pixmap>
+             <pixmap>:/resources/folder (1).png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -10624,7 +10624,7 @@ QPushButton &gt; * {
                         <string/>
                        </property>
                        <property name="pixmap">
-                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba3.png</pixmap>
+                        <pixmap resource="../resources/resources.qrc">:/resources/prueba3.png</pixmap>
                        </property>
                        <property name="scaledContents">
                         <bool>true</bool>
@@ -10656,7 +10656,7 @@ QPushButton &gt; * {
                         <string/>
                        </property>
                        <property name="pixmap">
-                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba4.png</pixmap>
+                        <pixmap resource="../resources/resources.qrc">:/resources/prueba4.png</pixmap>
                        </property>
                        <property name="scaledContents">
                         <bool>true</bool>
@@ -10688,7 +10688,7 @@ QPushButton &gt; * {
                         <string/>
                        </property>
                        <property name="pixmap">
-                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba5.png</pixmap>
+                        <pixmap resource="../resources/resources.qrc">:/resources/prueba5.png</pixmap>
                        </property>
                        <property name="scaledContents">
                         <bool>true</bool>
@@ -10705,7 +10705,24 @@ QPushButton &gt; * {
                         <string/>
                        </property>
                        <property name="pixmap">
-                        <pixmap resource="../resources/resources.qrc">:/resources/Fallo_prueba6.png</pixmap>
+                        <pixmap resource="../resources/resources.qrc">:/resources/prueba6.png</pixmap>
+                       </property>
+                       <property name="scaledContents">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="page_24">
+                    <layout class="QGridLayout" name="gridLayout_26">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_105">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="pixmap">
+                        <pixmap resource="../resources/resources.qrc">:/resources/prueba7.png</pixmap>
                        </property>
                        <property name="scaledContents">
                         <bool>true</bool>
@@ -11342,7 +11359,7 @@ pulse ambas botoneras...</string>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="lblLCD_ShortCircuit3Input">
+                     <widget class="QLabel" name="lblLCD_ShortCircuitInput3">
                       <property name="minimumSize">
                        <size>
                         <width>40</width>
@@ -11439,7 +11456,7 @@ pulse ambas botoneras...</string>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="lblLCD_ShortCircuitHInput">
+                     <widget class="QLabel" name="lblLCD_ShortCircuitInputH">
                       <property name="minimumSize">
                        <size>
                         <width>40</width>
@@ -11536,7 +11553,7 @@ pulse ambas botoneras...</string>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="lblLCD_ShortCircuitOInput">
+                     <widget class="QLabel" name="lblLCD_ShortCircuitInputO">
                       <property name="minimumSize">
                        <size>
                         <width>40</width>
@@ -11633,7 +11650,7 @@ pulse ambas botoneras...</string>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="lblLCD_ShortCircuitCInput">
+                     <widget class="QLabel" name="lblLCD_ShortCircuitInputC">
                       <property name="minimumSize">
                        <size>
                         <width>40</width>
@@ -12913,7 +12930,7 @@ QPushButton {
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="btnResultados">
+          <widget class="QPushButton" name="btnPrueba7">
            <property name="minimumSize">
             <size>
              <width>160</width>
@@ -13012,7 +13029,7 @@ QPushButton {
             <string> Trazabilidad</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/resources.qrc">
+            <iconset>
              <normaloff>:/resources/folder (1).png</normaloff>:/resources/folder (1).png</iconset>
            </property>
            <property name="iconSize">
