@@ -1782,10 +1782,18 @@ class MainWindow(QMainWindow, mainApplication):
                 # Crear un QTimer para emitir la señal después de 3 segundos
                 QTimer.singleShot(3000, lambda: self.Test_2_signal.emit())
 
-                
+                #Verify lcd short ircuit test is enabled
+                is_lcd_shor_circuit_test_enabled=self._read_lcd_short_circuit_test_activation_flag()
 
-                #Proceed with test 3
-                self.test_3()
+                if is_lcd_shor_circuit_test_enabled:
+                    #Proceed with lcd short circuit test 
+                    self.short_circuit_lcd_test()
+
+                else:
+                    self.test.result_lcd_short_circuit_vision_test_result("BYPASS")
+                    self.btnPrueba3.setStyleSheet("background-color: green;")
+                    #Proceed with test 3
+                    self.test_3()
 
 
             else:
@@ -1946,7 +1954,11 @@ class MainWindow(QMainWindow, mainApplication):
 
 ########################  LCD SHORT CIRCUIT TEST   ############################################
 
-
+    def _read_lcd_short_circuit_test_activation_flag(self):
+        config = configparser.ConfigParser()
+        config.read('settings/settings.ini')
+        response_setting = config.get('LCD_short_circuit_test', 'enabled', fallback="true").replace('"', '').strip().strip('"').lower()
+        return response_setting == "true"
 
     def get_lcd_short_circuit_test_configuration(self):
 
