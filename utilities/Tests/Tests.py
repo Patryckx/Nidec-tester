@@ -61,7 +61,7 @@ class Manage_tests():
 
     def result_lcd_short_circuit_vision_test_result(self,result:str):
         self.lcd_short_circuit_vision_test_result=result.replace('(', '').replace(')', '').replace("'", '')
-        self.record["Prueba 3HOC"]
+        self.record["Prueba 3HOC"]=self.lcd_short_circuit_vision_test_result
 
 
     def result_T3(self,leds_result:str):

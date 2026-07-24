@@ -138,6 +138,12 @@ class Test_LCD_Short_Circuit_test(QThread):
         self.lcd_short_circuit_test_order=["3","H","O","C"]
 
     def run (self):
+
+        print("Prueba 4")
+        print("Encendiendo pantalla LCD 100%")
+        self.rs485.send_command("FF00FFA50060100D04D05C016402B7")
+
+
         print("Prueba vision corto circuitos")
 
         test_failed=False
@@ -157,9 +163,10 @@ class Test_LCD_Short_Circuit_test(QThread):
             self.rs485.send_command(command)
             self.Camera.send_data(f"PW,{program}")
 
+
             # Realizar el disparo y leer la respuesta
             self.Camera.send_data('T2')
-            time.sleep(0.5)  # Esperar un breve momento
+            time.sleep(0.7)  # Esperar un breve momento
             response = self.Camera.read_data()
             print(f"resultadoss {response}")
 
@@ -645,6 +652,11 @@ class MainWindow(QMainWindow, mainApplication):
         self.piece_id=None
         self.test_id=None
         self.bad_piece_id=None
+
+
+        #LCDShort circuit teestt
+
+        self.prueba3hoc=None
 
 
         # Asegurar que la ventana pueda recibir eventos de teclado
@@ -1751,7 +1763,7 @@ class MainWindow(QMainWindow, mainApplication):
 
                 #self.bad_piece_id+=1
 
-                self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
+                self.add_register(Result1,"FAIL","FAIL","FAIL","FAIL","FAIL","FAIL","FAIL")
 
                 self.lblPiezasMalas.setText(str(self.bad_piece_id))
 
@@ -2016,18 +2028,25 @@ class MainWindow(QMainWindow, mainApplication):
 
             #if result == "PASS":
             if not test_failed:
+
+                self.prueba3hoc="PASS"
+
                 self.btnPrueba3.setStyleSheet(
                 "background-color: green;" 
             )
                 QTimer.singleShot(3000, lambda: self.Test_LCD_Short_circuit_signal.emit())
                 self.test_3()                               
             else:
+                self.prueba3hoc="FAIL"
                 # ── FALLA: cancelar pruebas3, 4, 5 y 6 ──────────────────
                 # Marcar pruebas no ejecutadas como FAIL en el objeto test
 
                 self.btnPrueba3.setStyleSheet(
                 "background-color: red;" 
             )
+                self.prueba3hoc="FAIL"
+
+                self.test.result_lcd_short_circuit_vision_test_result("FAIL")
                 self.test.result_T3("FAIL")
 
                 self.test.result_T4("FAIL")
@@ -2042,7 +2061,7 @@ class MainWindow(QMainWindow, mainApplication):
 
 
     def Test_LCD_Short_circuit_GUI_changes(self):
-        self.stackedWidget.setCurrentIndex(8)
+        self.stackedWidget.setCurrentIndex(7)
 
 
 
@@ -2106,7 +2125,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_3_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(9) 
+        self.stackedWidget.setCurrentIndex(8) 
 
 ############## TEST4   #####################################
 
@@ -2174,7 +2193,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_4_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(10) 
+        self.stackedWidget.setCurrentIndex(9) 
 
 
 ##############  TEST 5   ##########################
@@ -2320,7 +2339,7 @@ class MainWindow(QMainWindow, mainApplication):
 
     def Test_5_GUI_changes(self):
 
-        self.stackedWidget.setCurrentIndex(11) 
+        self.stackedWidget.setCurrentIndex(10) 
 
 
     ################ TEST 6   #######################
@@ -2426,7 +2445,7 @@ class MainWindow(QMainWindow, mainApplication):
 
         try:
 
-            self.stackedWidget.setCurrentIndex(12) 
+            self.stackedWidget.setCurrentIndex(11) 
 
             #Stop monitoring Hmi position thread
             #self.monitor_thread.stop()
@@ -2468,7 +2487,7 @@ class MainWindow(QMainWindow, mainApplication):
 
             Result232=self.test.test232_result
 
-            Result_LCD_Short_circuit_vision_test=self.test.lcd_short_circuit_vision_test_result
+            Result_LCD_Short_circuit_vision_test=self.prueba3hoc
 
             Result3=self.test.test3_result
             self.lblResumenLEDS.setText(Result3)
@@ -2501,7 +2520,7 @@ class MainWindow(QMainWindow, mainApplication):
             if not self.dont_add_register:
 
                 #Add register to GUI table and csv file
-                self.add_register(Result1,Result2,Result232,Result3,Result4,Result5,Result6)
+                self.add_register(Result1,Result2,Result232,Result_LCD_Short_circuit_vision_test,Result3,Result4,Result5,Result6)
 
             # En lugar de time.sleep(6), usamos QTimer
             QTimer.singleShot(4500,self.Test_resume_signal.emit)
@@ -2649,7 +2668,7 @@ class MainWindow(QMainWindow, mainApplication):
         self.stackedWidget.setCurrentIndex(14)
 
 
-    def add_register(self, Codigo,Firmware,Comunicacion232,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
+    def add_register(self, Codigo,Firmware,Comunicacion232,Prueba3HOC,LEDS_result,LCDS_result,Buttons_result,Entradas_result):
 
         try:
 
@@ -2694,7 +2713,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.ResultsTable.setItem(row, col, item)  # Establecer el QTableWidgetItem en la celda correspondiente
                 col += 1  # Mover a la siguiente columna para el próximo valor del diccionario
         
-            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"ID_pieza_mala":self.bad_piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
+            csv_register = {"ID_Prueba":self.test_id,"ID":self.piece_id,"ID_pieza_mala":self.bad_piece_id,"Numero Empleado":user,"Numero Orden":shop_order,"Codigos serial ,QR":Codigo,"Version Firmware": Firmware,"Comunicación232":Comunicacion232,"Prueba 3HOC":Prueba3HOC,"Prueba LEDS": LEDS_result,"Prueba LCDS": LCDS_result, "Prueba pulsacion Botones":Buttons_result,"Prueba entradas digitales": Entradas_result, "Hora y Fecha": Current_date}
             
             # Call csv register add function 
             self.test.add_csv_register(csv_register,user,shop_order)
@@ -2941,6 +2960,8 @@ class MainWindow(QMainWindow, mainApplication):
             Result2   = self.test.test2_result
             Result232 = self.test.test232_result
 
+            Result_LCD_Short_circuit_vision_test=self.prueba3hoc
+
             # Rellenar con FAIL las pruebas que no se ejecutaron
             Result3 = getattr(self.test, 'test3_result', 'FAIL')
             Result4 = getattr(self.test, 'test4_result', 'FAIL')
@@ -2950,7 +2971,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.test_id += 1
 
             if not self.dont_add_register:
-                self.add_register(Result1, Result2, Result232,
+                self.add_register(Result1, Result2, Result232,Result_LCD_Short_circuit_vision_test,
                                 Result3, Result4, Result5, Result6)
 
             # Limpiar y volver al inicio del ciclo
