@@ -2098,7 +2098,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.test.result_T5("FAIL", {})
                 self.test.result_T6("FAIL", {})
 
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(3))
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(4))
 
         except Exception as e:
             print("Error processing test 3 verification:", e)
@@ -2164,7 +2164,7 @@ class MainWindow(QMainWindow, mainApplication):
                 self.test.result_T6("FAIL", {})
                 
 
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(4))
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(5))
 
         except Exception as e:
             print("Error processing test 4 verification: ",e)
@@ -2311,7 +2311,7 @@ class MainWindow(QMainWindow, mainApplication):
             else:
                 # ── FALLA: cancelar prueba 6 ───────────────────────────
                 self.test.result_T6("FAIL", {})
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(5))
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(6))
 
         except Exception as e:
             print("Error on test 5 finished function:", e)
@@ -2386,7 +2386,7 @@ class MainWindow(QMainWindow, mainApplication):
             if test_failed==False:
                 digital_result="PASS"
 
-                self.btnPrueba.setStyleSheet("background-color: green;")
+                self.btnPrueba7.setStyleSheet("background-color: green;")
 
                 self.test.result_T6(digital_result,digital_results_dict)
 
@@ -2399,11 +2399,11 @@ class MainWindow(QMainWindow, mainApplication):
 
             else:
 
-                self.btnPrueba6.setStyleSheet("background-color: red;")
+                self.btnPrueba7.setStyleSheet("background-color: red;")
 
                 self.test.result_T6("FAIL", {})
 
-                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(6))
+                QTimer.singleShot(2000, lambda: self.test_failed_signal.emit(7))
           
         except Exception as e:
             print("Error on test 6 finished function: ",e)
@@ -2545,6 +2545,20 @@ class MainWindow(QMainWindow, mainApplication):
             #self.lblVerify232communication.setText("")
             self.btnPrueba2.setStyleSheet("background-color: ;")
 
+
+            #Test 3HOC
+
+            lcd_short_circuit_names = ['lblLCD_ShortCircuit3','lblLCD_ShortCircuitH','lblLCD_ShortCircuitO','lblLCD_ShortCircuitC']
+            lcd_short_circuit_input_names = ['lblLCD_ShortCircuitInput3','lblLCD_ShortCircuitInputH','lblLCD_ShortCircuitInputO','lblLCD_ShortCircuitInputC']
+
+            for lcd_widget in lcd_short_circuit_names:
+                getattr(self, lcd_widget).setEnabled(False)
+
+            for lcd_input_widget in lcd_short_circuit_input_names:
+                getattr(self, lcd_input_widget).setEnabled(True)
+
+            self.btnPrueba3.setStyleSheet("background-color: ;")
+
             
             #Test 3
             led_names = [f"lblLED{i}" for i in range(1, 12)]
@@ -2554,7 +2568,7 @@ class MainWindow(QMainWindow, mainApplication):
                 getattr(self, led_names[i]).setEnabled(False)
                 getattr(self, led_input_names[i]).setEnabled(True)
             
-            self.btnPrueba3.setStyleSheet("background-color: ;")
+            self.btnPrueba4.setStyleSheet("background-color: ;")
             
             #Test 4
 
@@ -2568,7 +2582,7 @@ class MainWindow(QMainWindow, mainApplication):
                 getattr(self, lcd_names[i]).setEnabled(False)
                 getattr(self, lcd_input_names[i]).setEnabled(True)
 
-            self.btnPrueba4.setStyleSheet("background-color: ;")
+            self.btnPrueba5.setStyleSheet("background-color: ;")
 
             #Test 5
             button_names = [f"lblButton{i}" for i in range(1, 9)]
@@ -2579,7 +2593,7 @@ class MainWindow(QMainWindow, mainApplication):
                 getattr(self, button_names[i]).setEnabled(False)
                 getattr(self, button_input_names[i]).setEnabled(True)
             
-            self.btnPrueba5.setStyleSheet("background-color: ;")
+            self.btnPrueba6.setStyleSheet("background-color: ;")
 
             #Test 6
             digital_names = [f"lblDigital{i}" for i in range(1, 5)]
@@ -2590,7 +2604,7 @@ class MainWindow(QMainWindow, mainApplication):
                 getattr(self, digital_names[i]).setEnabled(False)
                 getattr(self, digital_input_names[i]).setEnabled(True)
 
-            self.btnPrueba6.setStyleSheet("background-color: ;")
+            self.btnPrueba7.setStyleSheet("background-color: ;")
 
             #Resume
 
@@ -2879,7 +2893,7 @@ class MainWindow(QMainWindow, mainApplication):
             self.timer.stop()
 
             
-            # Ir a la pantalla de falla (índice 15 — ajusta al tuyo)
+       
             self.stackedWidget.setCurrentIndex(16)
 
 
@@ -2897,6 +2911,9 @@ class MainWindow(QMainWindow, mainApplication):
             
             if prueba_fallida ==6:
                 self.stackedWidget_failed_test.setCurrentIndex(5)
+
+            if prueba_fallida ==7:
+                self.stackedWidget_failed_test.setCurrentIndex(6)
 
             
 

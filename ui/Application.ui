@@ -9709,7 +9709,7 @@ QPushButton &gt; * {
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap>:/resources/folder (1).png</pixmap>
+             <pixmap resource="../resources/resources.qrc">:/resources/folder (1).png</pixmap>
             </property>
             <property name="scaledContents">
              <bool>true</bool>
@@ -13029,7 +13029,7 @@ QPushButton {
             <string> Trazabilidad</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../resources/resources.qrc">
              <normaloff>:/resources/folder (1).png</normaloff>:/resources/folder (1).png</iconset>
            </property>
            <property name="iconSize">
