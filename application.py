@@ -154,7 +154,7 @@ class Test_LCD_Short_Circuit_test(QThread):
             print(program)
             print(command)
 
-            self.Rs485.send_command(command)
+            self.rs485.send_command(command)
             self.Camera.send_data(f"PW,{program}")
 
             # Realizar el disparo y leer la respuesta
@@ -1993,24 +1993,29 @@ class MainWindow(QMainWindow, mainApplication):
             lcd_name = f"lblLCD_ShortCircuit{character}"           
             led_input_names = f"lblLCD_ShortCircuitInput{character}" 
 
-            getattr(self, lcd_name.setEnabled(True))
-            getattr(self, led_input_names.setEnabled(False))
+            # getattr(self, lcd_name.setEnabled(True))
+            # getattr(self, led_input_names.setEnabled(False))
+
+            #  Correcto
+            getattr(self, lcd_name).setEnabled(True)
+            getattr(self, led_input_names).setEnabled(False)
 
         except Exception as e:
             print("Error updating lcds function:",e)
             raise
 
 
-    def process_lcd_short_circuit_test_verification(self, result:bool,lcds_short_circuit_result:dict):
+    def process_lcd_short_circuit_test_verification(self, test_failed:bool,lcds_short_circuit_result:dict):
         try:
             
-            Short_circuit_lcd_result = f"{result, lcds_short_circuit_result}"
+            Short_circuit_lcd_result = f"{test_failed, lcds_short_circuit_result}"
             self.test.result_lcd_short_circuit_vision_test_result(Short_circuit_lcd_result)
 
             self.lcd_short_circuit_thread.quit()
             self.lcd_short_circuit_thread.wait()
 
-            if result == "PASS":
+            #if result == "PASS":
+            if not test_failed:
                 self.btnPrueba3.setStyleSheet(
                 "background-color: green;" 
             )
